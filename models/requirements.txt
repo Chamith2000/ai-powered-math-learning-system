@@ -1,0 +1,11 @@
+flask
+numpy
+pandas
+torch
+pytorch-lightning
+tensorflow
+joblib
+scikit-learn
+
+opencv-python
+pillow
