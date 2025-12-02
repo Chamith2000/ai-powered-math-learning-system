@@ -11,6 +11,10 @@ import AddTeacherGuide from "../pages/teacher-guide/add-teacher-guide";
 import UpdateTeacherGuide from "../pages/teacher-guide/update-teacher-guide";
 import TeacherGuideFeedback from "../pages/teacher-guide/teacher-guide-feedback";
 import UserDetails from "../pages/user/user-details.jsx";
+import StartingPapers from "../pages/starting-papers/starting-paper.jsx";
+import AddStartingPapers from "../pages/starting-papers/add-starting-paper.jsx";
+import UpdateStartingPapers from "../pages/starting-papers/starting-python-paper.jsx";
+import ViewStartingPapers from "../pages/starting-papers/view-starting-paper.jsx";
 
 export const router = createBrowserRouter([
     {
@@ -44,6 +48,22 @@ export const router = createBrowserRouter([
             {
                 path: "/admin/user-list",
                 element: <UserDetails />
+            },
+            {
+                path: "/admin/starting-papers",
+                element: <StartingPapers />
+            },
+            {
+                path: "/admin/starting-papers/create",
+                element: <AddStartingPapers />
+            },
+            {
+                path: "/admin/starting-papers/edit/:id",
+                element: <UpdateStartingPapers />
+            },
+            {
+                path: "/admin/starting-papers/view/:id",
+                element: <ViewStartingPapers />
             },
 
 
