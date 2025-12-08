@@ -204,3 +204,12 @@ transformer = StudentTransformerModel(d_in=len(feature_cols))
 transformer.load_state_dict(torch.load("models/student_transformer_model.pth", map_location=device))
 transformer.to(device)
 transformer.eval()
+
+# ---------------- LOAD MODEL 3: Weekly Forecast ----------------
+weekly_model = WeeklyForecastModel(input_dim=7)
+weekly_model = WeeklyForecastModel.load_from_checkpoint(
+    "models/weekly_model.ckpt",
+    input_dim=7
+)
+weekly_model.to(device)
+weekly_model.eval()
