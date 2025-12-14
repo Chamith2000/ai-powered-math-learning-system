@@ -1,0 +1,80 @@
+{
+  "info": {
+    "_postman_id": "a1b2c3d4-5e6f-7g8h-9i0j-1k2l3m4n5o6p",
+    "name": "MCQ & Question Recommendation API",
+    "description": "Postman collection for MCQ generation and question count recommendation endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "MCQ Generate",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"topic\": \"Algebra\",\n  \"difficulty\": \"medium\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/mcq/generate",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "mcq",
+            "generate"
+          ]
+        },
+        "description": "Generate MCQ questions using HF Proxy based on topic and difficulty level"
+      },
+      "response": []
+    },
+    {
+      "name": "Recommend Difficulty + Question Count",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"total_time\": 120,\n  \"waited_time\": 15,\n  \"total_q\": 20,\n  \"answered\": 18,\n  \"correct\": 14,\n  \"wrong\": 4,\n  \"marks\": 78\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/recommend",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "recommend"
+          ]
+        },
+        "description": "Get recommended difficulty level and question count based on student performance metrics"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000",
+      "type": "string"
+    }
+  ]
+}
