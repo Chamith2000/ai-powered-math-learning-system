@@ -5,6 +5,7 @@ import Home from "../pages/home";
 import TeacherGuide from "../pages/teacher-guide/teacher-guide";
 import AddTeacherGuide from "../pages/teacher-guide/add-teacher-guide";
 import UpdateTeacherGuide from "../pages/teacher-guide/update-teacher-guide";
+import TeacherGuideFeedback from "../pages/teacher-guide/teacher-guide-feedback";
 
 export const router = createBrowserRouter([
     {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
             {
                 path: "/admin/teacher-guides/edit/:id",
                 element: <UpdateTeacherGuide />
+            },
+            {
+                path: "/admin/teacher-guides-feedback/:id",
+                element: <TeacherGuideFeedback />
             },
 
 
