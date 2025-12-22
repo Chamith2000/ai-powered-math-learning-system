@@ -3,6 +3,8 @@ import RootLayout from "../layout/root";
 import Home from "../pages/home";
 
 import TeacherGuide from "../pages/teacher-guide/teacher-guide";
+import AddTeacherGuide from "../pages/teacher-guide/add-teacher-guide";
+import UpdateTeacherGuide from "../pages/teacher-guide/update-teacher-guide";
 
 export const router = createBrowserRouter([
     {
@@ -20,6 +22,14 @@ export const router = createBrowserRouter([
             {
                 path: "/admin/teacher-guide",
                 element: <TeacherGuide />
+            },
+            {
+                path: "/admin/teacher-guide/create",
+                element: <AddTeacherGuide />
+            },
+            {
+                path: "/admin/teacher-guides/edit/:id",
+                element: <UpdateTeacherGuide />
             },
 
 
