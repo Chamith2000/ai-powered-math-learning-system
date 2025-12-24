@@ -3,6 +3,7 @@ import 'swiper/css';
 import ScrollToTop from "./component/layout/ScrollToTop";
 import AutoCapture from "./page/CameraCapturing";
 import StartingPaper from "./page/StartingPaper";
+import PaperDetails from "./page/PaperDetails";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Routes>
 
           <Route path="starting-paper/" element={<StartingPaper />} />
+          <Route path="paper-details/:paperId" element={<PaperDetails />} />
 
       </Routes>
     </BrowserRouter>
