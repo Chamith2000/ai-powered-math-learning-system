@@ -4,6 +4,7 @@ import ScrollToTop from "./component/layout/ScrollToTop";
 import AutoCapture from "./page/CameraCapturing";
 import StartingPaper from "./page/StartingPaper";
 import PaperDetails from "./page/PaperDetails";
+import PaperList from "./page/PaperList";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
 
           <Route path="starting-paper/" element={<StartingPaper />} />
           <Route path="paper-details/:paperId" element={<PaperDetails />} />
+          <Route path="paperlist" element={<PaperList />} />
 
       </Routes>
     </BrowserRouter>
