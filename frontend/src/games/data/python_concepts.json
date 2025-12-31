@@ -1,0 +1,28 @@
+{
+  "concepts": [
+    { "term": "+ (Addition)", "definition": "Combine two numbers to get a total.", "example": "7 + 5 = 12" },
+    { "term": "- (Subtraction)", "definition": "Take away one number from another.", "example": "10 - 4 = 6" },
+    { "term": "× (Multiplication)", "definition": "Repeated addition of the same number.", "example": "3 × 4 = 12" },
+    { "term": "÷ (Division)", "definition": "Split into equal groups.", "example": "12 ÷ 3 = 4" },
+
+    { "term": "=", "definition": "Means both sides have the same value.", "example": "8 + 2 = 10" },
+    { "term": "≠", "definition": "Means two values are NOT equal.", "example": "6 ≠ 9" },
+    { "term": ">", "definition": "Left number is bigger than the right.", "example": "9 > 4" },
+    { "term": "<", "definition": "Left number is smaller than the right.", "example": "3 < 7" },
+
+    { "term": "Even Number", "definition": "A number divisible by 2.", "example": "12 is even because 12 ÷ 2 = 6" },
+    { "term": "Odd Number", "definition": "A number not divisible by 2.", "example": "9 is odd because 9 ÷ 2 leaves 1" },
+
+    { "term": "Fraction", "definition": "A part of a whole.", "example": "1/2 means 1 out of 2 equal parts" },
+    { "term": "Decimal", "definition": "A number with a decimal point.", "example": "0.75 = 75/100" },
+
+    { "term": "Percentage", "definition": "Out of 100.", "example": "25% = 25/100 = 0.25" },
+    { "term": "Ratio", "definition": "Compares two quantities.", "example": "2:3 means 2 parts to 3 parts" },
+
+    { "term": "Perimeter", "definition": "Distance around a shape.", "example": "Rectangle: P = 2(L + W)" },
+    { "term": "Area", "definition": "Space inside a shape.", "example": "Rectangle: A = L × W" },
+
+    { "term": "Mean (Average)", "definition": "Sum of values divided by how many values.", "example": "Mean of 2,4,6 = (2+4+6)/3 = 4" },
+    { "term": "Range", "definition": "Biggest value minus smallest value.", "example": "Range of 3, 8, 10 = 10 - 3 = 7" }
+  ]
+}

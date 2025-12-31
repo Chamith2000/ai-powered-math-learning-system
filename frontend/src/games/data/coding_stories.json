@@ -1,0 +1,409 @@
+{
+  "stories": [
+    {
+      "id": "market_day_math",
+      "title": "Mila and the Market Day Maths",
+      "startNodeId": "intro",
+      "nodes": [
+        {
+          "id": "intro",
+          "text": "You are Mila, a grade-six student. Today is Market Day! You must help your parents sell fruits fairly and correctly. Maths will help you make good choices.",
+          "image": "/images/maths/market_intro.png",
+          "choices": [
+            { "text": "Count fruits carefully", "nextId": "counting" },
+            { "text": "Guess the numbers quickly", "nextId": "guessing" }
+          ]
+        },
+        {
+          "id": "guessing",
+          "text": "You guess the numbers. Uh-oh! Some customers get more fruits than others. They are unhappy.",
+          "tips": ["Guessing is risky", "Maths helps fairness"],
+          "choices": [{ "text": "Start counting properly", "nextId": "counting" }]
+        },
+        {
+          "id": "counting",
+          "text": "You count apples and oranges. There are 24 apples and 6 customers.",
+          "language": "math",
+          "example": "24 ÷ 6 = 4",
+          "tips": ["Division shares equally"],
+          "choices": [
+            { "text": "Give 4 apples to each", "nextId": "division_success" },
+            { "text": "Give random amounts", "nextId": "guessing" }
+          ]
+        },
+        {
+          "id": "division_success",
+          "text": "Great! Everyone gets 4 apples. Now it's time to set prices.",
+          "choices": [
+            { "text": "Use addition to find total price", "nextId": "addition" },
+            { "text": "Use subtraction to guess price", "nextId": "subtraction_wrong" }
+          ]
+        },
+        {
+          "id": "subtraction_wrong",
+          "text": "You subtract the prices wrongly and lose money.",
+          "tips": ["Addition is better for totals"],
+          "choices": [{ "text": "Try addition instead", "nextId": "addition" }]
+        },
+        {
+          "id": "addition",
+          "text": "Each basket costs 15 rupees. A customer buys 3 baskets.",
+          "language": "math",
+          "example": "15 + 15 + 15 = 45",
+          "tips": ["Addition finds totals"],
+          "choices": [{ "text": "Charge 45 rupees", "nextId": "multiplication_intro" }]
+        },
+        {
+          "id": "multiplication_intro",
+          "text": "You realize repeated addition is multiplication!",
+          "language": "math",
+          "example": "15 × 3 = 45",
+          "tips": ["Multiplication is faster"],
+          "choices": [{ "text": "Use multiplication next time", "nextId": "success_end" }]
+        },
+        {
+          "id": "success_end",
+          "text": "Market Day is a success! Customers are happy, money is correct, and you feel proud using maths.",
+          "image": "/images/maths/market_success.png",
+          "tips": ["You used division", "You used addition", "You learned multiplication"]
+        }
+      ]
+    },
+
+    {
+      "id": "pizza_party_fractions",
+      "title": "The Pizza Party Fractions",
+      "startNodeId": "intro",
+      "nodes": [
+        {
+          "id": "intro",
+          "text": "Your class is having a pizza party! Each pizza is cut into 8 slices. You must share fairly so everyone feels happy.",
+          "image": "/images/maths/pizza_intro.png",
+          "choices": [
+            { "text": "Use division to share equally", "nextId": "division" },
+            { "text": "Hand out slices randomly", "nextId": "random" }
+          ]
+        },
+        {
+          "id": "random",
+          "text": "Random slices cause complaints—some students get more than others. Time to use maths!",
+          "tips": ["Fair sharing needs a plan"],
+          "choices": [{ "text": "Use division instead", "nextId": "division" }]
+        },
+        {
+          "id": "division",
+          "text": "There are 5 pizzas and 18 students. Each pizza has 8 slices.",
+          "language": "math",
+          "example": "Total slices = 5 × 8 = 40\n40 ÷ 18 = 2 each (with leftovers)",
+          "tips": ["Use multiplication for total", "Division for sharing"],
+          "choices": [
+            { "text": "Calculate leftovers", "nextId": "leftovers" },
+            { "text": "Ignore leftovers", "nextId": "ignore_leftovers" }
+          ]
+        },
+        {
+          "id": "ignore_leftovers",
+          "text": "If you ignore leftovers, some slices are wasted. You can do better!",
+          "choices": [{ "text": "Calculate leftovers", "nextId": "leftovers" }]
+        },
+        {
+          "id": "leftovers",
+          "text": "After giving 2 slices to each student, how many slices are left?",
+          "language": "math",
+          "example": "Given out = 18 × 2 = 36\nLeftover = 40 − 36 = 4 slices",
+          "tips": ["Multiply to find total given out", "Subtract to find leftovers"],
+          "choices": [
+            { "text": "Cut leftovers into halves", "nextId": "halves" },
+            { "text": "Give leftovers to helpers", "nextId": "helpers_end" }
+          ]
+        },
+        {
+          "id": "halves",
+          "text": "You cut 4 leftover slices into halves to share more fairly.",
+          "language": "math",
+          "example": "4 slices = 8 half-slices\nSome students get an extra 1/2 slice",
+          "tips": ["Fractions help share fairly"],
+          "choices": [{ "text": "Finish the party plan", "nextId": "success_end" }]
+        },
+        {
+          "id": "helpers_end",
+          "text": "The class agrees helpers can have the extra slices. Everyone feels it is fair.",
+          "image": "/images/maths/pizza_helpers.png",
+          "tips": ["Fairness can be decided together"],
+          "choices": [{ "text": "Finish the party plan", "nextId": "success_end" }]
+        },
+        {
+          "id": "success_end",
+          "text": "The pizza party is a hit! You used multiplication, division, subtraction, and fractions.",
+          "image": "/images/maths/pizza_success.png",
+          "tips": ["You used: ×, ÷, −, fractions"]
+        }
+      ]
+    },
+
+    {
+      "id": "sports_day_scores",
+      "title": "Sports Day Scores and Averages",
+      "startNodeId": "intro",
+      "nodes": [
+        {
+          "id": "intro",
+          "text": "Sports Day is here! You must help record scores for 5 races. Your teacher asks: 'What is the average score?'",
+          "image": "/images/maths/sports_intro.png",
+          "choices": [
+            { "text": "Use mean (average)", "nextId": "mean" },
+            { "text": "Choose the biggest score only", "nextId": "wrong" }
+          ]
+        },
+        {
+          "id": "wrong",
+          "text": "Picking the biggest score is not the average. Average uses all scores.",
+          "tips": ["Average = mean"],
+          "choices": [{ "text": "Use mean instead", "nextId": "mean" }]
+        },
+        {
+          "id": "mean",
+          "text": "The team scores are: 10, 8, 12, 9, 11. Find the mean.",
+          "language": "math",
+          "example": "Sum = 10+8+12+9+11 = 50\nMean = 50 ÷ 5 = 10",
+          "tips": ["Add all values", "Divide by how many"],
+          "choices": [
+            { "text": "Now find the range", "nextId": "range" },
+            { "text": "Stop here", "nextId": "end_ok" }
+          ]
+        },
+        {
+          "id": "range",
+          "text": "The teacher also wants the range (spread).",
+          "language": "math",
+          "example": "Max = 12, Min = 8\nRange = 12 − 8 = 4",
+          "tips": ["Range shows spread"],
+          "choices": [{ "text": "Finish report", "nextId": "success_end" }]
+        },
+        {
+          "id": "end_ok",
+          "text": "You got the mean correct. Next time, try range too!",
+          "image": "/images/maths/sports_ok.png"
+        },
+        {
+          "id": "success_end",
+          "text": "Great job! Your report is correct and clear. The teacher is proud.",
+          "image": "/images/maths/sports_success.png",
+          "tips": ["You used: mean, range"]
+        }
+      ]
+    },
+
+    {
+      "id": "shape_detectives_area_perimeter",
+      "title": "Shape Detectives: Area vs Perimeter",
+      "startNodeId": "intro",
+      "nodes": [
+        {
+          "id": "intro",
+          "text": "You join the Shape Detectives! A garden needs a fence (perimeter) and grass (area). Which do you calculate first?",
+          "image": "/images/maths/shapes_intro.png",
+          "choices": [
+            { "text": "Calculate perimeter for the fence", "nextId": "perimeter" },
+            { "text": "Calculate area for the grass", "nextId": "area" }
+          ]
+        },
+        {
+          "id": "perimeter",
+          "text": "The garden is a rectangle: length 12 m and width 5 m. Find perimeter.",
+          "language": "math",
+          "example": "P = 2(L + W) = 2(12 + 5) = 34 m",
+          "tips": ["Perimeter is around the shape"],
+          "choices": [
+            { "text": "Now calculate area", "nextId": "area_after" },
+            { "text": "Forget area", "nextId": "forget_area" }
+          ]
+        },
+        {
+          "id": "forget_area",
+          "text": "Without area, you don’t know how much grass is needed. Let’s compute it!",
+          "choices": [{ "text": "Calculate area", "nextId": "area_after" }]
+        },
+        {
+          "id": "area",
+          "text": "The garden is a rectangle: length 12 m and width 5 m. Find area.",
+          "language": "math",
+          "example": "A = L × W = 12 × 5 = 60 m²",
+          "tips": ["Area is inside space"],
+          "choices": [
+            { "text": "Now calculate perimeter", "nextId": "perimeter_after" }
+          ]
+        },
+        {
+          "id": "area_after",
+          "text": "Now find area for the grass.",
+          "language": "math",
+          "example": "A = 12 × 5 = 60 m²",
+          "tips": ["Multiply length and width"],
+          "choices": [{ "text": "Finish the plan", "nextId": "success_end" }]
+        },
+        {
+          "id": "perimeter_after",
+          "text": "Now find perimeter for the fence.",
+          "language": "math",
+          "example": "P = 2(12 + 5) = 34 m",
+          "tips": ["Add then multiply by 2"],
+          "choices": [{ "text": "Finish the plan", "nextId": "success_end" }]
+        },
+        {
+          "id": "success_end",
+          "text": "You solved it! The fence fits perfectly and the grass covers the whole garden.",
+          "image": "/images/maths/shapes_success.png",
+          "tips": ["You used: area, perimeter"]
+        }
+      ]
+    },
+
+    {
+      "id": "train_timetable_time",
+      "title": "The Train Time Challenge",
+      "startNodeId": "intro",
+      "nodes": [
+        {
+          "id": "intro",
+          "text": "You must catch a train at 10:45 AM. It takes 35 minutes to reach the station. When should you leave home?",
+          "image": "/images/maths/time_intro.png",
+          "choices": [
+            { "text": "Subtract time carefully", "nextId": "subtract" },
+            { "text": "Leave at 10:45 AM", "nextId": "late" }
+          ]
+        },
+        {
+          "id": "late",
+          "text": "If you leave at 10:45, you arrive after the train leaves. You missed it!",
+          "tips": ["You must leave earlier"],
+          "choices": [{ "text": "Subtract time instead", "nextId": "subtract" }]
+        },
+        {
+          "id": "subtract",
+          "text": "Compute 10:45 AM minus 35 minutes.",
+          "language": "math",
+          "example": "10:45 − 35 min = 10:10 AM",
+          "tips": ["Subtract minutes", "Borrow an hour if needed"],
+          "choices": [
+            { "text": "Leave at 10:10 AM", "nextId": "traffic" },
+            { "text": "Leave at 10:30 AM", "nextId": "late" }
+          ]
+        },
+        {
+          "id": "traffic",
+          "text": "Uh-oh! Traffic adds 10 more minutes. What now?",
+          "choices": [
+            { "text": "Leave 10 minutes earlier", "nextId": "final" },
+            { "text": "Ignore traffic", "nextId": "late2" }
+          ]
+        },
+        {
+          "id": "late2",
+          "text": "Traffic makes you late. You miss the train again.",
+          "choices": [{ "text": "Plan earlier next time", "nextId": "final" }]
+        },
+        {
+          "id": "final",
+          "text": "You decide to leave at 10:00 AM. You reach the station early and catch the train!",
+          "image": "/images/maths/time_success.png",
+          "tips": ["You used subtraction and planning"]
+        }
+      ]
+    },
+
+    {
+      "id": "mystery_discount_percent",
+      "title": "The Mystery Discount",
+      "startNodeId": "intro",
+      "nodes": [
+        {
+          "id": "intro",
+          "text": "A shop has a 20% discount on a backpack that costs Rs. 2000. How much do you pay?",
+          "image": "/images/maths/discount_intro.png",
+          "choices": [
+            { "text": "Find 20% of 2000", "nextId": "percent_calc" },
+            { "text": "Guess the final price", "nextId": "guess" }
+          ]
+        },
+        {
+          "id": "guess",
+          "text": "Guessing can lose money. Let’s calculate the discount properly.",
+          "tips": ["Percent means out of 100"],
+          "choices": [{ "text": "Calculate properly", "nextId": "percent_calc" }]
+        },
+        {
+          "id": "percent_calc",
+          "text": "20% means 20 out of 100.",
+          "language": "math",
+          "example": "20% of 2000 = (20/100) × 2000 = 400",
+          "tips": ["Convert percent to fraction", "Multiply"],
+          "choices": [
+            { "text": "Subtract discount from price", "nextId": "final_price" }
+          ]
+        },
+        {
+          "id": "final_price",
+          "text": "Now subtract the discount from the original price.",
+          "language": "math",
+          "example": "Final price = 2000 − 400 = 1600",
+          "tips": ["Subtract to get final amount"],
+          "choices": [{ "text": "Pay Rs. 1600", "nextId": "success_end" }]
+        },
+        {
+          "id": "success_end",
+          "text": "Correct! You pay Rs. 1600 and save Rs. 400. Smart shopping!",
+          "image": "/images/maths/discount_success.png",
+          "tips": ["You used: percent, multiplication, subtraction"]
+        }
+      ]
+    },
+
+    {
+      "id": "robot_steps_pattern",
+      "title": "RoboSteps and the Pattern Path",
+      "startNodeId": "intro",
+      "nodes": [
+        {
+          "id": "intro",
+          "text": "A small robot must walk in a pattern: 2 steps forward, 1 step left, repeat 4 times. Can you predict where it ends?",
+          "image": "/images/maths/pattern_intro.png",
+          "choices": [
+            { "text": "Use a table to track moves", "nextId": "table" },
+            { "text": "Guess the final spot", "nextId": "guess" }
+          ]
+        },
+        {
+          "id": "guess",
+          "text": "The robot ends somewhere unexpected. Patterns are easier with tracking!",
+          "tips": ["Tables help you see patterns"],
+          "choices": [{ "text": "Use a table", "nextId": "table" }]
+        },
+        {
+          "id": "table",
+          "text": "Track each repeat in a table. Forward +2 each time, Left +1 each time.",
+          "language": "math",
+          "example": "Forward total = 2 × 4 = 8\nLeft total = 1 × 4 = 4",
+          "tips": ["Multiply to find repeated totals"],
+          "choices": [
+            { "text": "Find final position", "nextId": "position" }
+          ]
+        },
+        {
+          "id": "position",
+          "text": "Start at (0,0). End at (forward, left) = (8,4).",
+          "language": "math",
+          "example": "(0,0) → (8,4)",
+          "tips": ["Coordinates show movement"],
+          "choices": [{ "text": "Finish", "nextId": "success_end" }]
+        },
+        {
+          "id": "success_end",
+          "text": "You predicted the robot’s final position perfectly! Patterns become easy when you track and multiply.",
+          "image": "/images/maths/pattern_success.png",
+          "tips": ["You used: pattern, multiplication, coordinates"]
+        }
+      ]
+    }
+  ]
+}
