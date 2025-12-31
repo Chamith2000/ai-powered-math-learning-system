@@ -145,7 +145,6 @@ function AutoCapture() {
               <option value="never">Never</option>
             </select>
           </div>
-
           <button style={{ marginRight: '10px' }} onClick={handleDismiss}>Dismiss</button>
           <button
             style={{ backgroundColor: 'lightgreen' }}
