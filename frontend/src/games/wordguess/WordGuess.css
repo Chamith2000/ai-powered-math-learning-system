@@ -1,0 +1,242 @@
+/* ==========================
+   WordGuess – Grade 6 Theme
+   ========================== */
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+.App { /* legacy container used by your Board/Keyboard */
+  text-align: center;
+  background: none;
+  color: #1f2937;
+}
+
+.game {
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  padding-top: 20px;
+  flex-direction: column;
+}
+
+/* --- New: Friendly wrapper --- */
+.wg-root {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.wg-header {
+  text-align: center;
+  margin: 24px 0 10px;
+}
+.wg-header h2 { margin: 6px 0; }
+.wg-header p  { margin: 0; color: #4b5563; }
+
+.wg-toolbar {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.wg-btn {
+  background: #111827;
+  color: #fff;
+  border: 0;
+  border-radius: 10px;
+  padding: 8px 14px;
+  cursor: pointer;
+}
+.wg-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wg-meta {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+}
+
+.wg-valids {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.wg-valids__label {
+  color: #374151;
+}
+.wg-pill {
+  background: #e5e7eb;
+  color: #111827;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.wg-softmsg {
+  margin-top: 8px;
+  background: #fff7ed;
+  color: #9a3412;
+  border: 1px solid #fed7aa;
+  padding: 8px 10px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+/* Learning card */
+.wg-learn {
+  max-width: 720px;
+  margin: 10px auto 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+.wg-learn__title { font-weight: 700; margin-bottom: 6px; }
+.wg-word { text-transform: uppercase; }
+.wg-learn__def { margin-bottom: 8px; }
+.wg-learn__code {
+  white-space: pre-wrap;
+  padding: 10px;
+  border-radius: 8px;
+  background: #111;
+  color: #f1f1f1;
+  overflow-x: auto;
+  margin: 0;
+}
+.wg-learn__actions { text-align: right; margin-top: 8px; }
+
+/* Hint modal */
+.wg-modal {
+  position: fixed;
+  inset: 0;
+  backdrop-filter: blur(2px);
+  background: rgba(0,0,0,0.25);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+.wg-modal__card {
+  width: min(720px, 92vw);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  padding: 12px;
+}
+.wg-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 6px 4px;
+  border-bottom: 1px solid #f3f4f6;
+}
+.wg-close {
+  background: transparent;
+  border: 0;
+  font-size: 22px;
+  cursor: pointer;
+}
+.wg-modal__body { padding: 10px 6px; }
+.wg-modal__footer { padding: 8px 6px 4px; text-align: right; }
+
+.wg-hints { display: grid; gap: 10px; }
+.wg-hints__row {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 8px;
+  align-items: start;
+}
+.wg-hints__badge {
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  display: grid; place-items: center;
+  background: #111827;
+  color: #fff;
+  font-weight: 700;
+}
+.wg-code__title { font-size: 12px; color: #6b7280; margin-bottom: 4px; }
+.wg-code pre {
+  margin: 0;
+  white-space: pre-wrap;
+  padding: 10px;
+  border-radius: 8px;
+  background: #111;
+  color: #f1f1f1;
+}
+
+/* Legacy board/keyboard styles kept for compatibility */
+.board {
+  width: 550px;
+  height: 550px;
+  border: 1px solid #d1d5db;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 12px;
+}
+
+.row {
+  flex: 33%;
+  display: flex;
+  flex-direction: row;
+  margin: 5px;
+}
+
+.letter {
+  flex: 5%;
+  height: 100%;
+  border: 1px solid #d1d5db;
+  margin: 5px;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 700;
+  color: #111827;
+  background: #fff;
+  border-radius: 10px;
+}
+
+#correct { background-color: #22c55e; color: #fff; }
+#almost  { background-color: #f59e0b; color: #fff; }
+#error   { background-color: #9ca3af; color: #fff; }
+
+.keyboard {
+  width: 700px;
+  height: 300px;
+  margin-top: 24px;
+}
+
+.line1,
+.line2,
+.line3 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 5px;
+}
+
+.key {
+  width: 50px;
+  height: 70px;
+  margin: 5px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  background-color: #111827;
+  color: white;
+  cursor: pointer;
+}
+#big { width: 100px; }
+#disabled { background-color: #6b7280; }

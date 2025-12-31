@@ -1,0 +1,29 @@
+[
+  { "word": "addit", "hints": "Joining numbers together.", "definition": "Adding numbers to get a total.", "example": "7 + 5 = 12" },
+  { "word": "minus", "hints": "Taking away from a number.", "definition": "Subtracting one number from another.", "example": "10 - 4 = 6" },
+  { "word": "times", "hints": "Repeated adding.", "definition": "Multiplying numbers.", "example": "3 × 4 = 12" },
+  { "word": "divid", "hints": "Sharing equally.", "definition": "Dividing a number into equal parts.", "example": "12 ÷ 3 = 4" },
+
+  { "word": "equal", "hints": "Both sides match.", "definition": "Means two values are the same.", "example": "8 + 2 = 10" },
+  { "word": "great", "hints": "Left side is bigger.", "definition": "Shows that one number is larger than another.", "example": "9 > 4" },
+  { "word": "lesss", "hints": "Left side is smaller.", "definition": "Shows that one number is smaller than another.", "example": "3 < 7" },
+
+  { "word": "evenn", "hints": "Can split by 2 with no leftover.", "definition": "A number divisible by 2.", "example": "14 ÷ 2 = 7" },
+  { "word": "odddd", "hints": "Splitting by 2 leaves 1.", "definition": "A number not divisible by 2.", "example": "9 ÷ 2 leaves 1" },
+
+  { "word": "fract", "hints": "A piece of a whole.", "definition": "A part of a whole written like a/b.", "example": "1/2 is half" },
+  { "word": "decim", "hints": "Has a dot in it.", "definition": "A number with a decimal point.", "example": "0.75" },
+  { "word": "perct", "hints": "Out of 100.", "definition": "A fraction of 100.", "example": "25% = 25/100" },
+  { "word": "ratio", "hints": "Compares two amounts.", "definition": "Shows comparison between two quantities.", "example": "2:3" },
+
+  { "word": "meann", "hints": "Average value.", "definition": "Sum of numbers divided by how many numbers.", "example": "(2+4+6) ÷ 3 = 4" },
+  { "word": "range", "hints": "Biggest minus smallest.", "definition": "Difference between highest and lowest value.", "example": "10 - 3 = 7" },
+  { "word": "round", "hints": "Make it the nearest whole number.", "definition": "Changes a number to the nearest value.", "example": "3.6 rounds to 4" },
+
+  { "word": "angle", "hints": "Corner measure.", "definition": "The space between two lines.", "example": "Right angle = 90°" },
+  { "word": "areaa", "hints": "Inside space of a shape.", "definition": "How much space is inside a shape.", "example": "Area of rectangle = L × W" },
+  { "word": "perim", "hints": "Around the shape.", "definition": "Distance around a shape.", "example": "Perimeter of square = 4 × side" },
+
+  { "word": "graph", "hints": "A picture of data.", "definition": "Shows numbers using bars, lines, or points.", "example": "Bar graph of marks" },
+  { "word": "table", "hints": "Rows and columns.", "definition": "Organizes data in rows and columns.", "example": "A times table" }
+]
