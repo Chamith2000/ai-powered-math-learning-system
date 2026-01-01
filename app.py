@@ -181,3 +181,35 @@ def call_hf(payload):
     except Exception as e:
         return {"error": str(e)}
 
+# ---------------- LOAD MODEL 2: Current Performance ----------------
+feature_cols = [
+    "time_since_prev",
+    "cum_interactions",
+    "cum_score_mean",
+    "score_per_difficulty",
+    "roll_mean_score_3",
+    "roll_mean_score_5",
+    "roll_mean_score_10",
+    "roll_sum_time_spent_3",
+    "roll_sum_time_spent_5",
+    "roll_mean_wait_3",
+    "roll_mean_wait_5",
+    "difficulty",
+    "wait_time",
+    "resource_score",
+    "time_spent",
+]
+
+transformer = StudentTransformerModel(d_in=len(feature_cols))
+transformer.load_state_dict(torch.load("models/student_transformer_model.pth", map_location=device))
+transformer.to(device)
+transformer.eval()
+
+# ---------------- LOAD MODEL 3: Weekly Forecast ----------------
+weekly_model = WeeklyForecastModel(input_dim=7)
+weekly_model = WeeklyForecastModel.load_from_checkpoint(
+    "models/weekly_model.ckpt",
+    input_dim=7
+)
+weekly_model.to(device)
+weekly_model.eval()
