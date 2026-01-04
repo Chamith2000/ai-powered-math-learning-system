@@ -66,7 +66,7 @@ const LoginForm = ({ registerPath, resetPath }) => {
       <h2 className="fs-20 fw-bolder mb-4">Login</h2>
       <h4 className="fs-13 fw-bold mb-2">Login to your account</h4>
       <p className="fs-12 fw-medium text-muted">
-        Thank you for get back <strong>Codingඉස්කොලේ </strong> Admin applications.
+        Thank you for get back <strong>MathsBuddy </strong> Admin applications.
       </p>
 
       <form className="w-100 mt-4 pt-2" onSubmit={handleSubmit}>
