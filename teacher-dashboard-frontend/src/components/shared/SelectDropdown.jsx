@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import PropTypes from 'prop-types';
-import getIcon from '@/utils/getIcon';
+import getIcon from '@/utils/getIcon.jsx';
 
 const SelectDropdown = ({ options, selectedOption, onSelectOption, className, defaultSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
