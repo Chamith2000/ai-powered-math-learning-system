@@ -66,6 +66,23 @@ export const router = createBrowserRouter([
                 element: <ViewStartingPapers />
             },
 
+            {
+                path: "/admin/visual-learning",
+                element: <VisualLearning />
+            },
+            {
+                path: "/admin/visual-learning/create",
+                element: <AddVisualLearning />
+            },
+            {
+                path: "/admin/visual-learning/edit/:id",
+                element: <UpdateVisualLearning />
+            },
+            {
+                path: "/admin/visual-learning/view/:id",
+                element: <ViewVisualLearning />
+            },
+
 
 
         ]
