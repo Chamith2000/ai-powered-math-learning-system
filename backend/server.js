@@ -14,6 +14,7 @@ const videoLectureRoutes = require("./src/routes/videoLectureRoutes");
 
 const startingPaperTitleRoutes = require("./src/routes/startingPaperTitleRoutes");
 const startingPaperQuestionRoutes = require("./src/routes/startingPaperQuestionRoutes");
+
 const teacherGuideRoutes = require("./src/routes/teacherGuideRoutes");
 const teacherGuideFeedBackRoutes = require("./src/routes/teacherGuideFeedBackRoutes");
 const mathsVideoLectureRoutes = require("./src/routes/mathsVideoLectureRoutes");
@@ -43,7 +44,6 @@ app.use("/api/maths/video-lectures", mathsVideoLectureRoutes);
 app.use("/api/maths/papers", mathsPapersRoutes);
 app.use("/api/maths/qanda", mathsQandARoutes);
 app.use("/api/completed-lectures", completedLectureRoutes);
-
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
