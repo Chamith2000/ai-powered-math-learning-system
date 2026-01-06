@@ -1,5 +1,5 @@
 flask
-numpy<2
+numpy
 pandas
 torch
 pytorch-lightning

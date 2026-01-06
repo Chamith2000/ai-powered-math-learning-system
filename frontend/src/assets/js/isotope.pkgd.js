@@ -21,14 +21,14 @@
   /*jshint strict: false */ /* globals define, module, require */
   if ( typeof define == 'function' && define.amd ) {
     // AMD
-    define( 'jquery-bridget/jquery-bridget',[ 'frontend/src/assets/js/jquery' ], function(jQuery ) {
+    define( 'jquery-bridget/jquery-bridget',[ 'jquery' ], function( jQuery ) {
       return factory( window, jQuery );
     });
   } else if ( typeof module == 'object' && module.exports ) {
     // CommonJS
     module.exports = factory(
       window,
-      require('frontend/src/assets/js/jquery')
+      require('jquery')
     );
   } else {
     // browser global
