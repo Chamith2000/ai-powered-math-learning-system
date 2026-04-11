@@ -1,0 +1,110 @@
+{
+  "words": [
+    {
+      "word": "addit",
+      "definition": "Adding numbers together to get a total.",
+      "example": "7 + 5 = 12"
+    },
+    {
+      "word": "minus",
+      "definition": "Taking one number away from another.",
+      "example": "10 - 4 = 6"
+    },
+    {
+      "word": "times",
+      "definition": "Multiplying numbers.",
+      "example": "3 × 4 = 12"
+    },
+    {
+      "word": "divid",
+      "definition": "Splitting into equal parts.",
+      "example": "12 ÷ 3 = 4"
+    },
+
+    {
+      "word": "equal",
+      "definition": "Both sides have the same value.",
+      "example": "8 + 2 = 10"
+    },
+    {
+      "word": "great",
+      "definition": "Left number is bigger than the right.",
+      "example": "9 > 4"
+    },
+    {
+      "word": "lesss",
+      "definition": "Left number is smaller than the right.",
+      "example": "3 < 7"
+    },
+
+    {
+      "word": "evenn",
+      "definition": "A number divisible by 2.",
+      "example": "12 ÷ 2 = 6"
+    },
+    {
+      "word": "odddd",
+      "definition": "A number not divisible by 2.",
+      "example": "9 ÷ 2 leaves 1"
+    },
+
+    {
+      "word": "fract",
+      "definition": "A part of a whole.",
+      "example": "1/2 means one out of two equal parts"
+    },
+    {
+      "word": "ratio",
+      "definition": "Compares two amounts.",
+      "example": "2 : 3"
+    },
+    {
+      "word": "decim",
+      "definition": "A number with a decimal point.",
+      "example": "0.75"
+    },
+    {
+      "word": "perct",
+      "definition": "A number out of 100.",
+      "example": "25% = 25 out of 100"
+    },
+
+    {
+      "word": "round",
+      "definition": "Making a number simpler.",
+      "example": "3.6 rounds to 4"
+    },
+    {
+      "word": "meann",
+      "definition": "Average of numbers.",
+      "example": "(2 + 4 + 6) ÷ 3 = 4"
+    },
+    {
+      "word": "range",
+      "definition": "Biggest number minus smallest number.",
+      "example": "10 − 3 = 7"
+    },
+
+    {
+      "word": "areaa",
+      "definition": "Space inside a shape.",
+      "example": "Area of rectangle = length × width"
+    },
+    {
+      "word": "perim",
+      "definition": "Distance around a shape.",
+      "example": "Perimeter of square = 4 × side"
+    },
+
+    {
+      "word": "angle",
+      "definition": "The space between two lines.",
+      "example": "A right angle is 90°"
+    },
+    {
+      "word": "graph",
+      "definition": "Shows numbers using lines or bars.",
+      "example": "Bar graph of test marks"
+    }
+  ]
+}

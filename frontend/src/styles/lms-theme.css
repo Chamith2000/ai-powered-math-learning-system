@@ -1,0 +1,983 @@
+/**
+ * LMS Kid-Friendly Theme V3 - Full Overhaul
+ * Mathematics Learning Platform – Grade 3–5
+ * Design: Duolingo × Khan Academy Kids × Galaxy
+ */
+
+/* ========================================================================
+   0. GOOGLE FONTS IMPORT
+   ======================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Nunito:wght@400;600;700;800&display=swap');
+
+/* ========================================================================
+   1. CSS VARIABLES
+   ======================================================================== */
+:root {
+  --lms-primary: #8B5CF6;
+  --lms-primary-light: #A78BFA;
+  --lms-primary-dark: #6D28D9;
+
+  --lms-secondary: #10B981;
+  --lms-secondary-light: #34D399;
+  --lms-secondary-dark: #059669;
+
+  --lms-accent: #F59E0B;
+  --lms-accent-light: #FCD34D;
+  --lms-accent-dark: #D97706;
+
+  --lms-info: #0EA5E9;
+  --lms-info-dark: #0284C7;
+
+  --lms-dark-bg: #1e1b4b;
+  --lms-dark-bg2: #312e81;
+
+  --lms-background: #F5F3FF;
+  --lms-background-warm: #FFFBEB;
+  --lms-card-bg: #FFFFFF;
+
+  --lms-error: #EF4444;
+  --lms-error-dark: #B91C1C;
+  --lms-success: #22C55E;
+
+  --lms-border: #E5E7EB;
+  --lms-border-soft: #DDD6FE;
+
+  --lms-text: #1F2937;
+  --lms-text-light: #6B7280;
+
+  --lms-radius-sm: 16px;
+  --lms-radius: 24px;
+  --lms-radius-lg: 32px;
+  --lms-radius-xl: 40px;
+  --lms-radius-full: 9999px;
+
+  --lms-shadow-card: 0 6px 0 #DDD6FE;
+  --lms-shadow-hover: 0 2px 0 #A78BFA;
+
+  --lms-font-heading: 'Baloo 2', 'Nunito', sans-serif;
+  --lms-font-body: 'Nunito', 'Poppins', sans-serif;
+  --lms-transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================================================
+   2. BASE / BODY
+   ======================================================================== */
+body {
+  font-family: var(--lms-font-body) !important;
+  color: var(--lms-text) !important;
+  background-color: var(--lms-background) !important;
+  background-image: linear-gradient(rgba(245, 243, 255, 0.88), rgba(245, 243, 255, 0.88)),
+                    url('../assets/images/bg-img/maths-bg1.png') !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+  background-position: center !important;
+}
+
+/* Ensure normal text outside dark sections stays dark */
+p, li, span, label, td, th {
+  color: var(--lms-text) !important;
+}
+
+a {
+  color: var(--lms-primary-dark) !important;
+  text-decoration: none !important;
+}
+
+a:hover {
+  color: var(--lms-primary) !important;
+}
+
+h1, h2, h3, h4, h5, h6, .title {
+  font-family: var(--lms-font-heading) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.3px !important;
+  color: var(--lms-text) !important;
+}
+
+/* Force high-contrast white text for dark sections */
+.lms-force-white,
+.lms-force-white h1, 
+.lms-force-white h2, 
+.lms-force-white h3, 
+.lms-force-white h4, 
+.lms-force-white h5, 
+.lms-force-white h6, 
+.lms-force-white p, 
+.lms-force-white span {
+  color: #FFFFFF !important;
+}
+
+
+
+/* ========================================================================
+   3. KEYFRAME ANIMATIONS
+   ======================================================================== */
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.8); opacity: 0; }
+  80%  { transform: scale(1.05); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes wiggleMove {
+  0%, 100% { transform: rotate(0deg); }
+  25%      { transform: rotate(-3deg); }
+  75%      { transform: rotate(3deg); }
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.floating-anim {
+  animation: floatY 4s ease-in-out infinite;
+}
+
+
+/* ========================================================================
+   4. BUTTONS — Squishy 3D Toy Style
+   ======================================================================== */
+button,
+.lab-btn,
+.lms-btn,
+.btn,
+input[type="submit"] {
+  font-family: var(--lms-font-heading) !important;
+  font-weight: 800 !important;
+  border-radius: var(--lms-radius-full) !important;
+  padding: 14px 32px !important;
+  transition: var(--lms-transition) !important;
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+/* Primary Purple */
+.lab-btn,
+.btn-primary,
+.lms-btn-primary,
+input[type="submit"] {
+  background: var(--lms-primary) !important;
+  color: #FFF !important;
+  border: 3px solid rgba(255,255,255,0.3) !important;
+  box-shadow: 0 6px 0 var(--lms-primary-dark) !important;
+}
+
+/* Secondary Green */
+.btn-success, .lms-btn-secondary {
+  background: var(--lms-secondary) !important;
+  color: #FFF !important;
+  border: 3px solid rgba(255,255,255,0.3) !important;
+  box-shadow: 0 6px 0 var(--lms-secondary-dark) !important;
+}
+
+/* Accent Yellow/Orange */
+.btn-warning, .lms-btn-accent {
+  background: var(--lms-accent) !important;
+  color: #FFF !important;
+  border: 3px solid rgba(255,255,255,0.3) !important;
+  box-shadow: 0 6px 0 var(--lms-accent-dark) !important;
+}
+
+button:hover,
+.lab-btn:hover,
+.btn:hover,
+input[type="submit"]:hover {
+  transform: translateY(-3px) !important;
+  filter: brightness(1.08) !important;
+}
+
+/* Ensure colored buttons keep white text on hover */
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-success:hover,
+.btn-danger:hover,
+.btn-warning:hover,
+.btn-info:hover,
+.lms-btn-primary:hover,
+.lab-btn:hover {
+  color: #FFF !important;
+}
+
+/* Safety: Prevent text inside hovered white cards from turning white */
+.info-card-row:hover *,
+.course-inner:hover *,
+.category-inner:hover *,
+.lms-card:hover *,
+.paper-card:hover * {
+  color: inherit !important;
+}
+
+.info-card-row:hover div[style*="color: rgb(31, 41, 55)"],
+.info-card-row:hover div {
+    /* Fallback to ensure dark gray text stays dark if inherit fails due to parent overrides */
+}
+
+
+button:active,
+.lab-btn:active,
+.btn:active,
+input[type="submit"]:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 1px 0 rgba(0,0,0,0) !important;
+}
+
+.lab-btn span {
+  color: white !important;
+}
+
+
+/* ========================================================================
+   5. FORM INPUTS — Soft Bubbly
+   ======================================================================== */
+input:not([type="submit"]):not([type="radio"]):not([type="checkbox"]):not(.lms-input-no-border),
+select:not(.lms-input-no-border),
+textarea:not(.lms-input-no-border) {
+
+  font-family: var(--lms-font-body) !important;
+  font-size: 1rem !important;
+  border: 3px solid var(--lms-border-soft) !important;
+  border-radius: var(--lms-radius-full) !important;
+  padding: 14px 22px !important;
+  transition: var(--lms-transition) !important;
+  background-color: #FAFAFA !important;
+  color: var(--lms-text) !important;
+  box-shadow: none !important;
+}
+
+input:not([type="submit"]):not(.lms-input-no-border):focus,
+select:not(.lms-input-no-border):focus,
+textarea:not(.lms-input-no-border):focus {
+
+  outline: none !important;
+  border-color: var(--lms-primary-light) !important;
+  background-color: #FFF !important;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15) !important;
+}
+
+input.lms-input-no-border {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+
+
+/* ========================================================================
+   6. CARDS — Clean White with Single Coloured Bottom Shadow
+   ======================================================================== */
+.lms-card,
+.course-inner,
+.category-inner,
+.paper-card,
+.blog-item,
+.faq-item {
+  background: #FFFFFF !important;
+  border-radius: var(--lms-radius-xl) !important;
+  /* Single soft bottom shadow ONLY — no double border */
+  border: none !important;
+  box-shadow: 0 6px 0 var(--lms-border-soft), 0 2px 20px rgba(139,92,246,0.08) !important;
+  overflow: hidden !important;
+  transition: var(--lms-transition) !important;
+}
+
+.course-inner:hover,
+.category-inner:hover,
+.lms-card:hover,
+.paper-card:hover,
+.blog-item:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 10px 0 var(--lms-border-soft), 0 6px 30px rgba(139,92,246,0.15) !important;
+}
+
+/* Card inner text should be dark */
+.course-inner h4,
+.course-inner h5,
+.course-inner p,
+.course-inner span,
+.course-inner a,
+.category-inner h4,
+.category-inner h5,
+.category-inner p,
+.category-inner a {
+  color: var(--lms-text) !important;
+}
+
+.course-inner .course-price,
+.course-inner .rating,
+.course-inner .meta {
+  color: var(--lms-text-light) !important;
+}
+
+.course-thumb img, .category-thumb img {
+  border-radius: var(--lms-radius-lg) !important;
+  width: 100%;
+}
+
+
+/* ========================================================================
+   7. SECTION WRAPPERS — transparent background (global bg shows through)
+   ======================================================================== */
+.lms-section-bg,
+.section-bg,
+.padding-tb {
+  background-color: transparent !important;
+}
+
+
+/* ========================================================================
+   8. SECTION HEADERS (subtitle / title pairs)
+   ======================================================================== */
+.section-header .subtitle,
+.section-header .sub-title {
+  font-family: var(--lms-font-heading) !important;
+  font-weight: 700 !important;
+  color: var(--lms-primary) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-size: 0.9rem !important;
+}
+
+.section-header .title {
+  color: var(--lms-text) !important;
+  font-size: 2.2rem !important;
+}
+
+
+/* ========================================================================
+   9. NAVBAR / HEADER — Dark Galaxy Theme
+   ======================================================================== */
+.header-section {
+  background: var(--lms-dark-bg) !important;
+  border-bottom: 4px solid var(--lms-dark-bg2) !important;
+  border-bottom-left-radius: 40px !important;
+  border-bottom-right-radius: 40px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 99999 !important;
+  width: 100% !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  overflow: visible !important; /* Allow dropdowns to spill out */
+}
+
+
+
+
+/* Scrolled state — frosted dark glass, smaller, hide top-bar */
+.header-section.header-fixed {
+  background: rgba(30, 27, 75, 0.9) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+  border-radius: 0 0 40px 40px !important;
+  transform: translateY(0);
+  overflow: visible !important;
+}
+
+
+/* Smoothly hide the top info bar instead of sudden display:none */
+.header-section.header-fixed .header-top {
+  max-height: 0 !important;
+  opacity: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+  transition: all 0.4s ease !important;
+}
+
+.header-section .header-top {
+  max-height: 100px !important;
+  opacity: 1 !important;
+  transition: all 0.4s ease !important;
+}
+
+
+/* All sub-panels transparent so dark bg shows */
+.header-section .header-top,
+.header-section .header-bottom {
+  background: transparent !important;
+  border-radius: 0 0 40px 40px !important;
+  overflow: visible !important;
+}
+
+
+/* Header top bar text (phone, address, social) */
+.header-section .header-top,
+.header-section .header-top a,
+.header-section .header-top i,
+.header-section .header-top span,
+.header-section .header-top li {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* Nav menu links */
+.header-section .menu > ul > li > a {
+  font-family: var(--lms-font-heading) !important;
+  font-weight: 800 !important;
+  font-size: 1.05rem !important;
+  color: white !important;
+  padding: 10px 20px !important;
+  border-radius: var(--lms-radius-full) !important;
+  transition: all 0.2s !important;
+}
+
+.header-section .menu > ul > li > a:hover,
+.header-section .menu > ul > li.active > a {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+  color: var(--lms-accent) !important;
+}
+
+/* Dropdown menus — must appear ABOVE everything */
+.header-section .menu > ul > li .submenu,
+.header-section .header-item .submenu {
+  background: #FFFFFF !important;
+  border-radius: var(--lms-radius) !important;
+  border: 3px solid var(--lms-border-soft) !important;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.15) !important;
+  z-index: 99999 !important;
+  position: absolute !important;
+}
+
+.header-section .menu > ul > li .submenu li a {
+  color: var(--lms-text) !important;
+  font-weight: 700 !important;
+  padding: 10px 20px !important;
+}
+
+.header-section .menu > ul > li .submenu li a:hover {
+  color: var(--lms-primary) !important;
+  background: var(--lms-background) !important;
+}
+
+/* Login / Signup buttons */
+.header-section .login {
+  background: rgba(255,255,255,0.1) !important;
+  color: white !important;
+  border: 2px solid rgba(255,255,255,0.4) !important;
+  border-radius: var(--lms-radius-full) !important;
+  font-weight: 800 !important;
+  padding: 8px 22px !important;
+  box-shadow: none !important;
+}
+
+.header-section .login:hover {
+  background: rgba(255,255,255,0.2) !important;
+}
+
+.header-section .signup {
+  background: var(--lms-accent) !important;
+  color: white !important;
+  border: 3px solid rgba(255,255,255,0.3) !important;
+  border-radius: var(--lms-radius-full) !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 0 var(--lms-accent-dark) !important;
+}
+
+.header-section .logout-btn {
+  background: var(--lms-error) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--lms-radius-full) !important;
+  padding: 10px 22px !important;
+  font-weight: 800 !important;
+  box-shadow: 0 4px 0 var(--lms-error-dark) !important;
+}
+
+
+/* ========================================================================
+   10. BANNER / HERO — Dark Animated Galaxy
+   ======================================================================== */
+.banner-section {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(252, 211, 77, 0.35) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(167, 139, 250, 0.45) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.18) 0%, transparent 60%),
+    linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+  background-size: 200% 200% !important;
+  animation: gradientShift 10s ease infinite !important;
+  min-height: 80vh !important;
+  display: flex !important;
+  align-items: center !important;
+  padding-top: 40px !important;
+  padding-bottom: 0 !important;
+  margin-top: -40px !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.banner-section .section-wrapper {
+  width: 100% !important;
+  padding: 40px 0 !important;
+}
+
+.banner-section .row {
+  align-items: center !important;
+  min-height: 60vh !important;
+}
+
+.banner-section .banner-content .subtitle {
+  color: var(--lms-accent) !important;
+  background: #FFFBEB !important;
+  padding: 8px 16px !important;
+  border-radius: 50px !important;
+  display: inline-block !important;
+  border: 2px solid var(--lms-accent-light) !important;
+}
+
+/* Search form inside banner */
+.banner-section form {
+  border-radius: 50px !important;
+  border: 4px solid var(--lms-primary-light) !important;
+  background: #FFF !important;
+  box-shadow: 0 8px 0 rgba(109,40,217,0.3) !important;
+  display: flex !important;
+}
+
+.banner-section form input {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.banner-section form button {
+  border-radius: 0 46px 46px 0 !important;
+  margin: 0 !important;
+  padding: 14px 36px !important;
+}
+
+/* Category quick-link buttons inside banner */
+.banner-catagory .cat-btn {
+  border: 2px solid transparent !important;
+  box-shadow: none !important;
+  padding: 8px 16px !important;
+  transform: none !important;
+}
+
+
+/* ========================================================================
+   11. PAGE HEADER (Breadcrumb Sections) — Same Galaxy Look
+   ======================================================================== */
+.pageheader-section {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(252, 211, 77, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(167, 139, 250, 0.5) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.2) 0%, transparent 60%),
+    linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+  background-size: 200% 200% !important;
+  animation: gradientShift 10s ease infinite !important;
+  padding: 110px 0 60px !important;
+  border-bottom-left-radius: 80px !important;
+  border-bottom-right-radius: 80px !important;
+  border-bottom: 6px solid var(--lms-dark-bg2) !important;
+  margin-top: -40px !important;
+  margin-bottom: 50px !important;
+  position: relative !important;
+  z-index: 1 !important;
+  overflow: visible !important;
+}
+
+.pageheader-section h2 {
+  color: white !important;
+  font-size: 2.8rem !important;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+  animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.pageheader-section .breadcrumb {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-radius: var(--lms-radius-full) !important;
+  padding: 8px 24px !important;
+  display: inline-flex !important;
+  margin-top: 16px !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.pageheader-section .breadcrumb-item a,
+.pageheader-section .breadcrumb-item + .breadcrumb-item::before {
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+
+/* ========================================================================
+   12. FOOTER & NEWSLETTER — Premium Galaxy Redesign
+   ======================================================================== */
+.news-footer-wrap {
+  background: var(--lms-dark-bg) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.news-letter {
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%) !important;
+  padding: 80px 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.news-letter .news-title h3 {
+  color: white !important;
+  font-family: var(--lms-font-heading) !important;
+  font-size: 2.2rem !important;
+  text-shadow: 0 4px 10px rgba(0,0,0,0.3) !important;
+  margin-bottom: 20px !important;
+}
+
+.news-letter .news-form {
+  max-width: 700px !important;
+  margin: 0 auto !important;
+}
+
+.news-letter .nf-list {
+  display: flex !important;
+  align-items: stretch !important;
+  gap: 15px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  padding: 12px !important;
+  border-radius: 60px !important;
+  backdrop-filter: blur(10px) !important;
+  border: 4px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+}
+
+.news-letter .nf-list input[type="email"] {
+  flex: 1 !important;
+  background: #FFFFFF !important;
+  border: none !important;
+  border-radius: 50px !important;
+  padding: 15px 30px !important;
+  font-weight: 700 !important;
+  color: var(--lms-text) !important;
+  font-size: 1rem !important;
+  height: auto !important;
+  outline: none !important;
+}
+
+.news-letter .nf-list input[type="email"]::placeholder {
+  color: var(--lms-text-light) !important;
+  opacity: 0.7 !important;
+}
+
+.news-letter .nf-list input[type="submit"] {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  transform: none !important;
+  margin-top: 0 !important;
+  background: var(--lms-accent) !important;
+  color: white !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  border-radius: 50px !important;
+  padding: 0 40px !important;
+  border: none !important;
+  box-shadow: 0 6px 0 var(--lms-accent-dark) !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  height: auto !important;
+  min-height: 54px !important;
+  cursor: pointer !important;
+}
+
+.news-letter .nf-list input[type="submit"]:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 0 var(--lms-accent-dark) !important;
+  background: var(--lms-accent-light) !important;
+}
+
+.news-letter .nf-list input[type="submit"]:active {
+  transform: translateY(2px) !important;
+  box-shadow: 0 2px 0 var(--lms-accent-dark) !important;
+}
+
+@media (max-width: 575px) {
+  .news-letter .nf-list {
+    flex-direction: column !important;
+    border-radius: 30px !important;
+    padding: 20px !important;
+  }
+  .news-letter .nf-list input[type="submit"] {
+    padding: 15px 0 !important;
+  }
+}
+
+
+
+.pageheader-section .breadcrumb-item.active {
+  color: var(--lms-accent-light) !important;
+}
+
+
+/* ========================================================================
+   12. BADGES
+   ======================================================================== */
+.lms-badge {
+  font-family: var(--lms-font-heading) !important;
+  font-weight: 800 !important;
+  padding: 6px 18px !important;
+  border-radius: var(--lms-radius-full) !important;
+  font-size: 0.95rem !important;
+}
+
+
+/* ========================================================================
+   13. FOOTER — Dark Galaxy, matching header
+   ======================================================================== */
+.news-footer-wrap {
+  background:
+    radial-gradient(circle at 10% 90%, rgba(252, 211, 77, 0.15) 0%, transparent 45%),
+    radial-gradient(circle at 90% 10%, rgba(167, 139, 250, 0.2) 0%, transparent 45%),
+    linear-gradient(135deg, #0f0e2e 0%, #1e1b4b 100%) !important;
+  border-top-left-radius: 60px !important;
+  border-top-right-radius: 60px !important;
+  border-top: 4px solid var(--lms-dark-bg2) !important;
+  margin-top: 60px !important;
+}
+
+/* Newsletter bar inside footer */
+.news-footer-wrap .news-letter {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 40px 0 !important;
+}
+
+.news-footer-wrap .news-letter h3 {
+  color: white !important;
+  font-size: 1.6rem !important;
+}
+
+.news-footer-wrap .news-letter p,
+.news-footer-wrap .news-letter span {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.news-footer-wrap .news-letter input[type="email"] {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 2px solid rgba(255, 255, 255, 0.25) !important;
+  color: white !important;
+}
+
+.news-footer-wrap .news-letter input[type="email"]::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.news-footer-wrap .news-letter input[type="submit"] {
+  background: var(--lms-accent) !important;
+  color: white !important;
+  border: 3px solid rgba(255,255,255,0.3) !important;
+  box-shadow: 0 4px 0 var(--lms-accent-dark) !important;
+}
+
+/* Footer main columns */
+footer {
+  background: transparent !important;
+}
+
+.footer-top {
+  background: transparent !important;
+  padding-top: 50px !important;
+  padding-bottom: 30px !important;
+}
+
+.footer-item h4,
+.footer-item .title h4 {
+  color: white !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 18px !important;
+  padding-bottom: 12px !important;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.12) !important;
+  font-family: var(--lms-font-heading) !important;
+}
+
+.footer-item ul li a {
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  transition: all 0.2s !important;
+  display: block !important;
+  padding: 5px 0 !important;
+}
+
+.footer-item ul li a:hover {
+  color: var(--lms-accent) !important;
+  padding-left: 8px !important;
+}
+
+/* Footer bottom bar */
+.footer-bottom {
+  background: rgba(0, 0, 0, 0.2) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 20px 0 !important;
+}
+
+.footer-bottom p,
+.footer-bottom span,
+.footer-bottom a {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-size: 0.9rem !important;
+}
+
+.footer-bottom a:hover {
+  color: var(--lms-accent) !important;
+}
+
+/* shape images in footer */
+.fs-shape {
+  display: none !important;
+}
+
+
+/* ========================================================================
+   14. NEWSLETTER SECTION (standalone, not footer)
+   ======================================================================== */
+.newsletters-section {
+  background: linear-gradient(135deg, var(--lms-primary) 0%, var(--lms-primary-dark) 100%) !important;
+  border-radius: var(--lms-radius-xl) !important;
+  margin: 0 20px 60px !important;
+  padding: 60px 40px !important;
+}
+
+.newsletters-section .title,
+.newsletters-section h2,
+.newsletters-section p,
+.newsletters-section h5 {
+  color: white !important;
+}
+
+
+/* ========================================================================
+   15. CATEGORY SECTION
+   ======================================================================== */
+.category-section .category-inner {
+  text-align: center !important;
+  padding: 30px 20px !important;
+}
+
+.category-section .category-inner h6,
+.category-section .category-inner p {
+  color: var(--lms-text) !important;
+}
+
+
+/* ========================================================================
+   16. SKILL SECTION
+   ======================================================================== */
+.skill-section .skill-inner {
+  background: #FFF !important;
+  border-radius: var(--lms-radius-lg) !important;
+  padding: 24px !important;
+  box-shadow: 0 4px 0 var(--lms-border-soft) !important;
+  border: none !important;
+}
+
+.skill-section .skill-content h5 {
+  color: var(--lms-primary-dark) !important;
+  font-size: 1.1rem !important;
+}
+
+.skill-section .skill-content p {
+  color: var(--lms-text-light) !important;
+  font-size: 0.95rem !important;
+}
+
+
+/* ========================================================================
+   17. ABOUT SECTION
+   ======================================================================== */
+.about-section h2,
+.about-section h3,
+.about-section h4 {
+  color: var(--lms-text) !important;
+}
+
+.about-section p {
+  color: var(--lms-text-light) !important;
+  line-height: 1.8 !important;
+}
+
+
+/* ========================================================================
+   18. PAGINATION
+   ======================================================================== */
+.default-pagination li.active a,
+.default-pagination li:not(.disabled):hover a {
+  background: var(--lms-primary) !important;
+  color: white !important;
+  border-radius: var(--lms-radius-sm) !important;
+  border: none !important;
+}
+
+.default-pagination li a {
+  color: var(--lms-text) !important;
+  border-radius: var(--lms-radius-sm) !important;
+}
+
+
+/* ========================================================================
+   19. BOOTSTRAP OVERRIDES — Keep consistent
+   ======================================================================== */
+.btn-primary {
+  background: var(--lms-primary) !important;
+  border-color: var(--lms-primary) !important;
+}
+
+.btn-success {
+  background: var(--lms-secondary) !important;
+  border-color: var(--lms-secondary) !important;
+}
+
+.btn-warning {
+  background: var(--lms-accent) !important;
+  border-color: var(--lms-accent) !important;
+  color: white !important;
+}
+
+.text-primary { color: var(--lms-primary) !important; }
+.text-success { color: var(--lms-secondary) !important; }
+.text-warning { color: var(--lms-accent) !important; }
+.bg-primary { background-color: var(--lms-primary) !important; }
+.bg-success { background-color: var(--lms-secondary) !important; }
+
+
+/* ========================================================================
+   20. CONTACT / FAQ SECTIONS
+   ======================================================================== */
+.contact-banner .lms-card {
+  border: none !important;
+  overflow: hidden !important;
+}
+
+.faq-section .faq-item {
+  border: none !important;
+  box-shadow: 0 4px 0 var(--lms-border-soft), 0 2px 16px rgba(139,92,246,0.07) !important;
+}
+
+.faq-section .faq-title h5 {
+  color: var(--lms-primary-dark) !important;
+}
+
+.faq-section .faq-content p {
+  color: var(--lms-text-light) !important;
+}
+
+
+/* ========================================================================
+   21. MOBILE MENU TOGGLE (burger)
+   ======================================================================== */
+.header-section .menu-toggle,
+.header-section .header-bar span {
+  background: white !important;
+}

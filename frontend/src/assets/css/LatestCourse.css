@@ -1,0 +1,213 @@
+/* LatestCourse.css - LMS Child-Friendly Theme */
+
+.course-section {
+    padding: 50px 0;
+}
+
+.course-item {
+    width: 100%;
+    max-width: 350px;
+    margin: 10px auto; /* Centers the item within its column */
+    height: 450px;
+
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 4px 20px rgba(79, 70, 229, 0.1);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid #E5E7EB;
+}
+
+.course-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 40px rgba(79, 70, 229, 0.18);
+    border-color: #818CF8;
+}
+
+/* Course inner container */
+.course-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Fix image size */
+.course-thumb img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Ensure proper aspect ratio */
+}
+
+/* Course content container */
+.course-content {
+    flex-grow: 1;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.course-content h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #374151;
+    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+/* Course category and rating */
+.course-category {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+/* Course details section */
+.course-details {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Course footer */
+.course-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 10px;
+}
+
+/* Author section */
+.course-author {
+    display: flex;
+    align-items: center;
+}
+
+.course-author img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.course-btn a {
+    font-size: 1rem;
+    color: #4F46E5;
+    text-decoration: none;
+    font-weight: 700;
+    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    padding: 8px 16px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%);
+    transition: all 0.3s ease;
+}
+
+.course-btn a:hover {
+    color: #4338CA;
+    background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+    color: white;
+}
+
+/* ===== Filter Dropdown Options ===== */
+.group-select-section .form-select option {
+    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    font-weight: 700;
+    color: #374151;
+    background-color: #F9FAFB;
+    padding: 10px 16px;
+}
+
+.group-select-section .form-select option:hover {
+    background-color: #EEF2FF;
+    color: #4F46E5;
+}
+
+.group-select-section .form-select option:checked {
+    background-color: #4F46E5;
+    color: #ffffff;
+}
+
+/* First option (placeholder "All ...") */
+.group-select-section .form-select option[value="all"] {
+    color: #6B7280;
+    font-style: italic;
+}
+
+/* ===== Filter Dropdown Options ===== */
+.group-select-section .form-select option {
+    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    font-weight: 700;
+    color: #374151;
+    background-color: #F9FAFB;
+    padding: 10px 16px;
+}
+
+.group-select-section .form-select option:checked {
+    background-color: #4F46E5;
+    color: #ffffff;
+}
+
+.group-select-section .form-select option[value="all"] {
+    color: #6B7280;
+    font-style: italic;
+}
+
+/* ===== Animated Select Wrapper ===== */
+.group-select-section .form-select {
+    transition:
+            border-color 0.25s ease,
+            background-color 0.25s ease,
+            box-shadow 0.25s ease,
+            transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.group-select-section .form-select:hover {
+    border-color: #818CF8;
+    background-color: #EEF2FF;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.15);
+    transform: translateY(-2px);
+}
+
+.group-select-section .form-select:focus {
+    border-color: #4F46E5;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+    transform: translateY(-2px) scale(1.01);
+    outline: none;
+    color: #4F46E5;
+    animation: selectPulse 0.4s ease forwards;
+}
+
+.group-select-section .form-select:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+}
+
+/* Pulse glow on focus */
+@keyframes selectPulse {
+    0%   { box-shadow: 0 0 0 0px rgba(79, 70, 229, 0.35); }
+    50%  { box-shadow: 0 0 0 6px rgba(79, 70, 229, 0.15); }
+    100% { box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
+}
+
+/* Slide-in on page load */
+.group-select-section .col:nth-child(1) .form-select { animation: slideInFilter 0.4s ease 0.1s both; }
+.group-select-section .col:nth-child(2) .form-select { animation: slideInFilter 0.4s ease 0.2s both; }
+.group-select-section .col:nth-child(3) .form-select { animation: slideInFilter 0.4s ease 0.3s both; }
+
+@keyframes slideInFilter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

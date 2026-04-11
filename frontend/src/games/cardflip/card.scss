@@ -1,0 +1,207 @@
+/* ================================
+   Maths Card Match (Scoped CSS)
+   Namespace: .pycm-root
+   ================================ */
+
+.pycm-root {
+  min-height: 100%;
+  padding-bottom: 32px;
+  background: none; /* background is set by the launcher */
+}
+
+/* Header */
+.pycm-root .pycm-header {
+  margin: 32px 0 24px;
+  text-align: center;
+}
+.pycm-root .pycm-header h2 {
+  margin-bottom: 6px;
+}
+.pycm-root .pycm-header p {
+  margin-top: 0;
+  opacity: 0.9;
+}
+
+/* Toolbar (buttons row) */
+.pycm-root .pycm-toolbar {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+/* Scoreboard table */
+.pycm-root .pycm-scoreboard {
+  max-width: 980px;
+  margin: 0 auto 16px;
+}
+.pycm-root .pycm-table-wrap {
+  overflow-x: auto;
+}
+.pycm-root .pycm-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: rgba(255, 255, 255, 0.95);
+}
+.pycm-root .pycm-table th,
+.pycm-root .pycm-table td {
+  padding: 8px 10px;
+  border: 1px solid #e5e7eb;
+}
+.pycm-root .pycm-table thead {
+  background: #f8fafc;
+}
+.pycm-root .pycm-text-end {
+  text-align: right;
+}
+.pycm-root .pycm-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ======================
+   Cards Grid / Cells
+   ====================== */
+.pycm-root .pycm-grid {
+  display: grid;
+  /* base: 2 columns (ensures cards don’t shrink) */
+  grid-template-columns: repeat(2, minmax(140px, 1fr));
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 16px;
+  padding: 42px;
+  
+}
+
+/* each cell has a fixed aspect so height is never 0 */
+.pycm-root .pycm-card-cell {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4; /* ≈ 140x187 */
+}
+
+/* If you need a fallback for very old browsers, uncomment:
+.pycm-root .pycm-card-cell::before {
+  content: "";
+  display: block;
+  padding-top: 133.333%; 
+}
+.pycm-root .pycm-card-cell > .card {
+  position: absolute;
+  inset: 0;
+}
+*/
+
+/* Make the card fill its cell */
+.pycm-root .pycm-card-cell > .card {
+  position: absolute;
+  inset: 0;
+}
+
+/* Breakpoints: max 4 columns total */
+@media (min-width: 640px) {
+  .pycm-root .pycm-grid {
+    grid-template-columns: repeat(3, minmax(140px, 1fr));
+    
+  }
+}
+@media (min-width: 992px) {
+  .pycm-root .pycm-grid {
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 16px;
+    margin: 150px;
+  }
+}
+
+/* ======================
+   Individual Card Styles
+   (scoped so they don’t
+   clash with the app)
+   ====================== */
+.pycm-root .card {
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.10);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transform-style: preserve-3d;
+  position: relative;
+  cursor: pointer;
+  background: #ffffff; /* front face base */
+}
+.pycm-root .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* image inside card (your card back image/star etc.) */
+.pycm-root .card img {
+  width: 95%;
+  height: 95%;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
+
+/* faces */
+.pycm-root .card .card-face {
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* back face */
+.pycm-root .card .card-face.card-back-face {
+  transform: rotateY(180deg);
+  background-color: rgba(192, 205, 255, 0.8); /* slightly transparent to show bg */
+}
+
+/* word on the back face */
+.pycm-root .card .card-face.card-back-face .card-word {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1f2a60;
+  text-align: center;
+  text-transform: uppercase;
+  margin-top: 50px;
+  padding: 10px 12px;
+  background-color: rgba(131, 155, 250, 0.9);
+  border-radius: 10px;
+}
+
+/* flip states */
+.pycm-root .card.is-flipped {
+  transform: rotateY(180deg);
+}
+.pycm-root .card.is-inactive {
+  opacity: 0;
+}
+
+/* ======================
+   Footer
+   ====================== */
+.pycm-root .pycm-footer {
+  text-align: center;
+}
+.pycm-root .pycm-footer .pycm-scoreline {
+  color: #333;
+  margin: 12px 0;
+}
+
+/* ======================
+   Optional: high-DPI small tweaks
+   ====================== */
+@media (min-resolution: 2dppx) {
+  .pycm-root .pycm-table th,
+  .pycm-root .pycm-table td {
+    border-color: #e6e6e6;
+  }
+}

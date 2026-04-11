@@ -1,0 +1,142 @@
+.mathquiz-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+  text-align: center;
+}
+
+.mathquiz-board {
+  background: white;
+  border-radius: 28px;
+  padding: 2rem;
+  box-shadow: 0 10px 40px rgba(79, 70, 229, 0.15);
+  border: 2px solid #E0E7FF;
+  min-width: 350px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.mathquiz-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #555;
+}
+
+.mathquiz-score {
+  color: #22C55E;
+}
+
+.mathquiz-timer {
+  color: #EF4444;
+}
+
+.mathquiz-question {
+  font-size: 4rem;
+  font-weight: 800;
+  margin: 1.5rem 0;
+  color: #4F46E5;
+  font-family: 'Baloo 2', sans-serif;
+}
+
+.mathquiz-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.mathquiz-option-btn {
+  background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 1.2rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  font-family: 'Baloo 2', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 0 rgba(67, 56, 202, 0.4);
+}
+
+.mathquiz-option-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 rgba(67, 56, 202, 0.4);
+}
+
+.mathquiz-option-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(67, 56, 202, 0.4);
+}
+
+.mathquiz-option-btn.correct {
+  background: linear-gradient(135deg, #22C55E 0%, #16A34A 100%);
+  box-shadow: 0 4px 0 rgba(22, 163, 74, 0.4);
+}
+
+.mathquiz-option-btn.wrong {
+  background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+  box-shadow: 0 4px 0 rgba(220, 38, 38, 0.4);
+}
+
+.mathquiz-gameover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mathquiz-gameover h2 {
+  font-size: 2.5rem;
+  color: #333;
+  margin: 0;
+}
+
+.mathquiz-gameover p {
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.mathquiz-action-btn {
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2.5rem;
+  font-size: 1.4rem;
+  border-radius: 50px;
+  font-weight: bold;
+  font-family: 'Baloo 2', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 0 rgba(217, 119, 6, 0.4);
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.mathquiz-action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 0 rgba(217, 119, 6, 0.4);
+}
+
+.mathquiz-action-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 0 rgba(217, 119, 6, 0.4);
+}
+
+/* Animations */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.mathquiz-shake {
+  animation: shake 0.4s ease-in-out;
+}
