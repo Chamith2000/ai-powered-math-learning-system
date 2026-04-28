@@ -5,8 +5,12 @@ import ProtectedRoute from "./ProtectedRoute";
 import ErrorPage from "./page/404";
 import AboutPage from "./page/about";
 import ContactPage from "./page/contact";
+import DocumentationPage from "./page/DocumentationPage";
 import ForgetPass from "./page/forgetpass";
+import FeedbackPage from "./page/FeedbackPage";
 import Home from "./page/home";
+import HelpCenterPage from "./page/HelpCenterPage";
+import HelpPage from "./page/HelpPage";
 import LoginPage from "./page/login";
 import SearchNone from "./page/search-none";
 import SearchPage from "./page/search-page";
@@ -15,11 +19,15 @@ import PaperList from "./page/PaperList";
 import PaperDetails from "./page/PaperDetails";
 import StudentProfile from "./page/StudentProfile";
 import GameLaunch from "./page/GameLaunch";
-import AutoCapture from "./page/CameraCapturing";
 import MathsLectures from "./page/MathsLectures";
 import MathsLectureView from "./page/MathsLecture-view";
 import MathsCompiler from "./page/MathsCompiler";
 import StartingPaper from "./page/StartingPaper";
+import TermsPage from "./page/TermsPage";
+import PrivacyPage from "./page/PrivacyPage";
+import StatusPage from "./page/StatusPage";
+import ChangelogPage from "./page/ChangelogPage";
+import ContactSupportPage from "./page/ContactSupportPage";
 
 function App() {
   return (
@@ -31,6 +39,15 @@ function App() {
           <Route path="login" element={<LoginPage />} />
           <Route path="signup" element={<SignupPage />} />
           <Route path="forgetpass" element={<ForgetPass />} />
+          <Route path="documentation" element={<DocumentationPage />} />
+          <Route path="feedback" element={<FeedbackPage />} />
+          <Route path="help" element={<HelpPage />} />
+          <Route path="terms" element={<TermsPage />} />
+          <Route path="privacy" element={<PrivacyPage />} />
+          <Route path="help-center" element={<HelpCenterPage />} />
+          <Route path="status" element={<StatusPage />} />
+          <Route path="changelog" element={<ChangelogPage />} />
+          <Route path="contact-support" element={<ContactSupportPage />} />
 
 
           {/* Protected Routes: Requires Login */}

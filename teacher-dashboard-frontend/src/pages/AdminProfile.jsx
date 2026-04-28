@@ -192,18 +192,6 @@ const AdminProfile = () => {
                     </div>
 
                     <div className="col-md-12">
-                      <label className="form-label">Profile Image URL</label>
-                      <input
-                        type="url"
-                        className="form-control"
-                        name="faceImgUrl"
-                        value={formData.faceImgUrl}
-                        onChange={handleFieldChange}
-                        placeholder="https://..."
-                      />
-                    </div>
-
-                    <div className="col-md-12">
                       <label className="form-label">Role</label>
                       <input
                         type="text"

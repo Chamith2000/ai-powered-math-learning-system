@@ -235,7 +235,7 @@ export default function CardFlipGame() {
     <div className="pycm-root">
       {/* Header */}
       <header className="pycm-header">
-        <h2>🧮 Maths Match</h2>
+        <h2><i className="icofont-calculator"></i> Maths Match</h2>
         <p>
           Flip two matching <b>Maths</b> words to learn! When you find a pair, a tip appears with a tiny code sample.
         </p>
@@ -291,7 +291,7 @@ export default function CardFlipGame() {
       {lastLearn && (
         <Paper elevation={2} sx={{ maxWidth: 720, margin: "0 auto 16px", padding: 2, background: "rgba(255,255,255,0.95)" }}>
           <Typography variant="subtitle1" gutterBottom>
-            ⭐ Learn: <b>{lastLearn.term}</b>
+            <i className="icofont-star"></i> Learn: <b>{lastLearn.term}</b>
           </Typography>
           <Typography variant="body2" gutterBottom>{lastLearn.definition}</Typography>
           <Divider sx={{ my: 1 }} />
@@ -300,7 +300,7 @@ export default function CardFlipGame() {
           </Typography>
           <Box sx={{ textAlign: "right", mt: 1 }}>
             <Button size="small" onClick={() => speak(`${lastLearn.term}. ${lastLearn.definition}`)}>
-              🔊 Read Aloud
+              <i className="icofont-volume-up"></i> Read Aloud
             </Button>
           </Box>
         </Paper>
@@ -339,7 +339,7 @@ export default function CardFlipGame() {
 
       {/* Win Modal */}
       <Dialog open={showModal} disableEscapeKeyDown>
-        <DialogTitle>🎉 Level Complete!</DialogTitle>
+        <DialogTitle><i className="icofont-trophy-alt"></i> Level Complete!</DialogTitle>
         <DialogContent>
           {(() => {
             const rec = levelResults.find(r => r.level === difficulty);

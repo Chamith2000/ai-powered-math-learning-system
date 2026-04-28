@@ -27,8 +27,45 @@ export default function GameLaunch() {
     <>
       <Header />
       <style>{`
+        .game-launch-container {
+          min-height: 100vh;
+          background:
+            radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 34%),
+            radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.12), transparent 30%),
+            #f6f9ff;
+          background-size: 32px 32px;
+          padding-top: 50px;
+          padding-bottom: 72px;
+          font-family: 'Nunito', sans-serif;
+        }
+        .game-launch-hero {
+          max-width: 820px;
+          margin: 0 auto 24px;
+          padding: 24px;
+          border-radius: 18px;
+          background: linear-gradient(135deg, #eef2ff 0%, #ffffff 55%, #ecfeff 100%);
+          border: 1px solid #dbeafe;
+          box-shadow: 0 14px 34px rgba(30, 41, 59, 0.08);
+        }
+        .game-launch-hero h1 {
+          color: #24306b !important;
+          font-family: 'Baloo 2', sans-serif;
+          font-weight: 900;
+          margin-bottom: 6px;
+        }
+        .game-launch-hero p {
+          color: #64748b !important;
+          font-weight: 800;
+          margin-bottom: 0;
+        }
+        .game-nav {
+          margin-bottom: 28px;
+        }
         .game-nav-btn {
           color: #495057 !important;
+          min-width: 148px;
+          border: 1px solid #dbeafe !important;
+          box-shadow: 0 10px 22px rgba(15, 23, 42, 0.08) !important;
         }
         .game-nav-btn.active-game {
           color: #fff !important;
@@ -39,36 +76,36 @@ export default function GameLaunch() {
         .game-nav-btn.active-game:hover {
           color: #fff !important;
         }
+        .game-screen-card {
+          background-color: #ffffff;
+          border: 1px solid #dbeafe;
+          border-radius: 22px;
+          min-height: 60vh;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 24px 60px rgba(31, 41, 55, 0.11);
+        }
       `}</style>
       <main
         className="game-launch-container"
         role="main"
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#F9FAFB",
-          backgroundImage: "radial-gradient(#E0E7FF 2px, transparent 2px)",
-          backgroundSize: "32px 32px",
-          paddingTop: "180px",
-          paddingBottom: "80px",
-          fontFamily: "'Nunito', sans-serif"
-        }}
       >
         <div className="container">
           {/* Header Section */}
-          <section className="text-center mb-5 mt-4">
-            <h1 className="display-4 fw-bold" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif", textShadow: "2px 2px 4px rgba(79, 70, 229, 0.2)" }}>
+          <section className="text-center game-launch-hero">
+            <h1 className="display-5">
               Let’s Play & Learn!
             </h1>
-            <p className="fs-4 text-secondary fw-bold mt-2">Pick a game to start your exciting adventure</p>
+            <p className="fs-5">Pick a game and start learning through play.</p>
           </section>
 
           {/* Game Selector Menu */}
-          <nav className="d-flex justify-content-center flex-wrap gap-3 mb-5" aria-label="Choose a game">
+          <nav className="game-nav d-flex justify-content-center flex-wrap gap-3" aria-label="Choose a game">
             {[
-              { id: "story", icon: "📖", title: "Story Time", bg: "#4F46E5" },
-              { id: "math", icon: "🧮", title: "Math Quiz", bg: "#22C55E" },
-              { id: "word", icon: "🔤", title: "Word Guess", bg: "#F59E0B" },
-              { id: "card", icon: "🃏", title: "Card Match", bg: "#EF4444" }
+              { id: "story", icon: "icofont-book-alt", title: "Story Time", bg: "#4F46E5" },
+              { id: "math", icon: "icofont-calculator", title: "Math Quiz", bg: "#22C55E" },
+              { id: "word", icon: "icofont-abc", title: "Word Guess", bg: "#F59E0B" },
+              { id: "card", icon: "icofont-card", title: "Card Match", bg: "#EF4444" }
             ].map(game => (
               <button
                 key={game.id}
@@ -96,7 +133,7 @@ export default function GameLaunch() {
                   }
                 }}
               >
-                <span className="fs-3 d-block mb-1">{game.icon}</span>
+                <span className="fs-3 d-block mb-1"><i className={game.icon}></i></span>
                 {game.title}
               </button>
             ))}
@@ -106,24 +143,8 @@ export default function GameLaunch() {
           <section className="row justify-content-center" aria-live="polite">
             <div className="col-12 col-xl-10">
               <div
-                className="game-card p-2 p-md-4 rounded-4 shadow-lg"
-                style={{
-                  backgroundColor: "#ffffff",
-                  border: "4px solid #E0E7FF",
-                  borderBottomWidth: "8px",
-                  borderRadius: "32px",
-                  minHeight: "60vh",
-                  position: "relative",
-                  overflow: "hidden",
-                  boxShadow: "0 10px 40px rgba(79, 70, 229, 0.15)"
-                }}
+                className="game-card game-screen-card p-2 p-md-4"
               >
-                {/* Decorative dots in corners */}
-                <div style={{ position: "absolute", top: 15, left: 15, width: 14, height: 14, borderRadius: "50%", backgroundColor: "#F59E0B" }}></div>
-                <div style={{ position: "absolute", top: 15, right: 15, width: 14, height: 14, borderRadius: "50%", backgroundColor: "#EF4444" }}></div>
-                <div style={{ position: "absolute", bottom: 15, left: 15, width: 14, height: 14, borderRadius: "50%", backgroundColor: "#22C55E" }}></div>
-                <div style={{ position: "absolute", bottom: 15, right: 15, width: 14, height: 14, borderRadius: "50%", backgroundColor: "#4F46E5" }}></div>
-
                 <div className="h-100" style={{ position: "relative", zIndex: 1 }}>
                   {renderGame()}
                 </div>

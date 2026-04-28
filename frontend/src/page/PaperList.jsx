@@ -72,119 +72,112 @@ const PaperList = () => {
   return (
       <Fragment>
         <Header />
-        <PageHeader title={"Available Adventures! 🗺️"} curPage={"Papers"} />
-        <div className="blog-section padding-tb" style={{  minHeight: "80vh" }}>
-          <div className="container">
-            <div className="row justify-content-center">
-              {/* Sidebar */}
-              <div className="col-lg-3 col-12 mb-4 mb-lg-0">
-                <aside>
-                  <div className="widget widget-search p-4 rounded-4 shadow-sm" style={{ backgroundColor: "#fff", border: "2px solid #e0e7ff" }}>
-                    <form className="search-wrapper" onSubmit={(e) => e.preventDefault()}>
-                      <input
-                          type="text"
-                          className="form-control rounded-pill px-4 mb-3"
-                          style={{ border: "2px solid #00b4d8", height: "50px", fontSize: "1.1rem" }}
-                          placeholder="Find an adventure... 🔍"
-                          value={searchQuery}
-                          onChange={handleInputChange}
-                      />
-                    </form>
-                  </div>
-                  <div className="widget widget-category mt-4 p-4 rounded-4 shadow-sm" style={{ backgroundColor: "#fff", border: "2px solid #e0e7ff" }}>
-                    <div className="widget-header mb-3">
-                      <h4 className="title text-primary fw-bold">Quick Links 🚀</h4>
-                    </div>
-                    <ul className="widget-wrapper list-unstyled">
-                      {filteredPapers.slice(0, 5).map((paper) => (
-                          <li key={paper._id} className="mb-2">
-                            <Link
-                                to={`/paper-details/${paper._id}`}
-                                className="d-block w-100 btn btn-outline-info rounded-pill text-start fw-bold"
-                                style={{ transition: "all 0.2s" }}
-                            >
-                              ⭐ {paper.paperTytle}
-                            </Link>
-                          </li>
-                      ))}
-                      {filteredPapers.length > 5 && (
-                          <li className="text-muted text-center mt-2 small">...and more!</li>
-                      )}
-                    </ul>
-                  </div>
-                </aside>
-              </div>
+        <PageHeader title={<><i className="icofont-paper me-2"></i>Maths Papers</>} curPage={"Papers"} />
 
-              {/* Main Content */}
-              <div className="col-lg-9 col-12">
+        <div className="paper-filter-section">
+          <div className="container">
+            <div className="paper-filter-card">
+              <div className="row align-items-center g-3">
+                <div className="col-lg-3 col-md-4 text-center text-md-start">
+                  <h4 className="paper-filter-title">
+                    <i className="icofont-search-document"></i>
+                    Find Papers
+                  </h4>
+                </div>
+                <div className="col-lg-6 col-md-8">
+                  <form className="paper-search-form" onSubmit={(e) => e.preventDefault()}>
+                    <i className="icofont-search-1"></i>
+                    <input
+                        type="text"
+                        className="paper-search-input lms-input-no-border"
+                        placeholder="Search by paper title..."
+                        value={searchQuery}
+                        onChange={handleInputChange}
+                    />
+                  </form>
+                </div>
+                <div className="col-lg-3 text-center text-lg-end">
+                  <span className="paper-count-pill">
+                    <i className="icofont-listing-box"></i>
+                    {filteredPapers.length} Papers
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="blog-section padding-tb paper-list-section" style={{ minHeight: "80vh" }}>
+          <div className="container">
+            <div className="paper-list-heading d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+              <div>
+                <h3 className="mb-1"><i className="icofont-paper me-2"></i>Question Paper Hub</h3>
+                <p className="mb-0">Choose a paper that matches your current learning level.</p>
+              </div>
+              {difficultyLevel && (
+                  <span className="paper-level-pill">
+                    <i className="icofont-dart"></i>
+                    Recommended: {difficultyLevel.charAt(0).toUpperCase() + difficultyLevel.slice(1)}
+                  </span>
+              )}
+            </div>
+
+            <div className="row justify-content-center">
+              <div className="col-12">
                 {loading ? (
-                    <div className="text-center mt-5">
+                    <div className="paper-empty-state text-center">
                       <div className="spinner-border text-info" style={{ width: '3rem', height: '3rem' }} role="status"></div>
-                      <h4 className="text-info mt-3 fw-bold">Loading Adventures... ⏳</h4>
+                      <h4 className="text-info mt-3 fw-bold"><i className="icofont-clock-time me-2"></i>Loading Papers...</h4>
                     </div>
                 ) : error ? (
-                    <div className="alert alert-danger rounded-4 text-center p-4">
-                      <h4>Oops! 🙈</h4>
+                    <div className="paper-empty-state alert alert-danger text-center">
+                      <h4><i className="icofont-warning-alt me-2"></i>Oops!</h4>
                       <p>{error}</p>
                     </div>
                 ) : filteredPapers.length > 0 ? (
                     <article>
                       <div className="section-wrapper">
-                        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 justify-content-center g-4">
+                        <div className="row row-cols-1 row-cols-md-2 row-cols-xl-3 justify-content-center g-4">
                           {filteredPapers.map((paper) => (
                               <div className="col" key={paper._id}>
                                 <div
-                                    className="card h-100 border-0 shadow-sm"
-                                    style={{
-                                      borderRadius: "20px",
-                                      overflow: "hidden",
-                                      transition: "transform 0.3s, box-shadow 0.3s",
-                                      borderBottom: "6px solid #ffca28" // fun yellow accent
-                                    }}
-                                    onMouseEnter={(e) => {
-                                      e.currentTarget.style.transform = "translateY(-10px)";
-                                      e.currentTarget.style.boxShadow = "0 15px 30px rgba(0,0,0,0.1)";
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      e.currentTarget.style.transform = "translateY(0)";
-                                      e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.05)";
-                                    }}
+                                    className="card h-100 paper-list-card"
                                 >
-                                  <div className="position-relative">
+                                  <div className="paper-list-thumb position-relative">
                                     {isPaperRecommended(paper.paperDifficulty) && (
-                                        <span className="position-absolute badge bg-success fs-6 rounded-pill shadow-sm" style={{ top: 10, left: 10, zIndex: 2 }}>
-                                  Recommended!
+                                        <span className="paper-recommended-badge">
+                                  <i className="icofont-star me-1"></i>Recommended
                                 </span>
                                     )}
                                     <Link to={`/paper-details/${paper._id}`} className="d-block w-100">
-                                      <img src={paperimg} alt="Paper Thumbnail" className="w-100" style={{ height: "180px", objectFit: "cover" }} />
+                                      <img src={paperimg} alt="Paper Thumbnail" className="w-100" />
                                     </Link>
                                   </div>
 
                                   <div className="card-body p-4 d-flex flex-column">
                                     <Link to={`/paper-details/${paper._id}`} className="text-decoration-none">
-                                      <h4 className="card-title text-primary fw-bold mb-3">{paper.paperTytle}</h4>
+                                      <h4 className="paper-card-title mb-3">{paper.paperTytle}</h4>
                                     </Link>
 
-                                    <div className="d-flex justify-content-between text-muted mb-3 small">
-                                      <span><i className="icofont-calendar text-info"></i> {new Date(paper.createdAt).toLocaleDateString()}</span>
-                                      <span><i className="icofont-graduate-alt text-warning"></i> {paper.teacherGuideId?.coureInfo || "Course"}</span>
+                                    <div className="paper-card-meta mb-3">
+                                      <span><i className="icofont-calendar"></i> {new Date(paper.createdAt).toLocaleDateString()}</span>
+                                      <span><i className="icofont-graduate-alt"></i> {paper.teacherGuideId?.coureInfo || "Course"}</span>
                                     </div>
 
-                                    <p className="card-text mt-auto mb-4">
-                                      <strong className="me-2">Difficulty:</strong>
+                                    <div className="paper-card-difficulty mt-auto mb-4">
+                                      <span>Difficulty</span>
                                       <span className={`badge rounded-pill fs-6 ${paper.paperDifficulty === 'Easy' ? 'bg-success' :
                                           paper.paperDifficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger'
                                       }`}>
-                                  {paper.paperDifficulty} {paper.paperDifficulty === 'Easy' ? '😊' : paper.paperDifficulty === 'Medium' ? '🤔' : '🔥'}
+                                  {paper.paperDifficulty} <i className={paper.paperDifficulty === 'Easy' ? 'icofont-leaf' : paper.paperDifficulty === 'Medium' ? 'icofont-lightning-ray' : 'icofont-fire'}></i>
                                 </span>
-                                    </p>
+                                    </div>
 
                                     <Link
                                         to={`/paper-details/${paper._id}`}
-                                        className="btn btn-primary rounded-pill w-100 fw-bold py-2"
+                                        className="btn btn-primary rounded-pill w-100 fw-bold py-2 paper-start-btn"
                                     >
-                                      Let's Play! 🎮
+                                      Open Paper <i className="icofont-paper-plane ms-2"></i>
                                     </Link>
                                   </div>
                                 </div>
@@ -197,9 +190,9 @@ const PaperList = () => {
                       </div>
                     </article>
                 ) : (
-                    <div className="text-center mt-5 p-5 bg-white rounded-4 shadow-sm border border-2 border-warning text-warning">
-                      <h3 className="fw-bold">No Adventures Found! 🕵️‍♂️</h3>
-                      <p className="text-dark fs-5">Try searching for something else!</p>
+                    <div className="paper-empty-state text-center">
+                      <h3 className="fw-bold"><i className="icofont-search-document me-2"></i>No Papers Found</h3>
+                      <p className="text-dark fs-5">Try searching for another paper title.</p>
                     </div>
                 )}
               </div>
@@ -283,7 +276,7 @@ export default PaperList;
 //                       type="text"
 //                       className="form-control rounded-pill px-4 mb-3"
 //                       style={{ border: "2px solid #00b4d8", height: "50px", fontSize: "1.1rem" }}
-//                       placeholder="Find an adventure... 🔍"
+//                       placeholder="Find an adventure..."
 //                       value={searchQuery}
 //                       onChange={handleInputChange}
 //                     />

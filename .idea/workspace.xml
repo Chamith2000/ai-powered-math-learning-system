@@ -1,7 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="520a326d-e432-41a8-8814-d583ff68df10" name="Changes" comment="" />
+    <list default="true" id="520a326d-e432-41a8-8814-d583ff68df10" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flask/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/flask/app.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build/asset-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/build/asset-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/build/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build/static/css/main.c23a1ea6.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build/static/css/main.c23a1ea6.css.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build/static/js/main.1d7a82af.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build/static/js/main.1d7a82af.js.LICENSE.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/build/static/js/main.1d7a82af.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/ProtectedRoute.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/ProtectedRoute.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/api.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/css/header/header.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/assets/css/header/header.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/MoodPopup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/MoodPopup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/WebCamCapture.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/WebCamCapture.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/layout/footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/layout/footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/layout/header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/layout/header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/section/HomeDiscovery.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/section/HomeDiscovery.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/section/banner.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/section/banner.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/section/contact-banner.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/section/contact-banner.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/component/section/faq.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/component/section/faq.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/games/cardflip/CardFlipGame.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/games/cardflip/CardFlipGame.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/games/mathquiz/MathQuiz.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/games/mathquiz/MathQuiz.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/games/wordguess/WordGuess.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/games/wordguess/WordGuess.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/CameraCapturing.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/CameraCapturing.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/GameLaunch.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/GameLaunch.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/MathsCompiler.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/MathsCompiler.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/MathsLecture-view.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/MathsLecture-view.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/MathsLectures.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/MathsLectures.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/PaperDetails.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/PaperDetails.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/PaperList.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/PaperList.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/StartingPaper.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/StartingPaper.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/StudentProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/StudentProfile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/contact.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/contact.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/login.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/page/signup.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/page/signup.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/lms-theme.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/styles/lms-theme.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/dist/assets/index-CWMpPnSs.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/dist/assets/index.es-D9WWGx8-.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/dist/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/dist/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/bootstrap.js" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/bootstrap.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/bootstrap.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/bootstrap.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/chunk-JFPFMKIB.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/chunk-JFPFMKIB.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/chunk-OT5EQO2H.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/chunk-OT5EQO2H.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react-apexcharts.js" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react-apexcharts.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react-bootstrap.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react-bootstrap.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react-perfect-scrollbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react-perfect-scrollbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react_jsx-runtime.js" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react_jsx-runtime.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react_jsx-runtime.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/node_modules/.vite/deps/react_jsx-runtime.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/src/components/authentication/LoginForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/src/components/authentication/LoginForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/src/components/authentication/ResetForm.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/src/components/authentication/ResetForm.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/src/pages/AdminProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/src/pages/AdminProfile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/src/pages/login-creative.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/src/pages/login-creative.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/src/pages/reset-creative.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/src/pages/reset-creative.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/teacher-dashboard-frontend/src/utils/PrivateRoute.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/teacher-dashboard-frontend/src/utils/PrivateRoute.jsx" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,7 +116,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1776870678683</updated>
-      <workItem from="1776870679952" duration="482000" />
+      <workItem from="1776870679952" duration="22545000" />
     </task>
     <servers />
   </component>

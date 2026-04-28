@@ -415,30 +415,203 @@ const MathsLectureView = () => {
 
   return (
     <Fragment>
+      <style>{`
+        .lecture-view-page {
+          background:
+            radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 34%),
+            radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.12), transparent 30%),
+            #f6f9ff !important;
+          padding-top: 26px !important;
+        }
+
+        .lecture-view-shell {
+          max-width: 1120px;
+          margin: 0 auto;
+        }
+
+        .lecture-watch-card,
+        .lecture-resource-card,
+        .lecture-feedback-card,
+        .lecture-comments-card,
+        .lecture-facts-card {
+          border-radius: 18px !important;
+          border: 1px solid #dbeafe !important;
+          background: #ffffff !important;
+          box-shadow: 0 14px 34px rgba(30, 41, 59, 0.08) !important;
+          overflow: hidden !important;
+        }
+
+        .lecture-watch-header {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 24px !important;
+          background: linear-gradient(135deg, #eef2ff 0%, #ffffff 55%, #ecfeff 100%) !important;
+          border-bottom: 1px solid #dbeafe !important;
+        }
+
+        .lecture-watch-header h2 {
+          color: #24306b !important;
+          font-family: 'Baloo 2', sans-serif !important;
+          font-weight: 900 !important;
+          line-height: 1.15 !important;
+        }
+
+        .lecture-video-frame {
+          background: #0f172a !important;
+          padding: 0 !important;
+        }
+
+        .lecture-video-frame video {
+          display: block !important;
+          width: 100% !important;
+          max-height: 62vh !important;
+          min-height: 360px !important;
+          object-fit: contain !important;
+        }
+
+        .lecture-description {
+          padding: 24px !important;
+          background: #ffffff !important;
+        }
+
+        .lecture-description h4,
+        .lecture-resource-card h4,
+        .lecture-feedback-card h4,
+        .lecture-comments-card h4,
+        .lecture-facts-card h4 {
+          color: #24306b !important;
+          font-family: 'Baloo 2', sans-serif !important;
+          font-weight: 900 !important;
+        }
+
+        .lecture-description p {
+          color: #64748b !important;
+          font-weight: 700 !important;
+          line-height: 1.7 !important;
+        }
+
+        .lecture-material-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          border-radius: 14px;
+          border: 1px solid #e0e7ff;
+          background: #f8fbff;
+          padding: 14px;
+          margin-bottom: 10px;
+        }
+
+        .lecture-material-name {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          min-width: 0;
+          color: #1f2a55 !important;
+          font-weight: 900 !important;
+        }
+
+        .lecture-material-name span {
+          overflow-wrap: anywhere;
+        }
+
+        .lecture-material-actions {
+          display: inline-flex;
+          gap: 8px;
+          flex: 0 0 auto;
+        }
+
+        .lecture-feedback-card {
+          background: #fffbeb !important;
+          border-color: #fde68a !important;
+        }
+
+        .lecture-feedback-card textarea {
+          border: 1px solid #fcd34d !important;
+          box-shadow: none !important;
+          background: #ffffff !important;
+        }
+
+        .lecture-comment-item {
+          border-radius: 14px;
+          border: 1px solid #dbeafe;
+          background: #f8fbff;
+          padding: 16px;
+        }
+
+        .lecture-facts-card {
+          position: sticky;
+          top: 96px;
+          padding: 24px !important;
+        }
+
+        .lecture-fact-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 14px;
+          padding: 14px 0;
+          border-bottom: 1px solid #e0e7ff;
+        }
+
+        .lecture-fact-row:last-child {
+          border-bottom: 0;
+        }
+
+        .lecture-fact-row span:first-child {
+          color: #64748b !important;
+          font-weight: 900 !important;
+        }
+
+        .lecture-fact-row span:last-child {
+          color: #1f2a55 !important;
+          font-weight: 900 !important;
+          text-align: right;
+        }
+
+        @media (max-width: 991px) {
+          .lecture-facts-card {
+            position: static;
+          }
+        }
+
+        @media (max-width: 575px) {
+          .lecture-watch-header,
+          .lecture-material-row {
+            flex-direction: column;
+            align-items: stretch;
+          }
+
+          .lecture-video-frame video {
+            min-height: 240px !important;
+          }
+        }
+      `}</style>
       <Header />
       <AutoCapture enableGamePopup={true} showFloatingEmotion={true} />
-      <PageHeader title={lecture.lectureTytle} curPage={'Adventure View'} />
+      <PageHeader title={<><i className="icofont-ui-video-play me-2"></i>Watch Lesson</>} curPage={'Lecture View'} />
 
-      <div className="course-view-section padding-tb section-bg" style={{ backgroundColor: "#F9FAFB", minHeight: "80vh", fontFamily: "'Nunito', sans-serif" }}>
+      <div className="course-view-section padding-tb section-bg lecture-view-page" style={{ backgroundColor: "#F9FAFB", minHeight: "80vh", fontFamily: "'Nunito', sans-serif" }}>
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-lg-10 col-12">
+            <div className="col-12 lecture-view-shell">
 
               {/* Main Video Card */}
-              <div className="card border-0 shadow-lg mb-5" style={{ borderRadius: "24px", overflow: "hidden", border: "2px solid #E0E7FF" }}>
-                <div className="card-header bg-white p-4 border-bottom d-flex justify-content-between align-items-center" style={{ borderColor: "#E0E7FF" }}>
-                  <h2 className="fw-bold mb-0" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>📺 {lecture.lectureTytle}</h2>
+              <div className="card border-0 shadow-lg mb-4 lecture-watch-card" style={{ borderRadius: "24px", overflow: "hidden", border: "2px solid #E0E7FF" }}>
+                <div className="card-header lecture-watch-header">
+                  <h2 className="fw-bold mb-0" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}><i className="icofont-ui-video-play me-2"></i>{lecture.lectureTytle}</h2>
                   <span className={`badge rounded-pill fs-6 ${lecture.lectureDifficulty === 'Easy' ? 'bg-success' : lecture.lectureDifficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger'}`}>
                     Level: {lecture.lectureDifficulty}
                   </span>
                 </div>
 
-                <div className="card-body p-0 bg-dark">
+                <div className="card-body lecture-video-frame">
                   <video
                     ref={videoRef}
                     controls
                     className="w-100"
-                    style={{ maxHeight: "60vh", objectFit: "contain" }}
                     onLoadedMetadata={() => {
                       if (videoRef.current && Number.isFinite(videoRef.current.duration)) {
                         setDurationMinutes(videoRef.current.duration / 60);
@@ -460,7 +633,7 @@ const MathsLectureView = () => {
                   </video>
                 </div>
 
-                <div className="card-footer bg-white p-4">
+                <div className="card-footer lecture-description">
                   <h4 className="fw-bold mb-3" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>What is this about?</h4>
                   <p className="fs-5 text-muted">{lecture.description}</p>
                 </div>
@@ -472,24 +645,24 @@ const MathsLectureView = () => {
 
                   {/* Materials (PDF) */}
                   {Array.isArray(lecture.pdfMaterials) && lecture.pdfMaterials.length > 0 && (
-                    <div className="card border-0 shadow-sm p-4 mb-4" style={{ borderRadius: "24px", borderTop: "6px solid #F59E0B", border: "2px solid #E5E7EB" }}>
-                      <h4 className="text-warning text-darken-2 fw-bold mb-4">Special Materials</h4>
+                    <div className="card border-0 shadow-sm p-4 mb-4 lecture-resource-card" style={{ borderRadius: "24px", borderTop: "6px solid #F59E0B", border: "2px solid #E5E7EB" }}>
+                      <h4 className="fw-bold mb-4"><i className="icofont-file-pdf me-2 text-danger"></i>Lesson Materials</h4>
 
                       <ul className="list-unstyled mb-4">
                         {lecture.pdfMaterials.map((url) => (
-                          <li key={url} className="d-flex flex-wrap align-items-center justify-content-between p-3 mb-2 bg-light rounded-4 shadow-sm border border-2 border-light">
-                            <div className="d-flex align-items-center mb-2 mb-md-0">
+                          <li key={url} className="lecture-material-row">
+                            <div className="lecture-material-name">
                               <i className="icofont-file-pdf text-danger fs-3 me-3"></i>
-                              <span className="fw-bold text-dark text-break">{fileNameFromUrl(url)}</span>
+                              <span>{fileNameFromUrl(url)}</span>
                             </div>
-                            <div className="d-flex gap-2">
+                            <div className="lecture-material-actions">
                               <button
                                 type="button"
                                 className={`btn btn-sm rounded-pill fw-bold ${activePdf === url ? 'btn-primary' : 'btn-outline-primary'}`}
                                 onClick={() => setActivePdf(url)}
                                 title="Preview"
                               >
-                                Peek
+                                Preview
                               </button>
                               <a
                                 className="btn btn-sm btn-outline-success rounded-pill fw-bold"
@@ -499,7 +672,7 @@ const MathsLectureView = () => {
                                 download
                                 title="Download"
                               >
-                                Get It!
+                                Download
                               </a>
                             </div>
                           </li>
@@ -520,9 +693,9 @@ const MathsLectureView = () => {
                   )}
 
                   {/* Feedback form */}
-                  <div className="card border-0 shadow-sm p-4 mb-4" style={{ borderRadius: "24px", backgroundColor: "#FFFBEB", border: "2px solid #FDE68A" }}>
+                  <div className="card border-0 shadow-sm p-4 mb-4 lecture-feedback-card" style={{ borderRadius: "24px", backgroundColor: "#FFFBEB", border: "2px solid #FDE68A" }}>
                     <h4 className="text-warning fw-bold mb-3" style={{ color: "#f57c00" }}>
-                      Tell us what you think!
+                      Share Feedback
                     </h4>
                     {hasTeacherGuide && lecture.teacherGuideId?.coureInfo && (
                       <p className="text-muted fw-bold">For: {lecture.teacherGuideId.coureInfo}</p>
@@ -538,10 +711,9 @@ const MathsLectureView = () => {
                       <textarea
                         className="form-control form-control-lg rounded-4 p-3 shadow-sm mb-3"
                         rows={3}
-                        style={{ border: "2px solid #ffe0b2" }}
                         value={feedbackText}
                         onChange={e => setFeedbackText(e.target.value)}
-                        placeholder="Was the video cool? Did you learn something new? Let us know! "
+                        placeholder="Was this lesson helpful? Let your teacher know."
                         disabled={submittingFeedback || !hasTeacherGuide}
                         required
                       />
@@ -551,7 +723,7 @@ const MathsLectureView = () => {
                           type="submit"
                           disabled={submittingFeedback || !feedbackText.trim() || !hasTeacherGuide}
                         >
-                          {submittingFeedback ? 'Sending... ' : 'Send Feedback! '}
+                          {submittingFeedback ? 'Sending...' : 'Send Feedback'}
                         </button>
                       </div>
                     </form>
@@ -559,12 +731,12 @@ const MathsLectureView = () => {
 
                   {/* Previous feedbacks */}
                   {feedbackList.length > 0 && (
-                    <div className="card border-0 shadow-sm p-4" style={{ borderRadius: "20px" }}>
-                      <h4 className="text-success fw-bold mb-4">What others said:</h4>
+                    <div className="card border-0 shadow-sm p-4 lecture-comments-card" style={{ borderRadius: "20px" }}>
+                      <h4 className="fw-bold mb-4"><i className="icofont-comment me-2 text-success"></i>Student Feedback</h4>
                       <div className="row g-3">
                         {feedbackList.map((fb, idx) => (
                           <div className="col-12" key={idx}>
-                            <div className="bg-light p-3 rounded-4 border border-info border-opacity-25 shadow-sm">
+                            <div className="lecture-comment-item">
                               <div className="d-flex justify-content-between align-items-center mb-2">
                                 <strong className="text-primary fs-5">{fb.userId?.username || 'Super Student'}</strong>
                                 <small className="text-muted">{new Date(fb.createdAt).toLocaleDateString()}</small>
@@ -581,30 +753,30 @@ const MathsLectureView = () => {
 
                 {/* Right Column: Overview / Stats */}
                 <div className="col-lg-4 col-12">
-                  <div className="card border-0 shadow-sm z-10 p-4 sticky-lg-top" style={{ borderRadius: "24px", top: "20px", borderTop: "6px solid #4F46E5", border: "2px solid #E5E7EB" }}>
-                    <h4 className="fw-bold mb-4" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>Quick Facts</h4>
+                  <div className="card border-0 shadow-sm z-10 p-4 sticky-lg-top lecture-facts-card" style={{ borderRadius: "24px", top: "20px", borderTop: "6px solid #4F46E5", border: "2px solid #E5E7EB" }}>
+                    <h4 className="fw-bold mb-4" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}><i className="icofont-info-circle me-2"></i>Lesson Details</h4>
 
                     <ul className="list-group list-group-flush fs-6">
-                      <li className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 bg-transparent">
+                      <li className="list-group-item lecture-fact-row bg-transparent">
                         <span className="text-muted fw-bold">Level</span>
                         <span className="badge bg-primary rounded-pill px-3 py-2">{lecture.lectureDifficulty}</span>
                       </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 bg-transparent">
+                      <li className="list-group-item lecture-fact-row bg-transparent">
                         <span className="text-muted fw-bold">Type</span>
                         <span className="fw-bold text-dark">{typeLabels[lecture.lectureType] || 'Unknown'}</span>
                       </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 bg-transparent">
+                      <li className="list-group-item lecture-fact-row bg-transparent">
                         <span className="text-muted fw-bold">Time</span>
                         <span className="fw-bold text-info">
                           {Number.isFinite(durationMinutes) ? `${Math.ceil(durationMinutes)} mins` : '—'}
                         </span>
                       </li>
-                      <li className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 bg-transparent">
+                      <li className="list-group-item lecture-fact-row bg-transparent">
                         <span className="text-muted fw-bold">Teacher</span>
                         <span className="fw-bold text-success border-bottom border-success border-2 pb-1">{lecture.createby?.username || 'Unknown'}</span>
                       </li>
                       {lecture.teacherGuideId?.coureInfo && (
-                        <li className="list-group-item d-flex justify-content-between align-items-center px-0 py-3 bg-transparent">
+                        <li className="list-group-item lecture-fact-row bg-transparent">
                           <span className="text-muted fw-bold">Guide</span>
                           <span className="fw-bold text-dark">{lecture.teacherGuideId.coureInfo}</span>
                         </li>

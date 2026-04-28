@@ -97,7 +97,7 @@ export default function MathQuiz() {
 
                 {gameState === 'start' && (
                     <div className="mathquiz-gameover">
-                        <h2>Math Quiz 🧮</h2>
+                        <h2>Math Quiz <i className="icofont-calculator"></i></h2>
                         <p>Answer as many questions as you can in {GAME_TIME}s!</p>
                         <p style={{ fontSize: '1rem', color: '#888' }}>(+2s for correct, -3s penalty for wrong)</p>
                         <button className="mathquiz-action-btn" onClick={startGame}>Start Game</button>

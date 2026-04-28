@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from '../../assets/images/logo/logo.png';
 import '../../assets/css/header/header.css';
+import { clearStudentSession } from "../../auth";
 
 const phoneNumber = "+94765523093";
 const address = "Colombo, Sri Lanka";
@@ -29,9 +30,8 @@ const Header = () => {
 
     // Handle Logout
     const handleLogout = () => {
-        localStorage.removeItem("token");
+        clearStudentSession();
         localStorage.removeItem("user");
-        localStorage.removeItem("userId");
         setIsLoggedIn(false);
         navigate("/login");
     };
@@ -39,20 +39,28 @@ const Header = () => {
     // Add scroll event for fixed header
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 210) {
-                setHeaderFixed(true);
-            } else {
-                setHeaderFixed(false);
-            }
+            const nextY = window.scrollY;
+
+            setHeaderFixed((prev) => {
+                if (!prev && nextY > 210) {
+                    return true;
+                }
+
+                if (prev && nextY < 170) {
+                    return false;
+                }
+
+                return prev;
+            });
         };
 
-
+        handleScroll();
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     return (
-        <header className={`header-section ${headerFixed ? "header-fixed fadeInUp" : ""}`} style={{ zIndex: 99999 }}>
+        <header className={`header-section ${headerFixed ? "header-fixed" : ""}`} style={{ zIndex: 99999 }}>
             <div className={`header-top ${socialToggle ? "open" : ""}`}>
                 <div className="container">
                     <div className="header-top-area">
@@ -73,7 +81,13 @@ const Header = () => {
                 <div className="container">
                     <div className="header-wrapper">
                         <div className="logo">
-                            <Link to="/"><img src={logo} alt="logo" className="headerlogo1" /></Link>
+                            <Link to="/" className="brand-link">
+                                <img src={logo} alt="MathsBuddy logo" className="headerlogo1" />
+                                <span className="brand-copy">
+                                    <span className="brand-name">MathsBuddy</span>
+                                    <span className="brand-tagline">Learn maths the smart way</span>
+                                </span>
+                            </Link>
                         </div>
                         <div className="menu-area">
                             <div className="menu">

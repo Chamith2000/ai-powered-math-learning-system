@@ -32,7 +32,7 @@ const Faq = () => {
                 <div className="row justify-content-center">
                     <div className="col-lg-8 col-12">
                         <div className="section-header text-center">
-                            <h2 className="title">Got Questions? 💭</h2>
+                            <h2 className="title">Got Questions? <i className="icofont-question-circle ms-2"></i></h2>
                             <p>Here are some of the most common questions from our parents and little heroes!</p>
                         </div>
                         <div className="faq-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>

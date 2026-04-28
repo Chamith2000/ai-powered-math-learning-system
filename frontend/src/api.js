@@ -1,4 +1,5 @@
 import axios from "axios";
+import { clearStudentSession, hasValidStudentSession } from "./auth";
 
 const API_BASE_URL = "http://localhost:5001";
 
@@ -12,16 +13,17 @@ const apiClient = axios.create({
 export const setAuthToken = (token) => {
   if (token) {
     apiClient.defaults.headers["Authorization"] = `Bearer ${token}`;
-    localStorage.setItem("token", token); 
   } else {
     delete apiClient.defaults.headers["Authorization"];
-    localStorage.removeItem("token"); 
+    clearStudentSession();
   }
 };
 
-const savedToken = localStorage.getItem("token");
-if (savedToken) {
+if (hasValidStudentSession()) {
+  const savedToken = localStorage.getItem("token");
   setAuthToken(savedToken);
+} else {
+  clearStudentSession();
 }
 
 export default apiClient;

@@ -400,25 +400,126 @@ const PaperDetails = () => {
 
   return (
     <Fragment>
+      <style>{`
+        .paper-detail-page {
+          background:
+            radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 34%),
+            radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.12), transparent 30%),
+            #f6f9ff !important;
+          padding-top: 26px !important;
+        }
+        .paper-detail-content {
+          max-width: 920px;
+        }
+        .paper-detail-hero,
+        .paper-detail-question-card,
+        .paper-detail-result,
+        .paper-detail-feedback,
+        .paper-detail-empty {
+          border-radius: 18px !important;
+          border: 1px solid #dbeafe !important;
+          background: #ffffff !important;
+          box-shadow: 0 14px 34px rgba(30, 41, 59, 0.08) !important;
+        }
+        .paper-detail-hero {
+          padding: 28px !important;
+          background: linear-gradient(135deg, #eef2ff 0%, #ffffff 55%, #ecfeff 100%) !important;
+        }
+        .paper-detail-hero h1 {
+          color: #24306b !important;
+          font-family: 'Baloo 2', sans-serif !important;
+          font-weight: 900 !important;
+        }
+        .paper-detail-question-card {
+          padding: 24px !important;
+          transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease !important;
+        }
+        .paper-detail-question-card:hover {
+          transform: translateY(-4px);
+          border-color: #818cf8 !important;
+          box-shadow: 0 20px 42px rgba(79, 70, 229, 0.14) !important;
+        }
+        .paper-question-heading {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 14px;
+          color: #1f2a55 !important;
+        }
+        .paper-question-title {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          margin: 0;
+          line-height: 1.45;
+          font-style: normal !important;
+        }
+        .paper-question-number {
+          flex: 0 0 auto;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 48px;
+          height: 48px;
+          border-radius: 14px;
+          background: #eef2ff;
+          color: #4f46e5;
+          font-weight: 900;
+        }
+        .paper-mark-badge {
+          white-space: nowrap;
+          border-radius: 999px;
+          padding: 9px 13px;
+          background: #fef3c7;
+          color: #7c2d12 !important;
+          font-weight: 900;
+        }
+        .paper-answer-input {
+          border: 1px solid #c7d2fe !important;
+          background-color: #f8fbff !important;
+          min-height: 52px;
+          box-shadow: none !important;
+        }
+        .paper-detail-submit {
+          width: fit-content;
+          margin-left: auto;
+          margin-right: auto;
+          border-radius: 999px;
+          background: rgba(255, 255, 255, 0.92);
+          padding: 8px;
+          box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
+        }
+        .paper-detail-feedback {
+          padding: 24px !important;
+          background: #fffbeb !important;
+          border-color: #fde68a !important;
+        }
+        @media (max-width: 575px) {
+          .paper-question-heading,
+          .paper-question-title {
+            flex-direction: column;
+          }
+        }
+      `}</style>
       <Header />
       <AutoCapture enableGamePopup={false} showFloatingEmotion={false} />
-      <PageHeader title="Fun Challenge! " curPage={"Paper Details"} />
-      <div className="paper-section padding-tb section-bg" style={{ backgroundColor: "#F9FAFB", minHeight: "80vh", fontFamily: "'Nunito', sans-serif" }}>
+      <PageHeader title={<><i className="icofont-paper me-2"></i>Question Paper</>} curPage={"Paper Details"} />
+      <div className="paper-section padding-tb section-bg paper-detail-page" style={{ backgroundColor: "#F9FAFB", minHeight: "80vh", fontFamily: "'Nunito', sans-serif" }}>
         <div className="container">
           {loading ? (
             <div className="text-center mt-5">
               <div className="spinner-border text-primary" style={{ width: '3rem', height: '3rem' }} role="status"></div>
-              <h4 className="text-primary mt-3 fw-bold">Loading your challenge... ⏳</h4>
+              <h4 className="text-primary mt-3 fw-bold"><i className="icofont-clock-time me-2"></i>Loading your challenge...</h4>
             </div>
           ) : error ? (
             <div className="alert alert-danger rounded-4 text-center p-4">
-              <h4>Oops! 🙈</h4>
+              <h4><i className="icofont-warning-alt me-2"></i>Oops!</h4>
               <p>{error}</p>
             </div>
           ) : paper ? (
-            <div className="paper-content mx-auto" style={{ maxWidth: "800px" }}>
+            <div className="paper-content mx-auto paper-detail-content">
               {/* Paper Header */}
-              <div className="paper-header text-center bg-white p-5 shadow-sm mb-5" style={{ borderRadius: "24px", border: "2px solid #E0E7FF", boxShadow: "0 4px 20px rgba(79, 70, 229, 0.1)" }}>
+              <div className="paper-header text-center bg-white p-5 shadow-sm mb-5 paper-detail-hero" style={{ borderRadius: "24px", border: "2px solid #E0E7FF", boxShadow: "0 4px 20px rgba(79, 70, 229, 0.1)" }}>
                 <h1 className="fw-bold mb-3" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>{paper.paperTytle}</h1>
                 <div className="d-flex flex-wrap justify-content-center gap-3">
                   <span className={`badge rounded-pill fs-5 ${paper.paperDifficulty === 'Easy' ? 'bg-success' : paper.paperDifficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger'}`}>
@@ -438,17 +539,19 @@ const PaperDetails = () => {
                   <ul className="question-list list-unstyled">
                     {questions.map((q, idx) => (
                       <li key={q._id} className="mb-4">
-                        <div className="card shadow-sm border-0 p-4" style={{ borderRadius: "24px", transition: "all 0.3s ease", border: "2px solid #E5E7EB" }} onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-5px)"; e.currentTarget.style.boxShadow = "0 10px 30px rgba(79, 70, 229, 0.12)"; }} onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,0.05)"; }}>
-                          <h4 className="mb-4 text-dark fst-italic">
-                            <span className="badge bg-primary rounded-circle fs-5 me-2" style={{ padding: "10px 15px" }}>Q{idx + 1}</span>
-                            {q.questionTytle}
-                            <span className="badge bg-warning text-dark fs-6 ms-3 rounded-pill shadow-sm">⭐ {q.score} marks</span>
-                          </h4>
+                        <div className="card shadow-sm border-0 paper-detail-question-card">
+                          <div className="paper-question-heading mb-4">
+                            <h4 className="paper-question-title">
+                              <span className="paper-question-number">Q{idx + 1}</span>
+                              <span>{q.questionTytle}</span>
+                            </h4>
+                            <span className="paper-mark-badge"><i className="icofont-star me-1"></i>{q.score} marks</span>
+                          </div>
                           <div>
                             <input
                               type="text"
-                              className="form-control form-control-lg rounded-pill px-4 shadow-sm"
-                              placeholder="Type your answer here! "
+                              className="form-control form-control-lg rounded-pill px-4 paper-answer-input"
+                              placeholder="Type your answer here"
                               value={studentAnswers[q._id] || ""}
                               style={{ border: "2px solid #e0e7ff", backgroundColor: "#fcfcff" }}
                               onChange={(e) => handleAnswerChange(q._id, e.target.value)}
@@ -456,7 +559,7 @@ const PaperDetails = () => {
                             />
                             {evaluationResults[q._id] !== undefined && (
                               <div className={`mt-3 p-3 rounded-4 fw-bold text-center fs-5 shadow-sm ${evaluationResults[q._id] ? "lms-feedback-correct" : "lms-feedback-incorrect"}`}>
-                                {evaluationResults[q._id] ? "Awesome! Correct! ✅" : "Oops! Incorrect ❌"}
+                                {evaluationResults[q._id] ? <><i className="icofont-check-circled me-2"></i>Awesome! Correct!</> : <><i className="icofont-close-circled me-2"></i>Oops! Incorrect</>}
                               </div>
                             )}
                           </div>
@@ -466,13 +569,13 @@ const PaperDetails = () => {
                   </ul>
                 ) : (
                   <div className="text-center p-5 bg-white rounded-4 shadow-sm">
-                    <h4 className="text-muted">No questions found yet.️</h4>
+                    <h4 className="text-muted">No questions found yet.</h4>
                   </div>
                 )}
               </div>
 
               {/* Submit + Scores */}
-              <div className="text-center mt-5 mb-5">
+              <div className="paper-detail-submit text-center mt-5 mb-5">
                 <button
                   className={`btn btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg ${isSubmitted ? 'btn-secondary' : ''}`}
                   style={{ fontSize: "1.5rem", transition: "all 0.3s ease", borderRadius: "50px", background: isSubmitted ? undefined : "linear-gradient(135deg, #22C55E 0%, #16A34A 100%)", border: "none" }}
@@ -483,7 +586,7 @@ const PaperDetails = () => {
                 </button>
 
                 {isSubmitted && (
-                  <div className="mt-4 p-4 bg-white rounded-4 shadow-sm d-inline-block border border-2 border-info">
+                  <div className="mt-4 p-4 bg-white rounded-4 shadow-sm d-inline-block border border-2 border-info paper-detail-result">
                     <h3 className="text-success fw-bold mb-3">
                       Great Job!
                     </h3>
@@ -495,14 +598,14 @@ const PaperDetails = () => {
                       <span className="badge bg-warning text-dark fs-5 me-2">Score</span>
                       {percentage}%
                     </h4>
-                    <p className="text-muted fst-italic mb-0">🕒 Time spent: {Math.ceil(secondsSpent / 60)}m</p>
+                    <p className="text-muted fst-italic mb-0"><i className="icofont-clock-time me-2"></i>Time spent: {Math.ceil(secondsSpent / 60)}m</p>
                   </div>
                 )}
               </div>
 
               {/* Feedback form — enabled only after submission */}
               {isSubmitted && (
-                <div className="card mt-4 p-4 border-0 shadow-lg" style={{ borderRadius: "24px", backgroundColor: "#FFFBEB", border: "2px solid #FDE68A" }}>
+                <div className="card mt-4 border-0 shadow-lg paper-detail-feedback" style={{ borderRadius: "24px", backgroundColor: "#FFFBEB", border: "2px solid #FDE68A" }}>
                   <h4 className="fw-bold border-bottom pb-2 mb-4" style={{ color: "#D97706", fontFamily: "'Baloo 2', sans-serif" }}>
                     Tell us what you think!
                     {paper.teacherGuideId?.coureInfo && <span className="fs-6 text-muted d-block mt-1">For: {paper.teacherGuideId.coureInfo}</span>}
@@ -519,7 +622,7 @@ const PaperDetails = () => {
                       style={{ border: "2px solid #ffe0b2" }}
                       value={feedbackText}
                       onChange={(e) => setFeedbackText(e.target.value)}
-                      placeholder="Was it fun? Too hard? Let your teacher know! ✏️"
+                      placeholder="Was it fun? Too hard? Let your teacher know!"
                       disabled={submittingFeedback || !paper.teacherGuideId?._id}
                       required
                     />
@@ -537,8 +640,8 @@ const PaperDetails = () => {
               )}
             </div>
           ) : (
-            <div className="text-center p-5 bg-white rounded-4 shadow-sm">
-              <h4>Adventure not found. </h4>
+            <div className="text-center p-5 bg-white rounded-4 shadow-sm paper-detail-empty">
+              <h4>Paper not found.</h4>
             </div>
           )}
         </div>

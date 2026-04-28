@@ -136,7 +136,7 @@ function AutoCapture({ enableGamePopup = false, showFloatingEmotion = false }) {
             animation: "slideIn 0.5s ease-out"
           }}
         >
-          <span>👀</span> 
+          <i className="icofont-eye"></i>
           <span>Emotion: {currentEmotion}</span>
         </div>
       )}
@@ -157,7 +157,7 @@ function AutoCapture({ enableGamePopup = false, showFloatingEmotion = false }) {
           }}
         >
           <div className="card-body p-4 text-center">
-            <h3 className="fw-bold mb-3" style={{ color: "#f57c00" }}>😟 Oh no!</h3>
+            <h3 className="fw-bold mb-3" style={{ color: "#f57c00" }}><i className="icofont-warning-alt me-2"></i>Oh no!</h3>
             <p className="fs-6 text-muted fw-bold mb-4">
               You look a little frustrated. Feeling stressed? How about a quick game to relax and recharge your brain?
             </p>
@@ -198,7 +198,7 @@ function AutoCapture({ enableGamePopup = false, showFloatingEmotion = false }) {
                   window.location.href = "/game-launch";
                 }}
               >
-                Let's Play! 🚀
+                Let's Play! <i className="icofont-rocket ms-2"></i>
               </button>
             </div>
           </div>

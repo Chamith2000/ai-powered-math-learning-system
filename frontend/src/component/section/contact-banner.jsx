@@ -14,7 +14,7 @@ const ContactBanner = () => {
                     }}
                 >
                     <h2 style={{ color: 'white', fontSize: '2.5rem', marginBottom: '20px' }}>
-                        Need a Little Extra Magic? ✨
+                        Need a Little Extra Magic? <i className="icofont-magic ms-2"></i>
                     </h2>
                     <p style={{ color: 'white', fontSize: '1.2rem', maxWidth: '600px', margin: '0 auto 30px auto' }}>
                         Our friendly support team is always here to help parents and mentors with any questions or technical spells!
@@ -30,7 +30,7 @@ const ContactBanner = () => {
                             boxShadow: '0 6px 0 rgba(0,0,0,0.2)'
                         }}
                     >
-                        Talk to Us Today 🚀
+                        Talk to Us Today <i className="icofont-rocket ms-2"></i>
                     </Link>
                 </div>
             </div>

@@ -6,44 +6,44 @@ import "../assets/css/LatestCourse.css";
 
 const EXAMPLES = [
   { key: "manual", title: "Manual (start here)", code: "" },
-  { key: "hello", title: "Hello 👋", code: `print("Hello, coder!")` },
+  { key: "hello", title: "Hello", code: `print("Hello, coder!")` },
   {
-    key: "ask-name", title: "Ask your name 🎤", code: `name = input("What is your name? ")
+    key: "ask-name", title: "Ask your name", code: `name = input("What is your name? ")
 print("Nice to meet you,", name + "!")` },
   {
-    key: "add-two", title: "Add two numbers ➕", code: `a = int(input("Enter first number: "))
+    key: "add-two", title: "Add two numbers", code: `a = int(input("Enter first number: "))
 b = int(input("Enter second number: "))
 print("Sum is:", a + b)` },
   {
-    key: "times-table", title: "Times table (x10) 🧮", code: `n = int(input("Show table for: "))
+    key: "times-table", title: "Times table (x10)", code: `n = int(input("Show table for: "))
 for i in range(1, 11):
     print(n, "x", i, "=", n*i)` },
   {
-    key: "even-odd", title: "Even or odd 🔍", code: `n = int(input("Enter a number: "))
+    key: "even-odd", title: "Even or odd", code: `n = int(input("Enter a number: "))
 print("Even" if n % 2 == 0 else "Odd")` },
   {
-    key: "count-5", title: "Count to 5 🔢", code: `for i in range(1, 6):
+    key: "count-5", title: "Count to 5", code: `for i in range(1, 6):
     print(i)` },
   {
-    key: "stars", title: "Stars ⭐", code: `n = int(input("How many stars? "))
+    key: "stars", title: "Stars", code: `n = int(input("How many stars? "))
 print("⭐" * n)` },
   {
-    key: "factorial", title: "Factorial (loop) 🧠", code: `n = int(input("Number: "))
+    key: "factorial", title: "Factorial (loop)", code: `n = int(input("Number: "))
 f = 1
 for i in range(2, n+1):
     f *= i
 print("Factorial =", f)` },
   {
-    key: "fibonacci", title: "Fibonacci terms 🔗", code: `n = int(input("How many terms? "))
+    key: "fibonacci", title: "Fibonacci terms", code: `n = int(input("How many terms? "))
 a, b = 0, 1
 for _ in range(n):
     print(a)
     a, b = b, a+b` },
   {
-    key: "palindrome", title: "Palindrome word 🔁", code: `w = input("Word: ").strip().lower()
+    key: "palindrome", title: "Palindrome word", code: `w = input("Word: ").strip().lower()
 print("Palindrome!" if w == w[::-1] else "Not a palindrome")` },
   {
-    key: "mini-calc", title: "Mini calculator ➗", code: `a = float(input("a: "))
+    key: "mini-calc", title: "Mini calculator", code: `a = float(input("a: "))
 op = input("+, -, *, / : ")
 b = float(input("b: "))
 if op == "+":   print(a + b)
@@ -153,7 +153,7 @@ RESULT_STDERR = _stderr.getvalue()
   return (
     <>
       <Header />
-      <PageHeader title={"Maths Playground 🧮"} curPage={"Maths Compiler"} />
+      <PageHeader title={<><i className="icofont-calculator me-2"></i>Maths Playground</>} curPage={"Maths Compiler"} />
 
       <main className="py-5" style={{ backgroundColor: "#f8f9fa", backgroundImage: "url('/images/background/bg1.png')", backgroundSize: "cover", backgroundBlendMode: "overlay" }}>
         <div className="container">
@@ -162,28 +162,28 @@ RESULT_STDERR = _stderr.getvalue()
             <div className="card-body p-4 p-md-5 bg-white">
 
               <div className="text-center mb-4">
-                <h2 className="fw-bold mb-3" style={{ color: "#f72585" }}>Let's Write Some Code! 💻</h2>
+                <h2 className="fw-bold mb-3" style={{ color: "#f72585" }}>Let's Write Some Code! <i className="icofont-code ms-2"></i></h2>
                 <div className="alert border-0 rounded-pill shadow-sm d-inline-block px-4 py-2" style={{ backgroundColor: "#fff3cd", color: "#856404" }}>
-                  💡 <strong>Tip:</strong> If your program uses <code>input()</code>, a small box will pop up asking your answer.
+                  <i className="icofont-light-bulb me-2"></i><strong>Tip:</strong> If your program uses <code>input()</code>, a small box will pop up asking your answer.
                 </div>
               </div>
 
               {loading && (
                 <div className="text-center p-4">
                   <div className="spinner-border text-info mb-2" role="status"></div>
-                  <h5 className="text-info fw-bold">Waking up the Maths Engine... 🧮</h5>
+                  <h5 className="text-info fw-bold"><i className="icofont-calculator me-2"></i>Waking up the Maths Engine...</h5>
                 </div>
               )}
 
               {!loading && !pyodide && (
                 <div className="alert alert-danger rounded-4 shadow-sm text-center">
-                  Oh no! 🙈 We couldn't load Maths. Please check your internet connection and try again!
+                  <i className="icofont-warning-alt me-2"></i>Oh no! We couldn't load Maths. Please check your internet connection and try again!
                 </div>
               )}
 
               <div className="row g-3 align-items-center mb-4 bg-light p-3 rounded-4 border border-2 border-info shadow-sm">
                 <div className="col-12 col-md-auto">
-                  <span className="fw-bold fs-5 text-primary">🪄 Magic Spells (Examples):</span>
+                  <span className="fw-bold fs-5 text-primary"><i className="icofont-magic me-2"></i>Magic Spells (Examples):</span>
                 </div>
                 <div className="col-12 col-md">
                   <select
@@ -202,7 +202,7 @@ RESULT_STDERR = _stderr.getvalue()
                     onClick={clearOutput}
                     title="Clear the output screen"
                   >
-                    🧹 Clear
+                    <i className="icofont-eraser me-2"></i>Clear
                   </button>
                   <button
                     className="btn btn-success btn-lg rounded-pill fw-bold shadow-sm px-5"
@@ -210,7 +210,7 @@ RESULT_STDERR = _stderr.getvalue()
                     disabled={!pyodide || running}
                     style={{ transform: running ? "scale(0.95)" : "scale(1)", transition: "transform 0.2s" }}
                   >
-                    {running ? "Running... 🏃" : "Run Code! ▶️"}
+                    {running ? <><i className="icofont-runner-alt-1 me-2"></i>Running...</> : <>Run Code! <i className="icofont-play-alt-1 ms-2"></i></>}
                   </button>
                 </div>
               </div>
@@ -249,7 +249,7 @@ RESULT_STDERR = _stderr.getvalue()
                 <div className="col-lg-5">
                   <div className="card h-100 border-0 shadow-sm rounded-4 overflow-hidden" style={{ border: "2px solid #e2e8f0" }}>
                     <div className="card-header bg-primary text-white border-0 py-3">
-                      <h5 className="mb-0 fw-bold">🖥️ Output Screen</h5>
+                      <h5 className="mb-0 fw-bold"><i className="icofont-ui-monitor me-2"></i>Output Screen</h5>
                     </div>
                     <div className="card-body bg-light p-0 d-flex flex-column">
                       <pre
@@ -267,7 +267,7 @@ RESULT_STDERR = _stderr.getvalue()
 
                       {stderr && (
                         <div className="p-3 border-top" style={{ backgroundColor: "#fef2f2" }}>
-                          <div className="mb-2 fw-bold text-danger">⚠️ Oops! Found an Error:</div>
+                          <div className="mb-2 fw-bold text-danger"><i className="icofont-warning me-2"></i>Oops! Found an Error:</div>
                           <pre
                             className="p-3 rounded-3 mb-0"
                             style={{ background: "#fff", border: "1px dashed #fca5a5", color: "#b91c1c", whiteSpace: "pre-wrap", fontSize: "0.95rem" }}

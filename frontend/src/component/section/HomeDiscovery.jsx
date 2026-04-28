@@ -258,7 +258,7 @@ const HomeDiscovery = () => {
 
                 <div className="text-center mt-5 pt-4">
                     <Link to="/signup" className="lab-btn" style={{ fontSize: "1.2rem", padding: "18px 48px" }}>
-                        <span>Start Your Free Adventure ✨</span>
+                        <span>Start Your Free Adventure <i className="icofont-magic ms-2"></i></span>
                     </Link>
                 </div>
             </div>

@@ -16,6 +16,192 @@ const safeNumber = (v, d = 0) => (Number.isFinite(Number(v)) ? Number(v) : d);
 
 const VALID_GRADES = [3, 4, 5];
 
+const startingPaperStyles = `
+  .starting-paper-page {
+    background:
+      radial-gradient(circle at top left, rgba(99, 102, 241, 0.12), transparent 34%),
+      radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.12), transparent 30%),
+      #f6f9ff;
+  }
+
+  .starting-setup-card,
+  .starting-loading-card,
+  .starting-panel,
+  .starting-summary-card {
+    border: 1px solid rgba(79, 70, 229, 0.12);
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.96);
+    box-shadow: 0 24px 60px rgba(31, 41, 55, 0.11);
+  }
+
+  .starting-grade-btn {
+    width: 122px;
+    height: 122px;
+    border: 2px solid #e0e7ff;
+    color: #27335c;
+    font-weight: 800;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  }
+
+  .starting-grade-btn:hover,
+  .starting-grade-btn.is-selected {
+    transform: translateY(-4px);
+    border-color: #4f46e5;
+    background: #eef2ff;
+    box-shadow: 0 14px 30px rgba(79, 70, 229, 0.2);
+  }
+
+  .starting-hero {
+    border-radius: 18px;
+    padding: 26px;
+    background: linear-gradient(135deg, #eef2ff 0%, #ffffff 55%, #ecfeff 100%);
+    border: 1px solid #dbeafe;
+  }
+
+  .starting-hero h2,
+  .starting-hero h3 {
+    color: #24306b;
+    font-family: "Baloo 2", sans-serif;
+    font-weight: 800;
+  }
+
+  .starting-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    padding: 9px 14px;
+    background: #ffffff;
+    border: 1px solid #dbeafe;
+    color: #334155;
+    font-weight: 800;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+  }
+
+  .starting-category-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #3243a3;
+    font-weight: 800;
+    border-bottom: 1px solid #dbeafe;
+    padding-bottom: 12px;
+  }
+
+  .starting-question-card {
+    border-radius: 18px;
+    border: 1px solid #dbeafe;
+    background: #ffffff;
+    box-shadow: 0 14px 34px rgba(30, 41, 59, 0.08);
+  }
+
+  .starting-question-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    color: #1f2a55;
+  }
+
+  .starting-question-title {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .starting-question-number {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-weight: 900;
+  }
+
+  .starting-mark-badge {
+    white-space: nowrap;
+    border-radius: 999px;
+    padding: 9px 13px;
+    background: #fef3c7;
+    color: #7c2d12;
+    font-weight: 900;
+  }
+
+  .starting-option-label {
+    display: block;
+    border: 1px solid #dbeafe;
+    border-radius: 16px;
+    padding: 14px 16px;
+    background: #f8fbff;
+    color: #24306b;
+    font-size: 1.05rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+  }
+
+  .starting-option-label:hover {
+    transform: translateX(4px);
+    border-color: #818cf8;
+    background: #eef2ff;
+  }
+
+  .starting-option-input:checked + .starting-option-label {
+    border-color: #4f46e5;
+    background: #4f46e5;
+    color: #ffffff;
+    box-shadow: 0 12px 24px rgba(79, 70, 229, 0.23);
+  }
+
+  .starting-submit-bar {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 8px;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.1);
+  }
+
+  .starting-round-card {
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 14px 28px rgba(15, 23, 42, 0.08);
+    overflow: hidden;
+  }
+
+  @media (max-width: 575px) {
+    .starting-setup-card,
+    .starting-loading-card,
+    .starting-panel,
+    .starting-summary-card {
+      border-radius: 16px;
+    }
+
+    .starting-hero {
+      padding: 20px;
+    }
+
+    .starting-question-head {
+      flex-direction: column;
+    }
+
+    .starting-question-title {
+      flex-direction: column;
+    }
+
+    .starting-mark-badge {
+      white-space: normal;
+    }
+  }
+`;
+
 const isValidOriginalMCQ = (q) =>
   Array.isArray(q.answers) &&
   q.answers.filter((t) => String(t || "").trim().length > 0).length >= 2;
@@ -680,11 +866,11 @@ const StartingPaper = () => {
 
     // Fire Detailed Popup
     await Swal.fire({
-      title: "Initial Assessment Completed! 🌟",
+      title: "Initial Assessment Completed!",
       html: tableHtml,
       width: '800px', // Wide popup for the table
       icon: "success",
-      confirmButtonText: "Generate Practice Paper 🚀",
+      confirmButtonText: "Generate Practice Paper",
       confirmButtonColor: '#198754',
       allowOutsideClick: false
     });
@@ -774,11 +960,11 @@ const StartingPaper = () => {
     const tableHtml = buildTableHtml(score, total, percent, genStats, recs, dist, isFinal);
 
     await Swal.fire({
-      title: "Awesome Practice! 🎉",
+      title: "Awesome Practice!",
       html: tableHtml,
       width: '800px',
       icon: "success",
-      confirmButtonText: isFinal ? "View Final Summary 📊" : "Generate Next Paper 🚀",
+      confirmButtonText: isFinal ? "View Final Summary" : "Generate Next Paper",
       confirmButtonColor: '#0dcaf0',
       allowOutsideClick: false
     });
@@ -814,29 +1000,29 @@ const StartingPaper = () => {
   if (currentView === "GRADE_SELECTION") {
     return (
       <Fragment>
+        <style>{startingPaperStyles}</style>
         <Header />
         <PageHeader title="Starting Paper" curPage={"Setup"} />
-        <div className="paper-section padding-tb section-bg" style={{ backgroundColor: "#f8fbff" }}>
+        <div className="paper-section padding-tb starting-paper-page">
           <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
-            <div className="card border-0 shadow-lg p-5" style={{ maxWidth: 600, width: "100%", borderRadius: "24px" }}>
+            <div className="starting-setup-card p-5" style={{ maxWidth: 620, width: "100%" }}>
               <div className="text-center mb-4">
                 <h2 className="text-primary mb-3" style={{ fontWeight: 800, fontSize: "2.5rem" }}>
-                  Ready to Play? 🚀
+                  Ready to Start? <i className="icofont-rocket ms-2"></i>
                 </h2>
-                <h5 className="text-muted">Choose your grade to start the adventure!</h5>
+                <h5 className="text-muted">Choose your grade and begin the assessment.</h5>
               </div>
               <div className="d-flex justify-content-center flex-wrap gap-4 mb-5 mt-4">
                 {VALID_GRADES.map((g) => {
                   const isSelected = grade === g;
-                  const btnColor = g === 3 ? "btn-info text-white" : g === 4 ? "btn-warning text-dark" : "btn-success text-white";
                   return (
                     <button
                       key={g}
-                      className={`btn btn-lg rounded-circle shadow-sm d-flex flex-column justify-content-center align-items-center ${isSelected ? `${btnColor} border border-4 border-primary shadow` : "btn-light"}`}
-                      style={{ width: 120, height: 120, fontSize: "1.8rem", fontWeight: "bold", transition: "transform 0.2s", transform: isSelected ? "scale(1.1)" : "scale(1)" }}
+                      className={`btn btn-lg rounded-circle d-flex flex-column justify-content-center align-items-center starting-grade-btn ${isSelected ? "is-selected" : ""}`}
                       onClick={() => setGrade(g)}
                     >
-                      <span style={{ fontSize: "1rem" }}>Grade</span>{g}
+                      <span style={{ fontSize: "0.98rem" }}>Grade</span>
+                      <span style={{ fontSize: "2rem" }}>{g}</span>
                     </button>
                   );
                 })}
@@ -844,17 +1030,17 @@ const StartingPaper = () => {
               <div className="text-center" style={{ minHeight: "80px" }}>
                 {grade ? (
                   <>
-                    <p className="text-success mb-3 fs-5" style={{ fontWeight: "bold" }}>Awesome! You picked Grade {grade} 🌟</p>
+                    <p className="text-success mb-3 fs-5" style={{ fontWeight: "bold" }}>Selected Grade {grade} <i className="icofont-check-circled ms-1"></i></p>
                     <button
                       className="btn btn-primary btn-lg rounded-pill px-5 py-3 shadow"
                       style={{ fontSize: "1.4rem", fontWeight: "bold" }}
                       onClick={() => { if (VALID_GRADES.includes(grade)) setGradeConfirmed(true); }}
                     >
-                      Go! 🎈
+                      Start Paper <i className="icofont-rocket ms-2"></i>
                     </button>
                   </>
                 ) : (
-                  <p className="text-muted fst-italic">Waiting for your choice...</p>
+                  <p className="text-muted fst-italic">Select a grade to continue.</p>
                 )}
               </div>
             </div>
@@ -868,13 +1054,16 @@ const StartingPaper = () => {
   if (currentView === "GENERATING") {
     return (
       <Fragment>
+        <style>{startingPaperStyles}</style>
         <Header />
         <PageHeader title="Generating Paper" curPage={"Processing"} />
-        <div className="paper-section padding-tb section-bg" style={{ backgroundColor: "#f8fbff", minHeight: "60vh" }}>
-          <div className="container d-flex flex-column justify-content-center align-items-center h-100">
-            <div className="spinner-border text-primary" style={{ width: "4rem", height: "4rem" }} role="status"></div>
-            <h3 className="mt-4 text-primary fw-bold">Generating your customized practice paper...</h3>
-            <p className="text-muted">We are analyzing your weaknesses and adjusting difficulty. Please wait! ⏳</p>
+        <div className="paper-section padding-tb starting-paper-page" style={{ minHeight: "60vh" }}>
+          <div className="container d-flex justify-content-center align-items-center h-100">
+            <div className="starting-loading-card p-5 text-center" style={{ maxWidth: 640 }}>
+              <div className="spinner-border text-primary" style={{ width: "4rem", height: "4rem" }} role="status"></div>
+              <h3 className="mt-4 text-primary fw-bold">Generating your customized practice paper...</h3>
+              <p className="text-muted mb-0">We are checking your learning level and preparing the next questions. <i className="icofont-clock-time ms-1"></i></p>
+            </div>
           </div>
         </div>
         <Footer />
@@ -884,21 +1073,27 @@ const StartingPaper = () => {
 
   return (
     <Fragment>
+      <style>{startingPaperStyles}</style>
       <Header />
       <PageHeader
         title={currentView === "SUMMARY" ? "Performance Summary" : "Question Paper"}
         curPage={currentView === "SUMMARY" ? "Summary" : "Paper Details"}
       />
-      <div className="paper-section padding-tb section-bg">
+      <div className="paper-section padding-tb starting-paper-page">
         <div className="container">
 
           {/* --- View 3: Initial Paper --- */}
           {currentView === "INITIAL_PAPER" && (
             loading ? <p>Loading paper details...</p> : error ? <p className="text-danger">{error}</p> : paper ? (
-              <div className="paper-content">
-                <div className="paper-header text-center">
-                  <h2>{paper.paperTytle} - Initial Assessment</h2>
-                  <p className="mb-0"><strong>Full Marks:</strong> {totalAvailableMarks}</p>
+              <div className="paper-content starting-panel p-4 p-lg-5">
+                <div className="starting-hero text-center mb-5">
+                  <h2 className="mb-2">{paper.paperTytle} - Initial Assessment</h2>
+                  <p className="text-muted mb-4">Answer each question carefully. Your result helps MathsBuddy choose the right learning path.</p>
+                  <div className="d-flex justify-content-center flex-wrap gap-3">
+                    <span className="starting-stat"><i className="icofont-star"></i>{totalAvailableMarks} Marks</span>
+                    <span className="starting-stat"><i className="icofont-question-circle"></i>{questions.length} Questions</span>
+                    <span className="starting-stat"><i className="icofont-clock-time"></i>{PER_QUESTION_SECONDS / 60} min/question</span>
+                  </div>
                 </div>
 
                 <div className="question-section mt-4">
@@ -914,7 +1109,7 @@ const StartingPaper = () => {
                       let globalIdx = 0;
                       return Object.keys(grouped).map((cat) => (
                         <div key={cat} className="mb-4">
-                          <h5 className="border-bottom pb-2 mb-3 text-primary">📂 Category: {cat}</h5>
+                          <h5 className="starting-category-title mb-3"><i className="icofont-folder-open"></i>Category: {cat}</h5>
                           <ul className="question-list list-unstyled">
                             {grouped[cat].map((q) => {
                               globalIdx += 1;
@@ -922,15 +1117,17 @@ const StartingPaper = () => {
                               return (
                                 <li
                                   key={q._id}
-                                  className="mb-4 p-4 bg-white shadow-sm"
-                                  style={{ borderRadius: "20px", border: "2px solid #e0e7ff" }}
+                                  className="starting-question-card mb-4 p-4"
                                   onMouseEnter={() => { ensureTimer(q._id); startTiming(q._id); }}
                                   onMouseLeave={() => { ensureTimer(q._id); stopTiming(q._id); }}
                                 >
-                                  <h4 className="mb-4 text-dark">
-                                    <span className="text-primary me-2">Q{idx}.</span>{q.paperQuestionTitle}
-                                    <span className="badge bg-warning text-dark fs-6 ms-2 rounded-pill shadow-sm">⭐ {q.score} marks</span>
-                                  </h4>
+                                  <div className="starting-question-head mb-4">
+                                    <h4 className="starting-question-title">
+                                      <span className="starting-question-number">Q{idx}</span>
+                                      <span>{q.paperQuestionTitle}</span>
+                                    </h4>
+                                    <span className="starting-mark-badge"><i className="icofont-star me-1"></i>{q.score} marks</span>
+                                  </div>
                                   <div className="d-flex flex-column gap-2">
                                     {(Array.isArray(q.answers) ? q.answers : []).filter(t => String(t || "").trim().length > 0).map((opt, i) => {
                                       const inputId = `${q._id}_${i}`;
@@ -938,12 +1135,12 @@ const StartingPaper = () => {
                                       return (
                                         <div key={inputId}>
                                           <input
-                                            className="btn-check" type="radio" name={q._id} id={inputId} value={opt}
+                                            className="btn-check starting-option-input" type="radio" name={q._id} id={inputId} value={opt}
                                             checked={checked}
                                             disabled={isSubmitted}
                                             onChange={(e) => { handleAnswerChange(q._id, e.target.value); markFirstAnswerIfNeeded(q._id); }}
                                           />
-                                          <label className={`btn btn-outline-primary text-start w-100 p-3 rounded-pill fw-bold fs-5 ${checked ? 'shadow' : ''}`} htmlFor={inputId}>
+                                          <label className="starting-option-label" htmlFor={inputId}>
                                             {opt}
                                           </label>
                                         </div>
@@ -960,14 +1157,14 @@ const StartingPaper = () => {
                   ) : <p>No questions available.</p>}
                 </div>
 
-                <div className="text-center mt-5 mb-5">
+                <div className="starting-submit-bar mt-5 mb-2">
                   <button
                     className={`btn btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg ${isSubmitted ? 'btn-secondary' : 'btn-success'}`}
                     style={{ fontSize: "1.5rem" }}
                     onClick={submitAnswers}
                     disabled={isSubmitted || questions.length === 0}
                   >
-                    {isSubmitted ? "Submitted! 🎉" : "Submit My Answers! 🚀"}
+                    {isSubmitted ? <><i className="icofont-check-circled me-2"></i>Submitted!</> : <>Submit My Answers! <i className="icofont-rocket ms-2"></i></>}
                   </button>
                 </div>
               </div>
@@ -977,9 +1174,16 @@ const StartingPaper = () => {
 
           {/* --- View 4: Practice Paper --- */}
           {currentView === "PRACTICE_PAPER" && (
-            <div className="mt-2">
-              <h3 className="mb-3 text-center text-primary">Practice Paper {practiceRound} / {MAX_PRACTICE_ROUNDS}</h3>
-              <p className="text-muted text-center">Total Questions: {nextPaper.length} | Total Marks: {nextTotal}</p>
+            <div className="starting-panel p-4 p-lg-5">
+              <div className="starting-hero text-center mb-5">
+                <h3 className="mb-2">Practice Paper {practiceRound} / {MAX_PRACTICE_ROUNDS}</h3>
+                <p className="text-muted mb-4">These questions are selected from your previous performance.</p>
+                <div className="d-flex justify-content-center flex-wrap gap-3">
+                  <span className="starting-stat"><i className="icofont-question-circle"></i>{nextPaper.length} Questions</span>
+                  <span className="starting-stat"><i className="icofont-star"></i>{nextTotal} Marks</span>
+                  <span className="starting-stat"><i className="icofont-dart"></i>Round {practiceRound}</span>
+                </div>
+              </div>
 
               {(() => {
                 const grouped = {};
@@ -992,7 +1196,7 @@ const StartingPaper = () => {
                 let gIdx = 0;
                 return Object.keys(grouped).map((cat) => (
                   <div key={cat} className="mb-4">
-                    <h5 className="border-bottom pb-2 mb-3 text-primary">📂 {cat}</h5>
+                    <h5 className="starting-category-title mb-3"><i className="icofont-folder-open"></i>{cat}</h5>
                     <ul className="list-unstyled">
                       {grouped[cat].map((q) => {
                         gIdx += 1;
@@ -1000,15 +1204,17 @@ const StartingPaper = () => {
                         return (
                           <li
                             key={q.id}
-                            className="mb-4 p-4 bg-white shadow-sm"
-                            style={{ borderRadius: "20px", border: "2px solid #e0e7ff" }}
+                            className="starting-question-card mb-4 p-4"
                             onMouseEnter={() => { ensureNextTimer(q.id); startNextTiming(q.id); }}
                             onMouseLeave={() => { ensureNextTimer(q.id); stopNextTiming(q.id); }}
                           >
-                            <h4 className="mb-4 text-dark">
-                              <span className="text-primary me-2">Q{qi}.</span>{q.question}
-                              <span className="badge bg-warning text-dark fs-6 ms-2 rounded-pill shadow-sm">⭐ {q.score} marks</span>
-                            </h4>
+                            <div className="starting-question-head mb-4">
+                              <h4 className="starting-question-title">
+                                <span className="starting-question-number">Q{qi}</span>
+                                <span>{q.question}</span>
+                              </h4>
+                              <span className="starting-mark-badge"><i className="icofont-star me-1"></i>{q.score} marks</span>
+                            </div>
                             <div className="d-flex flex-column gap-2">
                               {(Array.isArray(q.options) ? q.options : []).map((opt) => {
                                 const inputId = `${q.id}_${opt.key}`;
@@ -1016,12 +1222,12 @@ const StartingPaper = () => {
                                 return (
                                   <div key={inputId}>
                                     <input
-                                      className="btn-check" type="radio" name={q.id} id={inputId} value={opt.key}
+                                      className="btn-check starting-option-input" type="radio" name={q.id} id={inputId} value={opt.key}
                                       checked={checked}
                                       disabled={nextSubmitted}
                                       onChange={(e) => { handleNextAnswerChange(q.id, e.target.value); markNextFirstAnswerIfNeeded(q.id); }}
                                     />
-                                    <label className={`btn btn-outline-primary text-start w-100 p-3 rounded-pill fw-bold fs-5 ${checked ? 'shadow' : ''}`} htmlFor={inputId}>
+                                    <label className="starting-option-label" htmlFor={inputId}>
                                       <span className="me-2">{opt.key}.</span> {opt.text}
                                     </label>
                                   </div>
@@ -1036,14 +1242,14 @@ const StartingPaper = () => {
                 ));
               })()}
 
-              <div className="text-center mt-5 mb-5">
+              <div className="starting-submit-bar mt-5 mb-2">
                 <button
                   className={`btn btn-lg rounded-pill px-5 py-3 fw-bold shadow-lg ${nextSubmitted ? 'btn-secondary' : 'btn-success'}`}
                   style={{ fontSize: "1.5rem" }}
                   onClick={submitNextPaper}
                   disabled={nextSubmitted || nextPaper.length === 0}
                 >
-                  {nextSubmitted ? "Practice Completed! 🎉" : "Submit Practice Paper! 🚀"}
+                  {nextSubmitted ? <><i className="icofont-check-circled me-2"></i>Practice Completed!</> : <>Submit Practice Paper! <i className="icofont-rocket ms-2"></i></>}
                 </button>
               </div>
             </div>
@@ -1052,14 +1258,16 @@ const StartingPaper = () => {
 
           {/* --- View 5: Summary --- */}
           {currentView === "SUMMARY" && (
-            <div className="mt-4 p-5 bg-white rounded-4 shadow border-0" style={{ fontFamily: "'Nunito', sans-serif" }}>
-              <h2 className="mb-4 text-center text-primary fw-bold" style={{ fontFamily: "'Baloo 2', sans-serif" }}>Adventure Summary! 🌟</h2>
-              <h5 className="text-center text-muted mb-5">You've completely finished the assessment phase. Let's look at how you performed overall!</h5>
+            <div className="starting-summary-card p-4 p-lg-5" style={{ fontFamily: "'Nunito', sans-serif" }}>
+              <div className="starting-hero text-center mb-5">
+                <h2 className="mb-2">Assessment Summary <i className="icofont-star ms-2"></i></h2>
+                <h5 className="text-muted mb-0">You've completed the assessment phase. Here's your overall performance.</h5>
+              </div>
 
               <div className="row g-4 mb-5">
                 {practiceHistory.map((r, idx) => (
                   <div className="col-lg-6 col-12" key={r.round}>
-                    <div className="card h-100 shadow-sm border-0" style={{ borderRadius: "20px", borderTop: idx === 0 ? "5px solid #198754" : "5px solid #0dcaf0" }}>
+                    <div className="card h-100 border-0 starting-round-card" style={{ borderTop: idx === 0 ? "5px solid #198754" : "5px solid #0dcaf0" }}>
                       <div className="card-body p-4">
                         <h4 className="fw-bold mb-4" style={{ color: idx === 0 ? "#198754" : "#0dcaf0", borderBottom: "2px solid #E5E7EB", paddingBottom: "10px" }}>{r.roundName}</h4>
                         
@@ -1121,7 +1329,7 @@ const StartingPaper = () => {
 
               {finalDifficulty && (
                 <div className="alert alert-success mt-5 text-center p-4 rounded-4 shadow-sm border-0">
-                  <h4 className="fw-bold">🎯 Recommended System Difficulty:</h4>
+                  <h4 className="fw-bold"><i className="icofont-dart me-2"></i>Recommended System Difficulty:</h4>
                   <span className={`badge px-4 py-2 mt-2 fs-5 ${finalDifficulty === "Hard" ? "bg-danger" : finalDifficulty === "Medium" ? "bg-warning text-dark" : "bg-success"}`}>
                     {finalDifficulty} Path
                   </span>

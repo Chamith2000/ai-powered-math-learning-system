@@ -8,33 +8,34 @@ const siteTitle = "Site Map";
 const useTitle = "Useful Links";
 const socialTitle = "Social Contact";
 const supportTitle = "Our Support";
+const copyrightText = `Copyright ${new Date().getFullYear()} MathsBuddy. All rights reserved.`;
 
 const siteList = [
-  { text: "Documentation", link: "#" },
-  { text: "Feedback", link: "#" },
+  { text: "Documentation", link: "/documentation" },
+  { text: "Feedback", link: "/feedback" },
 ];
 
 const useList = [
-  { text: "About Us", link: "about" },
-  { text: "Help Link", link: "#" },
-  { text: "Terms & Conditions", link: "#" },
-  { text: "Contact Us", link: "contact" },
-  { text: "Privacy Policy", link: "#" },
+  { text: "About Us", link: "/about" },
+  { text: "Help Link", link: "/help" },
+  { text: "Terms & Conditions", link: "/terms" },
+  { text: "Contact Us", link: "/contact" },
+  { text: "Privacy Policy", link: "/privacy" },
 ];
 
 const socialList = [
-  { text: "Facebook", link: "#" },
-  { text: "Twitter", link: "#" },
-  { text: "Instagram", link: "#" },
-  { text: "YouTube", link: "#" },
-  { text: "Github", link: "#" },
+  { text: "Facebook", link: "https://www.facebook.com/" },
+  { text: "Twitter", link: "https://x.com/" },
+  { text: "Instagram", link: "https://www.instagram.com/" },
+  { text: "YouTube", link: "https://www.youtube.com/" },
+  { text: "Github", link: "https://github.com/" },
 ];
 
 const supportList = [
-  { text: "Help Center", link: "#" },
-  { text: "Status", link: "#" },
-  { text: "Changelog", link: "#" },
-  { text: "Contact Support", link: "#" },
+  { text: "Help Center", link: "/help-center" },
+  { text: "Status", link: "/status" },
+  { text: "Changelog", link: "/changelog" },
+  { text: "Contact Support", link: "/contact-support" },
 ];
 
 const Footer = () => {
@@ -97,21 +98,21 @@ const Footer = () => {
         position: 'absolute', top: '10%', left: '5%', fontSize: '3.5rem',
         opacity: 0.5, color: '#3B82F6',
         textShadow: '0 0 15px rgba(59, 130, 246, 0.8)'
-      }}>➕</div>
+      }}><i className="icofont-plus"></i></div>
 
       {/* Multiplication - Sunny Yellow */}
       <div className="floating-anim" style={{
         position: 'absolute', top: '45%', left: '3%', fontSize: '3rem',
         opacity: 0.5, color: '#FBBF24', animationDelay: '1.5s',
         textShadow: '0 0 15px rgba(251, 191, 36, 0.8)'
-      }}>✖️</div>
+      }}><i className="icofont-close"></i></div>
 
       {/* Division - Fresh Green */}
       <div className="floating-anim" style={{
         position: 'absolute', top: '15%', right: '5%', fontSize: '3.2rem',
         opacity: 0.5, color: '#34D399', animationDelay: '2s',
         textShadow: '0 0 15px rgba(52, 211, 153, 0.8)'
-      }}>➗</div>
+      }}><i className="icofont-calculations"></i></div>
 
       {/* Geometry Shape - Circle (Bright Pink) */}
       <div className="floating-anim" style={{
@@ -175,7 +176,7 @@ const Footer = () => {
                         <ul className="lab-ul">
                           {siteList.map((val, i) => (
                             <li key={i}>
-                              <a href={val.link}>{val.text}</a>
+                              <Link to={val.link}>{val.text}</Link>
                             </li>
                           ))}
                         </ul>
@@ -196,7 +197,7 @@ const Footer = () => {
                         <ul className="lab-ul">
                           {useList.map((val, i) => (
                             <li key={i}>
-                              <a href={val.link}>{val.text}</a>
+                              <Link to={val.link}>{val.text}</Link>
                             </li>
                           ))}
                         </ul>
@@ -217,7 +218,13 @@ const Footer = () => {
                         <ul className="lab-ul">
                           {socialList.map((val, i) => (
                             <li key={i}>
-                              <a href={val.link}>{val.text}</a>
+                              <a
+                                href={val.link}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {val.text}
+                              </a>
                             </li>
                           ))}
                         </ul>
@@ -238,7 +245,7 @@ const Footer = () => {
                         <ul className="lab-ul">
                           {supportList.map((val, i) => (
                             <li key={i}>
-                              <a href={val.link}>{val.text}</a>
+                              <Link to={val.link}>{val.text}</Link>
                             </li>
                           ))}
                         </ul>
@@ -248,6 +255,14 @@ const Footer = () => {
                 </div>
               </div>
 
+            </div>
+          </div>
+        </div>
+
+        <div className="footer-bottom">
+          <div className="container">
+            <div className="section-wrapper text-center">
+              <p>{copyrightText}</p>
             </div>
           </div>
         </div>

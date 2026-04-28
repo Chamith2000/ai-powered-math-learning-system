@@ -1,6 +1,48 @@
 .headerlogo1 {
     width: 60px;
     height: auto;
+    flex: 0 0 auto;
+}
+
+.header-section .brand-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 14px;
+    text-decoration: none !important;
+    color: #ffffff !important;
+    white-space: nowrap;
+}
+
+.header-section .logo {
+    width: auto !important;
+    flex: 0 0 auto;
+}
+
+.header-section .brand-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    line-height: 1.05;
+}
+
+.header-section .brand-name {
+    color: #ffffff !important;
+    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    font-size: 2rem;
+    font-weight: 900;
+    letter-spacing: 0;
+    text-shadow: 0 3px 8px rgba(15, 23, 42, 0.45);
+}
+
+.header-section .brand-tagline {
+    color: #fcd34d !important;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin-top: 4px;
+    white-space: nowrap;
 }
 
 /* LMS Child-Friendly Header Overrides */
@@ -153,11 +195,14 @@
     color: #ffffff !important;
     border: 2px solid rgba(255, 255, 255, 0.72) !important;
     box-shadow: 0 4px 0 #047857 !important;
+    margin-left: 12px !important;
 }
 
 .header-section .signup:hover {
-    background: #059669 !important;
-    color: #ffffff !important;
+    background: #fcd34d !important;
+    color: #24184f !important;
+    border-color: rgba(255, 255, 255, 0.9) !important;
+    box-shadow: 0 4px 0 rgba(217, 119, 6, 0.9) !important;
 }
 
 .header-section .logout-btn {
@@ -176,6 +221,22 @@
 }
 
 @media (max-width: 991px) {
+    .header-section .brand-link {
+        gap: 10px;
+    }
+
+    .header-section .brand-name {
+        font-size: 1.45rem;
+    }
+
+    .header-section .brand-tagline {
+        font-size: 0.68rem;
+    }
+
+    .headerlogo1 {
+        width: 52px;
+    }
+
     .header-section .menu > ul {
         background: #24184f !important;
         border: 2px solid rgba(252, 211, 77, 0.45) !important;
@@ -206,5 +267,19 @@
     .header-section .menu > ul > li ul li a.active {
         background: #fcd34d !important;
         color: #24184f !important;
+    }
+}
+
+@media (max-width: 420px) {
+    .header-section .brand-tagline {
+        display: none;
+    }
+
+    .header-section .brand-name {
+        font-size: 1.25rem;
+    }
+
+    .headerlogo1 {
+        width: 46px;
     }
 }

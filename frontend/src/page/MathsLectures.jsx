@@ -185,26 +185,25 @@ const MathsLectures = () => {
     return (
         <>
             <Header />
-            <PageHeader title={"Maths Adventures! 🎬"} curPage={"Lectures"} />
+            <PageHeader title={<><i className="icofont-ui-video-play me-2"></i>Maths Videos</>} curPage={"Lectures"} />
 
             {/* Filters */}
-            <div className="group-select-section bg-light py-4" style={{ borderBottom: "4px dashed #90e0ef" }}>
+            <div className="group-select-section lecture-filter-section">
                 <div className="container">
-                    <div className="section-wrapper bg-white p-4 rounded-4 shadow-sm border border-2 border-info">
-                        <div className="row align-items-center g-4">
-                            <div className="col-lg-2 col-md-3 text-center text-md-start">
-                                <h4 className="text-primary fw-bold mb-0">
-                                    <i className="icofont-magic me-2 fs-3 text-warning"></i>
-                                    Filter Magic!
+                    <div className="section-wrapper lecture-filter-card paper-filter-card">
+                        <div className="row align-items-center g-3">
+                            <div className="col-lg-3 col-md-4 text-center text-md-start">
+                                <h4 className="lecture-filter-title paper-filter-title">
+                                    <i className="icofont-search-1"></i>
+                                    Find Videos
                                 </h4>
                             </div>
-                            <div className="col-lg-10 col-md-9">
-                                <div className="row g-3 row-cols-md-4 row-cols-sm-2 row-cols-1">
+                            <div className="col-lg-9 col-md-8">
+                                <div className="row g-2 row-cols-lg-4 row-cols-sm-2 row-cols-1">
                                     {/* Type */}
                                     <div className="col">
                                         <select
-                                            className="form-select form-select-lg rounded-pill shadow-sm"
-                                            style={{ border: "2px solid #e0e7ff", fontWeight: "bold", color: "#495057" }}
+                                            className="form-select lecture-filter-control"
                                             value={selectedType}
                                             onChange={(e) => setSelectedType(e.target.value)}
                                         >
@@ -217,8 +216,7 @@ const MathsLectures = () => {
                                     {/* Difficulty */}
                                     <div className="col">
                                         <select
-                                            className="form-select form-select-lg rounded-pill shadow-sm"
-                                            style={{ border: "2px solid #e0e7ff", fontWeight: "bold", color: "#495057" }}
+                                            className="form-select lecture-filter-control"
                                             value={selectedDifficulty}
                                             onChange={(e) => setSelectedDifficulty(e.target.value)}
                                         >
@@ -231,8 +229,7 @@ const MathsLectures = () => {
                                     {/* Duration */}
                                     <div className="col">
                                         <select
-                                            className="form-select form-select-lg rounded-pill shadow-sm"
-                                            style={{ border: "2px solid #e0e7ff", fontWeight: "bold", color: "#495057" }}
+                                            className="form-select lecture-filter-control"
                                             value={selectedTime}
                                             onChange={(e) => setSelectedTime(e.target.value)}
                                         >
@@ -245,7 +242,7 @@ const MathsLectures = () => {
                                     {/* Reset/Placeholder */}
                                     <div className="col d-flex flex-column justify-content-center">
                                         {selectedTime !== "all" && (
-                                            <span className="badge bg-warning text-dark rounded-pill">Detecting auto-duration ⏱️</span>
+                                            <span className="lecture-filter-note">Auto-duration <i className="icofont-clock-time ms-1"></i></span>
                                         )}
                                     </div>
                                 </div>
@@ -255,7 +252,7 @@ const MathsLectures = () => {
                         {loading && (
                             <div className="text-center mt-4 p-3 bg-light rounded-4">
                                 <div className="spinner-border text-info" role="status"></div>
-                                <h5 className="text-info mt-2 fw-bold">Finding best adventures... 🔍</h5>
+                                <h5 className="text-info mt-2 fw-bold"><i className="icofont-search me-2"></i>Finding best adventures...</h5>
                             </div>
                         )}
                     </div>
@@ -263,22 +260,34 @@ const MathsLectures = () => {
             </div>
 
             {/* Course List */}
-            <div className="course-section padding-tb" style={{ minHeight: "60vh" }}>
+            <div className="course-section padding-tb lecture-results-section" style={{ minHeight: "60vh" }}>
                 <div className="container">
                     <div className="section-wrapper">
-                        <div className="d-flex justify-content-between align-items-center mb-5">
-                            <h3 className="text-primary fw-bold mb-0">Video Hub 📺</h3>
-                            <span className="badge bg-light text-dark fs-5 border border-2 border-secondary rounded-pill px-4 py-2 shadow-sm">
-                Showing {filteredLectures.length === 0 ? 0 : indexOfFirstLecture + 1} - {Math.min(indexOfLastLecture, filteredLectures.length)} of {filteredLectures.length}
-              </span>
+                        <div className="lecture-list-heading d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+                            <div>
+                                <h3 className="mb-1"><i className="icofont-ui-video-play me-2"></i>Video Lecture Hub</h3>
+                                <p className="mb-0">Watch maths lessons that match your grade and learning level.</p>
+                            </div>
+                            <div className="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-end">
+                                {preferredDifficulty && (
+                                    <span className="lecture-level-pill">
+                                        <i className="icofont-dart"></i>
+                                        Recommended: {preferredDifficulty}
+                                    </span>
+                                )}
+                                <span className="lecture-count-pill">
+                                    <i className="icofont-listing-box"></i>
+                                    {filteredLectures.length === 0 ? 0 : indexOfFirstLecture + 1} - {Math.min(indexOfLastLecture, filteredLectures.length)} of {filteredLectures.length}
+                                </span>
+                            </div>
                         </div>
 
                         <div className="row g-4 justify-content-center row-cols-xl-3 row-cols-md-2 row-cols-1">
                             {!loading && filteredLectures.length === 0 && (
                                 <div className="col-12 text-center py-5">
-                                    <div className="card border-0 shadow-sm p-5 rounded-4 bg-white border border-2 border-warning text-warning">
-                                        <h2 className="fw-bold">No Videos Found! 🙈</h2>
-                                        <p className="fs-5 text-dark">Try adjusting your Magic Filters!</p>
+                                    <div className="lecture-empty-state">
+                                        <h2 className="fw-bold"><i className="icofont-warning-alt me-2"></i>No Videos Found</h2>
+                                        <p className="fs-5 text-dark">Try adjusting the filters.</p>
                                     </div>
                                 </div>
                             )}
@@ -289,22 +298,13 @@ const MathsLectures = () => {
                                 return (
                                     <div className="col" key={lecture._id}>
                                         <div
-                                            className="card h-100 border-0 shadow-sm"
-                                            style={{ borderRadius: "20px", overflow: "hidden", transition: "transform 0.3s, box-shadow 0.3s", borderBottom: "6px solid #48cae4" }}
-                                            onMouseEnter={(e) => {
-                                                e.currentTarget.style.transform = "translateY(-10px)";
-                                                e.currentTarget.style.boxShadow = "0 15px 30px rgba(0,0,0,0.15)";
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.transform = "translateY(0)";
-                                                e.currentTarget.style.boxShadow = "0 4px 6px rgba(0,0,0,0.05)";
-                                            }}
+                                            className="card h-100 lecture-list-card"
                                         >
-                                            <div className="position-relative">
-                                                {/* 🟢 Recommended */}
+                                            <div className="lecture-list-thumb position-relative">
+                                                {/* Recommended */}
                                                 {showRecommended && (
-                                                    <span className="position-absolute badge bg-success fs-6 rounded-pill shadow-sm px-3 py-2" style={{ top: 12, left: 12, zIndex: 2 }}>
-                            🌟 Recommended
+                                                    <span className="lecture-recommended-badge">
+                            <i className="icofont-star me-1"></i>Recommended
                           </span>
                                                 )}
 
@@ -320,55 +320,54 @@ const MathsLectures = () => {
                                                                 e.currentTarget.pause();
                                                                 e.currentTarget.currentTime = 0;
                                                             }}
-                                                            style={{ width: "100%", height: 220, objectFit: "cover", backgroundColor: "#000" }}
                                                         />
                                                     ) : (
-                                                        <div className="d-flex align-items-center justify-content-center bg-light text-muted" style={{ width: "100%", height: 220 }}>
+                                                        <div className="lecture-no-video">
                                                             <h5 className="fw-bold"><i className="icofont-ui-video-play display-4 text-secondary opacity-50"></i><br />No Video</h5>
                                                         </div>
                                                     )}
                                                 </Link>
 
                                                 {lecture.createdAt && (
-                                                    <span className="position-absolute badge bg-dark text-white rounded-pill px-3 py-2 opacity-75" style={{ bottom: 12, right: 12, zIndex: 2 }}>
-                            📅 {new Date(lecture.createdAt).toLocaleDateString()}
+                                                    <span className="lecture-date-badge">
+                            <i className="icofont-calendar me-1"></i>{new Date(lecture.createdAt).toLocaleDateString()}
                           </span>
                                                 )}
                                             </div>
 
                                             <div className="card-body p-4 d-flex flex-column">
                                                 <div className="d-flex justify-content-between align-items-center mb-3">
-                          <span className="badge bg-light text-primary border border-primary rounded-pill">
+                          <span className="lecture-course-badge">
                             {lecture.teacherGuideId?.coureInfo || "Video Lecture"}
                           </span>
                                                 </div>
 
                                                 <Link to={`/maths-view/${lecture._id}`} className="text-decoration-none">
-                                                    <h4 className="card-title text-dark fw-bold mb-3">{lecture.lectureTytle}</h4>
+                                                    <h4 className="lecture-card-title mb-3">{lecture.lectureTytle}</h4>
                                                 </Link>
 
-                                                <div className="d-flex justify-content-between align-items-center mt-auto mb-4 bg-light p-3 rounded-4">
+                                                <div className="lecture-card-info mt-auto mb-4">
                           <span className={`badge rounded-pill fs-6 ${lecture.lectureDifficulty === 'Easy' ? 'bg-success' :
                               lecture.lectureDifficulty === 'Medium' ? 'bg-warning text-dark' : 'bg-danger'
                           }`}>
-                            {lecture.lectureDifficulty || "—"} {lecture.lectureDifficulty === 'Easy' ? '😊' : lecture.lectureDifficulty === 'Medium' ? '🤔' : '🔥'}
+                            {lecture.lectureDifficulty || "—"} <i className={lecture.lectureDifficulty === 'Easy' ? 'icofont-leaf' : lecture.lectureDifficulty === 'Medium' ? 'icofont-lightning-ray' : 'icofont-fire'}></i>
                           </span>
 
-                                                    <div className="d-flex gap-3 text-muted fw-bold">
-                                                        <span title="PDF Resources"><i className="icofont-paperclip text-primary fs-5"></i> {lecture.pdfMaterials?.length ?? 0}</span>
+                                                    <div className="lecture-card-meta">
+                                                        <span title="PDF Resources"><i className="icofont-paperclip"></i> {lecture.pdfMaterials?.length ?? 0}</span>
                                                         {typeof lecture.durationMins === "number" && (
-                                                            <span title="Duration"><i className="icofont-clock-time text-info fs-5"></i> {lecture.durationMins}m</span>
+                                                            <span title="Duration"><i className="icofont-clock-time"></i> {lecture.durationMins}m</span>
                                                         )}
                                                     </div>
                                                 </div>
 
-                                                <div className="d-flex justify-content-between align-items-center pt-3 border-top">
-                                                    <span className="text-muted fw-bold">By {lecture.createby?.username || "Unknown Teacher"} 👨‍🏫</span>
+                                                <div className="lecture-card-footer">
+                                                    <span>By {lecture.createby?.username || "Unknown Teacher"} <i className="icofont-teacher ms-1"></i></span>
                                                     <Link
                                                         to={`/maths-view/${lecture._id}`}
-                                                        className="btn btn-outline-info rounded-pill fw-bold"
+                                                        className="btn btn-primary rounded-pill fw-bold lecture-watch-btn"
                                                     >
-                                                        Watch 🍿
+                                                        Watch <i className="icofont-ui-video-play ms-1"></i>
                                                     </Link>
                                                 </div>
                                             </div>
@@ -519,7 +518,7 @@ export default MathsLectures;
 //                         }}
 //                     >
 //                       {opt.label}
-//                       {isSelected && <span style={{ color: "#4F46E5", fontSize: "0.85rem" }}>✓</span>}
+//                       {isSelected && <span style={{ color: "#4F46E5", fontSize: "0.85rem" }}>Selected</span>}
 //                     </li>
 //                 );
 //               })}

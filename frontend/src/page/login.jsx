@@ -6,6 +6,7 @@ import PageHeader from "../component/layout/pageheader";
 import apiClient, { setAuthToken } from "../api";
 import Swal from "sweetalert2";
 import FaceCapture from "../component/WebCamCapture";
+import { setStudentSession } from "../auth";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -27,9 +28,7 @@ const LoginPage = () => {
       const response = await apiClient.post("/api/auth/login", formData);
       const { token, user } = response.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", user.id);
-      localStorage.setItem("difficultyLevel", user.difficultyLevel ?? "Easy");
+      setStudentSession(token, String(user.id), user.difficultyLevel);
       setAuthToken(token);
 
       Swal.fire({
@@ -78,9 +77,7 @@ const LoginPage = () => {
       if (response?.data) {
         const { token, user } = response.data;
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", user.id);
-        localStorage.setItem("difficultyLevel", user.difficultyLevel ?? "Easy");
+        setStudentSession(token, String(user.id), user.difficultyLevel);
         setAuthToken(token);
 
         Swal.fire({
@@ -134,7 +131,7 @@ const LoginPage = () => {
                   name="email"
                   className="form-control form-control-lg rounded-pill px-4 shadow-sm lms-input"
                   style={{ border: "2px solid #E0E7FF", height: "56px", fontSize: "1.1rem", borderRadius: "50px" }}
-                  placeholder="Your Email 📧"
+                  placeholder="Your Email"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -146,7 +143,7 @@ const LoginPage = () => {
                   name="password"
                   className="form-control form-control-lg rounded-pill px-4 shadow-sm lms-input"
                   style={{ border: "2px solid #E0E7FF", height: "56px", fontSize: "1.1rem", borderRadius: "50px" }}
-                  placeholder="Your Password 🔒"
+                  placeholder="Your Password"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -161,7 +158,7 @@ const LoginPage = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 25px rgba(79, 70, 229, 0.4)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 15px rgba(79, 70, 229, 0.3)"; }}
                 >
-                  {loading ? "Logging in... ⏳" : "Let's Go!"}
+                  {loading ? <><i className="icofont-clock-time me-2"></i>Logging in...</> : <>Let's Go! <i className="icofont-rocket ms-2"></i></>}
                 </button>
               </div>
             </form>
@@ -188,7 +185,7 @@ const LoginPage = () => {
 
             {showFaceLogin && (
               <div className="mt-4 p-4 rounded-4 text-center" style={{ backgroundColor: "#EFF6FF", border: "2px solid #818CF8", borderRadius: "24px" }}>
-                <h4 className="fw-bold mb-3" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>Face Login 📸</h4>
+                <h4 className="fw-bold mb-3" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>Face Login <i className="icofont-camera ms-2"></i></h4>
                 <div className="d-flex justify-content-center mb-3">
                   <FaceCapture onCapture={setCapturedImage} />
                 </div>
@@ -199,7 +196,7 @@ const LoginPage = () => {
                     onClick={handleFaceLogin}
                     style={{ background: "linear-gradient(135deg, #4F46E5 0%, #4338CA 100%)", border: "none", borderRadius: "50px" }}
                   >
-                    Magic Login ✨
+                    <i className="icofont-magic me-2"></i>Magic Login
                   </button>
                 )}
               </div>

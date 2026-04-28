@@ -14,7 +14,7 @@ const MoodPopup = ({ emotion, onClose }) => {
       borderRadius: "10px",
       zIndex: 1000
     }}>
-      <h4>😟 Mood Detected</h4>
+      <h4><i className="icofont-warning-alt me-2"></i>Mood Detected</h4>
       <p>We detected: <strong>{emotion}</strong></p>
       <button onClick={onClose}>Dismiss</button>
     </div>

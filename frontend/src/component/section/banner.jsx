@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import girl3 from '../../assets/images/banner/girl3.png';
-const subTitle = "🌟 Welcome to the Fun Zone 🌟";
+const subTitle = "Welcome to the Fun Zone";
 const title = (
     <h2 className="title" style={{ fontSize: "3.5rem", lineHeight: "1.2", marginBottom: "20px", textShadow: "0 4px 10px rgba(0,0,0,0.3)" }}>
         <span className="d-lg-block" style={{ color: "var(--lms-accent)", transform: "rotate(-2deg)", display: "inline-block" }}>Unlock Your </span>
@@ -87,16 +87,16 @@ const Banner = () => {
             {/*Playful Floating Background Elements */}
 
             {/* 1. Addition (Bright Blue) */}
-            <div className="floating-anim" style={{ position: 'absolute', top: '15%', left: '8%', fontSize: '5rem', opacity: 0.7, color: '#3B82F6', textShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}>➕</div>
+            <div className="floating-anim" style={{ position: 'absolute', top: '15%', left: '8%', fontSize: '5rem', opacity: 0.7, color: '#3B82F6', textShadow: '0 0 15px rgba(59, 130, 246, 0.5)' }}><i className="icofont-plus"></i></div>
 
             {/* 2. Subtraction (Cute Pink) */}
-            <div className="floating-anim" style={{ position: 'absolute', top: '75%', left: '4%', fontSize: '5.5rem', opacity: 0.6, color: '#FB7185', animationDelay: '1s' }}>➖</div>
+            <div className="floating-anim" style={{ position: 'absolute', top: '75%', left: '4%', fontSize: '5.5rem', opacity: 0.6, color: '#FB7185', animationDelay: '1s' }}><i className="icofont-minus"></i></div>
 
             {/* 3. Multiplication (Sunny Yellow) */}
-            <div className="floating-anim" style={{ position: 'absolute', top: '10%', left: '48%', fontSize: '4.5rem', opacity: 0.8, color: '#FBBF24', animationDelay: '2s', textShadow: '0 0 20px rgba(251, 191, 36, 0.6)' }}>✖️</div>
+            <div className="floating-anim" style={{ position: 'absolute', top: '10%', left: '48%', fontSize: '4.5rem', opacity: 0.8, color: '#FBBF24', animationDelay: '2s', textShadow: '0 0 20px rgba(251, 191, 36, 0.6)' }}><i className="icofont-close"></i></div>
 
             {/* 4. Division (Fresh Green) */}
-            <div className="floating-anim" style={{ position: 'absolute', top: '85%', left: '45%', fontSize: '4.5rem', opacity: 0.6, color: '#34D399', animationDelay: '0.5s' }}>➗</div>
+            <div className="floating-anim" style={{ position: 'absolute', top: '85%', left: '45%', fontSize: '4.5rem', opacity: 0.6, color: '#34D399', animationDelay: '0.5s' }}><i className="icofont-calculations"></i></div>
 
             {/* 5. Percentage (Purple Glow) */}
             <div className="floating-anim" style={{
@@ -141,7 +141,7 @@ const Banner = () => {
                     <div className="row align-items-center">
                         <div className="col-xxl-5 col-xl-6 col-lg-10">
                             <div className="banner-content">
-                                <span className="lms-badge" style={{ backgroundColor: "#FFFBEB", color: "var(--lms-accent)", border: "3px solid var(--lms-accent-light)", display: "inline-block", marginBottom: "15px" }}>{subTitle}</span>
+                                <span className="lms-badge" style={{ backgroundColor: "#FFFBEB", color: "var(--lms-accent)", border: "3px solid var(--lms-accent-light)", display: "inline-flex", alignItems: "center", gap: "8px", marginBottom: "15px" }}><i className="icofont-star"></i>{subTitle}</span>
                                 {title}
                                 <p className="desc" style={{ fontSize: "1.4rem", color: "#E5E7EB", fontWeight: "700", marginBottom: "30px" }}>{desc}</p>
                                 <form onSubmit={handleSearchSubmit} style={{
@@ -198,7 +198,7 @@ const Banner = () => {
                                         flexShrink: 0,
                                         margin: 0,
                                         letterSpacing: "0.3px"
-                                    }}>🔍 Let's Go!</button>
+                                    }}><i className="icofont-search me-2"></i>Let's Go!</button>
                                 </form>
 
                                 {/* ── Category Buttons ── */}
@@ -277,11 +277,11 @@ const Banner = () => {
                             </div>
                         </div>
                         <div className="col-xxl-7 col-xl-6">
-                            <div className="banner-thumb floating-anim">
+                            <div className="banner-thumb floating-anim lms-hero-art">
                                 <img
                                     src="assets/images/banner/0001.png"
                                     alt="Math Superpowers"
-                                    style={{marginLeft: "50px", height: "600px", objectFit: "contain"}}
+                                    className="lms-hero-art__image"
                                 />
                                 {/*<img src="assets/images/banner/01.png" alt="img" />*/}
                                 {/* <img src={girl3} alt="img" style={{marginLeft:"100px", height:"700px"}}/>*/}

@@ -940,7 +940,7 @@ def compare_faces():
         return jsonify({"success": False, "message": str(e)})
 
 # ---------------- OBJECT DETECTION  ----------------
-YOLO_OBJECT_MODEL_PATH = "/mnt/data/yolov8n.pt"
+YOLO_OBJECT_MODEL_PATH = "models/yolov8n.pt"
 object_model = YOLO(YOLO_OBJECT_MODEL_PATH)
 
 object_class_names = object_model.names

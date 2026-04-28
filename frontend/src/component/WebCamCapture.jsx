@@ -45,7 +45,7 @@ const FaceCapture = ({ onCapture }) => {
           cursor: "pointer"
         }}
       >
-        Capture Face 📸
+        Capture Face <i className="icofont-camera ms-2"></i>
       </button>
       {image && (
         <div style={{ marginTop: "1rem" }}>

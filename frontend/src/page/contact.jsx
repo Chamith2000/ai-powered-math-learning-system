@@ -98,13 +98,13 @@ const ContactPage = () => {
         overflow: "hidden"
       }}>
         {/* Playful Floating Background Elements (Neon Bright) */}
-        <div className="floating-anim" style={{ position: 'absolute', top: '5%', left: '5%', fontSize: '3rem', opacity: 0.4, color: '#A78BFA' }}>🪐</div>
-        <div className="floating-anim" style={{ position: 'absolute', top: '65%', left: '2%', fontSize: '4rem', opacity: 0.3, color: '#FCD34D', animationDelay: '1s' }}>⭐</div>
-        <div className="floating-anim" style={{ position: 'absolute', top: '15%', left: '40%', fontSize: '2.5rem', opacity: 0.5, color: '#34D399', animationDelay: '2s' }}>➕</div>
-        <div className="floating-anim" style={{ position: 'absolute', bottom: '15%', left: '35%', fontSize: '3.5rem', opacity: 0.4, color: '#F43F5E', animationDelay: '0.5s' }}>➖</div>
-        <div className="floating-anim" style={{ position: 'absolute', top: '10%', right: '10%', fontSize: '3rem', opacity: 0.5, color: '#8B5CF6', animationDelay: '1.5s' }}>🚀</div>
-        <div className="floating-anim" style={{ position: 'absolute', bottom: '15%', right: '5%', fontSize: '4rem', opacity: 0.6, animationDelay: '2.5s' }}>💡</div>
-        <div className="floating-anim" style={{ position: 'absolute', top: '45%', right: '3%', fontSize: '2.5rem', opacity: 0.4, color: '#F59E0B', animationDelay: '0.8s' }}>✖️</div>
+        <div className="floating-anim" style={{ position: 'absolute', top: '5%', left: '5%', fontSize: '3rem', opacity: 0.4, color: '#A78BFA' }}><i className="icofont-globe-alt"></i></div>
+        <div className="floating-anim" style={{ position: 'absolute', top: '65%', left: '2%', fontSize: '4rem', opacity: 0.3, color: '#FCD34D', animationDelay: '1s' }}><i className="icofont-star"></i></div>
+        <div className="floating-anim" style={{ position: 'absolute', top: '15%', left: '40%', fontSize: '2.5rem', opacity: 0.5, color: '#34D399', animationDelay: '2s' }}><i className="icofont-plus"></i></div>
+        <div className="floating-anim" style={{ position: 'absolute', bottom: '15%', left: '35%', fontSize: '3.5rem', opacity: 0.4, color: '#F43F5E', animationDelay: '0.5s' }}><i className="icofont-minus"></i></div>
+        <div className="floating-anim" style={{ position: 'absolute', top: '10%', right: '10%', fontSize: '3rem', opacity: 0.5, color: '#8B5CF6', animationDelay: '1.5s' }}><i className="icofont-rocket"></i></div>
+        <div className="floating-anim" style={{ position: 'absolute', bottom: '15%', right: '5%', fontSize: '4rem', opacity: 0.6, animationDelay: '2.5s' }}><i className="icofont-light-bulb"></i></div>
+        <div className="floating-anim" style={{ position: 'absolute', top: '45%', right: '3%', fontSize: '2.5rem', opacity: 0.4, color: '#F59E0B', animationDelay: '0.8s' }}><i className="icofont-close"></i></div>
 
         <div className="container" style={{ position: "relative", zIndex: 2 }}>
           {/* Top section with Cards and Map */}
@@ -211,7 +211,7 @@ const ContactPage = () => {
                     boxShadow: "0 10px 0 #D97706",
                     transform: "rotate(3deg)"
                 }}>
-                  Find Our Magic Lab! 📍
+                  Find Our Magic Lab! <i className="icofont-location-pin ms-2"></i>
                 </div>
               </div>
             </div>
@@ -354,7 +354,7 @@ const ContactPage = () => {
                             e.currentTarget.style.boxShadow = "0 10px 0 var(--lms-primary-dark)";
                         }}
                       >
-                         ✨ {btnText} ✨
+                         <i className="icofont-magic me-2"></i>{btnText}
                       </button>
                     </div>
                   </div>

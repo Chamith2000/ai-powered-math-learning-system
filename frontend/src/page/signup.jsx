@@ -121,7 +121,7 @@ const SignupPage = () => {
 
             <form className="account-form" onSubmit={handleSubmit}>
               <div className="mb-4 text-center p-4 rounded-4" style={{ backgroundColor: "#F0FDF4", border: "2px solid #86EFAC", borderRadius: "24px" }}>
-                <h5 className="fw-bold mb-3" style={{ color: "#22C55E", fontFamily: "'Baloo 2', sans-serif" }}>Snap a cool photo! 📸</h5>
+                <h5 className="fw-bold mb-3" style={{ color: "#22C55E", fontFamily: "'Baloo 2', sans-serif" }}>Snap a cool photo! <i className="icofont-camera ms-2"></i></h5>
                 <FaceCapture onCapture={setFaceImage} />
               </div>
 
@@ -151,7 +151,7 @@ const SignupPage = () => {
                   <input className="form-control form-control-lg rounded-pill px-4 shadow-sm lms-input" style={{ border: "2px solid #E0E7FF", borderRadius: "50px" }} name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} required />
                 </div>
                 <div className="col-md-6 form-group mb-3">
-                  <input type="number" min="1" max="13" className="form-control form-control-lg rounded-pill px-4 shadow-sm" style={{ backgroundColor: "#FFFBEB", border: "2px solid #F59E0B", borderRadius: "50px" }} name="grade" placeholder="Your Grade (e.g. 3) ⭐" value={formData.grade} onChange={handleChange} required />
+                  <input type="number" min="1" max="13" className="form-control form-control-lg rounded-pill px-4 shadow-sm" style={{ backgroundColor: "#FFFBEB", border: "2px solid #F59E0B", borderRadius: "50px" }} name="grade" placeholder="Your Grade (e.g. 3)" value={formData.grade} onChange={handleChange} required />
                 </div>
               </div>
 
@@ -164,7 +164,7 @@ const SignupPage = () => {
                   onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 25px rgba(34, 197, 94, 0.4)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 15px rgba(34, 197, 94, 0.3)"; }}
                 >
-                  {loading ? "Registering... ⏳" : "Get Started Now! 🎉"}
+                  {loading ? <><i className="icofont-clock-time me-2"></i>Registering...</> : <>Get Started Now! <i className="icofont-rocket ms-2"></i></>}
                 </button>
               </div>
             </form>

@@ -95,7 +95,7 @@ function WordGuess() {
     setBoard(newBoard);
     setCurrAttempt({ attempt: 0, letter: 1 });
     setFirstLetterUsed(true);
-    setSoftMsg("Great! The first letter is filled for you. 👍");
+    setSoftMsg("Great! The first letter is filled for you.");
   };
 
   const revealWholeWord = () => {
@@ -244,12 +244,12 @@ function WordGuess() {
   return (
     <div className="wg-root">
       <header className="wg-header">
-        <h2>🧮 Maths Word Guess</h2>
+        <h2><i className="icofont-calculator"></i> Maths Word Guess</h2>
         <p>Guess the 5-letter Maths word. We’ll help with gentle hints each try.</p>
 
         <div className="wg-toolbar">
-          <button className="wg-btn" onClick={() => setShowHintModal(true)}>💡 Show Hints</button>
-          <button className="wg-btn" onClick={restartGame}>🔄 New Word</button>
+          <button className="wg-btn" onClick={() => setShowHintModal(true)}><i className="icofont-light-bulb"></i> Show Hints</button>
+          <button className="wg-btn" onClick={restartGame}><i className="icofont-refresh"></i> New Word</button>
           <button
             className="wg-btn"
             onClick={() =>
@@ -262,7 +262,7 @@ function WordGuess() {
             disabled={!currentHint}
             title="Read this aloud"
           >
-            🔊 Read Aloud
+            <i className="icofont-volume-up"></i> Read Aloud
           </button>
           <button
             className="wg-btn"
@@ -270,7 +270,7 @@ function WordGuess() {
             disabled={firstLetterUsed || gameOver.gameOver}
             title="Use once per round"
           >
-            ✨ Reveal First Letter
+            <i className="icofont-magic"></i> Reveal First Letter
           </button>
           <button
             className="wg-btn wg-btn-danger"
@@ -278,7 +278,7 @@ function WordGuess() {
             disabled={gameOver.gameOver || !correctWord}
             title="Show the answer and end this round"
           >
-            👀 Reveal Word
+            <i className="icofont-eye"></i> Reveal Word
           </button>
         </div>
 
@@ -298,13 +298,13 @@ function WordGuess() {
       {learnCard && (
         <div className="wg-learn">
           <div className="wg-learn__title">
-            ⭐ Learn: <span className="wg-word">{learnCard.word}</span>
+            <i className="icofont-star"></i> Learn: <span className="wg-word">{learnCard.word}</span>
           </div>
           <div className="wg-learn__def">{learnCard.definition}</div>
           <pre className="wg-learn__code">{learnCard.example}</pre>
           <div className="wg-learn__actions">
             <button className="wg-btn" onClick={() => speak(`${learnCard.word}. ${learnCard.definition}`)}>
-              🔊 Read Aloud
+              <i className="icofont-volume-up"></i> Read Aloud
             </button>
           </div>
         </div>
