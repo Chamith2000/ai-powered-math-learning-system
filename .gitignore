@@ -18,3 +18,7 @@ venv/
 .DS_Store
 
 .idea/
+
+flask/.venv/
+
+reports/
