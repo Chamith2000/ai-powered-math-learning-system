@@ -16,3 +16,9 @@ venv/
 
 # OS files
 .DS_Store
+
+.idea/
+
+flask/.venv/
+
+reports/
