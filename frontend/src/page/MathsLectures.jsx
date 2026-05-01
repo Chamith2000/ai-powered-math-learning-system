@@ -9,7 +9,7 @@ import apiClient from "../api";
 import "../assets/css/LatestCourse.css";
 
 const MathsLectures = () => {
-    const userId = localStorage.getItem("userId"); // User ID එක ගන්නවා
+    const userId = localStorage.getItem("userId");
     const [videoLectures, setVideoLectures] = useState([]);
     const [filteredLectures, setFilteredLectures] = useState([]);
 
@@ -57,18 +57,16 @@ const MathsLectures = () => {
     ];
 
     useEffect(() => {
-        fetchData(); // Component එක load වෙද්දි Data ගන්න function එක call කරනවා
+        fetchData();
     }, []);
 
     useEffect(() => {
         filterLectures();
     }, [selectedDifficulty, selectedType, selectedTime, videoLectures]);
 
-    // --- එකවර Lectures සහ Student විස්තර ගැනීම ---
     const fetchData = async () => {
         setLoading(true);
         try {
-            // API calls දෙකම එකවර යවනවා වේගය වැඩිවෙන්න
             const [lecturesRes, userRes] = await Promise.all([
                 apiClient.get("/api/maths/video-lectures/"),
                 userId ? apiClient.get(`/api/users/${userId}`).catch(() => ({ data: null })) : Promise.resolve({ data: null })
@@ -78,7 +76,6 @@ const MathsLectures = () => {
             let raw = Array.isArray(lecturesRes.data) ? lecturesRes.data : [];
 
             // --- Grade Filtering Logic ---
-            // Student කෙනෙක් නම්, එයාගේ grade එකට සමාන lectures විතරක් ඉතුරු කරනවා
             if (currentUser && currentUser.role !== 'admin' && currentUser.grade) {
                 raw = raw.filter(it => it.grade && Number(it.grade) === Number(currentUser.grade));
             }

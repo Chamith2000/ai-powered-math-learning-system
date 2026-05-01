@@ -11,7 +11,6 @@ const ViewTeacherGuideFeedback = () => {
     const { state } = useLocation();
     const navigate = useNavigate();
 
-    // Table eken pass karapu data
     const fb = state?.fb;
     const aiSuggestion = state?.suggestion || fb?.aiSuggestion;
     const [fetchedStudentGrade, setFetchedStudentGrade] = useState(null);
@@ -70,7 +69,6 @@ const ViewTeacherGuideFeedback = () => {
         );
     }
 
-    // AI Text එක neutral admin-card style එකට render කරන function එක
     const formatAIText = (text) => {
         if (!text) return null;
 

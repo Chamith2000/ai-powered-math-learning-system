@@ -115,7 +115,7 @@ const Banner = () => {
             {/* 8. Geometry Shape - Triangle (Bright Blue) */}
             <div className="floating-anim" style={{
                 position: 'absolute', top: '55%', left: '55%',
-                fontSize: '6rem', // Size එක වැඩි කළා
+                fontSize: '6rem',
                 opacity: 0.5, color: '#60A5FA', animationDelay: '1.8s',
                 filter: 'drop-shadow(0 0 10px rgba(96, 165, 250, 0.5))'
             }}>▲</div>
@@ -123,7 +123,7 @@ const Banner = () => {
             {/* 9. Geometry Shape - Circle (Bright Pink) */}
             <div className="floating-anim" style={{
                 position: 'absolute', top: '35%', left: '3%',
-                fontSize: '5.5rem', // Size එක වැඩි කළා
+                fontSize: '5.5rem',
                 opacity: 0.4, color: '#F472B6', animationDelay: '2.2s',
                 filter: 'drop-shadow(0 0 10px rgba(244, 114, 182, 0.5))'
             }}>●</div>

@@ -201,7 +201,6 @@ const ViewLectureFeedback = () => {
         if (lectureId) fetchFeedbacks();
     }, [lectureId]);
 
-    // --- Chart ekata Data Hadana Logic eka ---
     const chartData = useMemo(() => {
         if (feedbacks.length === 0) return { series: [], labels: [] };
 
@@ -259,7 +258,6 @@ const ViewLectureFeedback = () => {
         }
     };
 
-    // Pop-up eka wenuwata, view-teacher-guide-feedback.jsx page ekata navigate wena function eka
     const handleNavigateToDetailedView = (fb) => {
         navigate(`/admin/teacher-guides/feedback/view/${fb._id}`, {
             state: { fb: fb, suggestion: fb?.aiSuggestion }
@@ -374,7 +372,6 @@ const ViewLectureFeedback = () => {
                             </div>
                         ) : (
                             <>
-                                {/* Chart Section eka */}
                                 <div className="row mb-5 justify-content-center">
                                     <div className="col-md-8 col-lg-6">
                                         <div className="p-4 border rounded shadow-sm bg-white">
@@ -389,7 +386,6 @@ const ViewLectureFeedback = () => {
                                     </div>
                                 </div>
 
-                                {/* Data Table Section eka */}
                                 <div className="table-responsive">
                                     <table className="table table-hover table-bordered mb-0">
                                         <thead className="table-light">
@@ -409,7 +405,6 @@ const ViewLectureFeedback = () => {
                                                 <td>
                                                     <div
                                                         style={{ display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', cursor: 'pointer' }}
-                                                        // Navigate function eka use kirima
                                                         onClick={() => handleNavigateToDetailedView(fb)}
                                                     >
                                                         {fb?.studentFeedback || <span className="text-muted">No feedback provided</span>}

@@ -19,21 +19,6 @@ import MathsPapers from "../pages/maths-papers/maths-paper";
 import AddMathsPapers from "../pages/maths-papers/add-maths-paper";
 import UpdateMathsPapers from "../pages/maths-papers/update-maths-paper";
 import ViewMathsPapers from "../pages/maths-papers/view-maths-paper";
-import VisualLearning from "../pages/visual-learning/visual-learning";
-import AddVisualLearning from "../pages/visual-learning/add-visual-learning";
-import UpdateVisualLearning from "../pages/visual-learning/update-visual-learning";
-import ViewVisualLearning from "../pages/visual-learning/view-visual-learning";
-import AuditoryLearning from "../pages/auditory-learning/auditory-learning";
-import AddAuditoryLearning from "../pages/auditory-learning/add-auditory-learning";
-import UpdateAuditoryLearning from "../pages/auditory-learning/update-auditiry-learning";
-import ViewAuditoryLearning from "../pages/auditory-learning/view-auditory-learning";
-import ReadAndWrite from "../pages/read-and-write/read-write";
-import AddReadAndWrite from "../pages/read-and-write/add--read-write";
-import UpdateReadAndWrite from "../pages/read-and-write/update-read-write";
-import ViewReadAndWrite from "../pages/read-and-write/view--read-write";
-import Kinesthetic from "../pages/kinesthetic/kinesthetic";
-import AddKinesthetic from "../pages/kinesthetic/add-kinesthetic";
-import UpdateKinesthetic from "../pages/kinesthetic/update-kinesthetic";
 import StartingPapers from "../pages/starting-papers/starting-paper";
 import AddStartingPapers from "../pages/starting-papers/add-starting-paper";
 import UpdateStartingPapers from "../pages/starting-papers/starting-maths-paper";
@@ -110,70 +95,6 @@ export const router = createBrowserRouter([
             {
                 path: "/admin/maths-papers/view/:id",
                 element: <ViewMathsPapers />
-            },
-
-            {
-                path: "/admin/visual-learning",
-                element: <VisualLearning />
-            },
-            {
-                path: "/admin/visual-learning/create",
-                element: <AddVisualLearning />
-            },
-            {
-                path: "/admin/visual-learning/edit/:id",
-                element: <UpdateVisualLearning />
-            },
-            {
-                path: "/admin/visual-learning/view/:id",
-                element: <ViewVisualLearning />
-            },
-
-            {
-                path: "/admin/auditory-learning",
-                element: <AuditoryLearning />
-            },
-            {
-                path: "/admin/auditory-learning/create",
-                element: <AddAuditoryLearning />
-            },
-            {
-                path: "/admin/auditory-learning/edit/:id",
-                element: <UpdateAuditoryLearning />
-            },
-            {
-                path: "/admin/auditory-learning/view/:id",
-                element: <ViewAuditoryLearning />
-            },
-
-            {
-                path: "/admin/read-and-write",
-                element: <ReadAndWrite />
-            },
-            {
-                path: "/admin/read-and-write/create",
-                element: <AddReadAndWrite />
-            },
-            {
-                path: "/admin/read-and-write/edit/:id",
-                element: <UpdateReadAndWrite />
-            },
-            {
-                path: "/admin/read-and-write/view/:id",
-                element: <ViewReadAndWrite />
-            },
-
-            {
-                path: "/admin/kinesthetic",
-                element: <Kinesthetic />
-            },
-            {
-                path: "/admin/kinesthetic/create",
-                element: <AddKinesthetic />
-            },
-            {
-                path: "/admin/kinesthetic/edit/:id",
-                element: <UpdateKinesthetic />
             },
 
             {

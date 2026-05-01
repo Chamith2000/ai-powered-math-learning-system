@@ -9,7 +9,7 @@ import axios from 'axios';
 import BASE_URL from '../../config/apiConfig';
 import { getToken } from '@/utils/token';
 import Swal from 'sweetalert2';
-import { FiEdit3, FiSave, FiX } from 'react-icons/fi'; // Icons import kara
+import { FiEdit3, FiSave, FiX } from 'react-icons/fi';
 
 const ViewMathsPaperForm = ({ title }) => {
   const { id } = useParams(); // paper id
@@ -111,7 +111,7 @@ const ViewMathsPaperForm = ({ title }) => {
 
   // --- Inline Edit Handlers ---
   const handleEditClick = (q) => {
-    setEditingQuestion({ ...q }); // Prashnaye copy ekak state ekata gannawa
+    setEditingQuestion({ ...q });
   };
 
   const handleCancelEdit = () => {

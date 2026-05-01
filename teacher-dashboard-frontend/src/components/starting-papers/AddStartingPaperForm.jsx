@@ -198,7 +198,6 @@ const AddStartingPaperForm = ({ title }) => {
 
   // --- Download Sample CSV Format ---
   const downloadSampleCSV = () => {
-    // CSV eke header eka saha sample data peliya
     const headers = "Paper Title,Grade,Paper Number,Question Title,Category,Option 1,Option 2,Option 3,Option 4,Correct Index (0-3)\n";
     const sampleData = [
       '"Grade 3 Maths",3,1,"What is 15 + 24?","Addition","39","40","38","49",0',
@@ -316,7 +315,6 @@ const AddStartingPaperForm = ({ title }) => {
     <div className="col-xxl-12">
       <div className={`card stretch stretch-full ${isExpanded ? 'card-expand' : ''} ${refreshKey ? 'card-loading' : ''}`}>
         
-        {/* Parana widihatama CardHeader eka danna */}
         <CardHeader
           title={title}
           refresh={handleRefresh}
@@ -327,26 +325,23 @@ const AddStartingPaperForm = ({ title }) => {
         <form onSubmit={submitPaperAndQuestions}>
           <div className="card-body">
 
-            {/* Bulk Upload Button eka methanata danna (Dakunu konata wenda dila thiyenne) */}
             <div className="d-flex justify-content-end gap-2 mb-4">
-              
-              {/* Aluth: Download CSV Format Button eka */}
-              <button 
-                type="button" 
-                className="btn btn-outline-info" 
+
+              <button
+                type="button"
+                className="btn btn-outline-info"
                 onClick={downloadSampleCSV}
                 title="Download Sample CSV Format"
               >
                 <i className="feather-download me-2"></i> Download Format
               </button>
 
-              {/* Parana: Bulk Upload Button eka */}
-              <input 
-                type="file" 
-                accept=".csv" 
-                style={{ display: 'none' }} 
-                ref={fileInputRef} 
-                onChange={handleCSVUpload} 
+              <input
+                type="file"
+                accept=".csv"
+                style={{ display: 'none' }}
+                ref={fileInputRef}
+                onChange={handleCSVUpload}
               />
               <button 
                 type="button" 

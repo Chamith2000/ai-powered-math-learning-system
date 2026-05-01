@@ -8,7 +8,7 @@ import paperimg from "../assets/images/papers/paperimg.jpg";
 import apiClient from "../api";
 
 const PaperList = () => {
-  const userId = localStorage.getItem("userId"); // User ID එක ගන්නවා
+  const userId = localStorage.getItem("userId");
   const [papers, setPapers] = useState([]);
   const [filteredPapers, setFilteredPapers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,18 +17,16 @@ const PaperList = () => {
   const difficultyLevel = (localStorage.getItem("difficultyLevel") || "").trim().toLowerCase();
 
   useEffect(() => {
-    fetchData(); // Papers සහ Student එකවර ගන්නවා
+    fetchData();
   }, []);
 
   useEffect(() => {
     handleSearch();
   }, [searchQuery, papers]);
 
-  // --- එකවර Papers සහ Student විස්තර ගැනීම ---
   const fetchData = async () => {
     setLoading(true);
     try {
-      // API calls දෙකම එකවර යවනවා
       const [papersRes, userRes] = await Promise.all([
         apiClient.get("/api/maths/papers"),
         userId ? apiClient.get(`/api/users/${userId}`).catch(() => ({ data: null })) : Promise.resolve({ data: null })
@@ -38,7 +36,6 @@ const PaperList = () => {
       let rawPapers = Array.isArray(papersRes.data) ? papersRes.data : [];
 
       // --- Grade Filtering Logic ---
-      // Student කෙනෙක් නම්, එයාගේ grade එකට සමාන papers විතරක් ඉතුරු කරනවා
       if (currentUser && currentUser.role !== 'admin' && currentUser.grade) {
         rawPapers = rawPapers.filter(paper => paper.grade && Number(paper.grade) === Number(currentUser.grade));
       }

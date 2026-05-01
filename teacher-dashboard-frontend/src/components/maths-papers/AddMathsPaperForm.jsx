@@ -99,10 +99,8 @@ const AddMathsPaperForm = ({ title }) => {
 
   // --- Download Sample CSV Format ---
   const downloadSampleCSV = () => {
-    // CSV eke header eka (oyage papaparse eken kiyawana nam walatama galapennai dila thiyenne)
     const headers = "paperTitle,paperDifficulty,grade,questionTitle,answer,topicTags,score\n";
-    
-    // Grade 3, 4, 5 maths walata galapena sample data
+
     const sampleData = [
       '"Grade 3 Maths Practice","Easy",3,"What is 45 + 32?","77","addition,basic",2',
       '"Grade 4 Maths Practice","Medium",4,"A rectangle is 8 cm long and 5 cm wide. Find the area.","40 cm2","geometry,area",3',
@@ -291,7 +289,6 @@ const AddMathsPaperForm = ({ title }) => {
 
         <form onSubmit={submitPaperAndQuestions}>
           <div className="card-body">
-            {/* Bulk Upload & Download Buttons (Aluth Styles ekka) */}
             <div className="d-flex justify-content-end gap-2 mb-4">
               
               <button

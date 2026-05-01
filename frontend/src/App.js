@@ -94,16 +94,13 @@ export default App;
 
 
 // // App.jsx - Starting Paper routes updated section
-// // මෙය ඔබේ App.jsx හි ඇති starting-paper route replace කරන්න.
 //
-// // Import කල යුතු files:
 // import GradeSelectPage from "./page/starting-paper/GradeSelectPage";
 // import StartingPaperPage from "./page/starting-paper/StartingPaperPage";
 // import PracticePaperPage from "./page/starting-paper/PracticePaperPage";
 // import SummaryPage from "./page/starting-paper/SummaryPage";
 //
 // // ── App.jsx Routes section ────────────────────────────────────────────────────
-// // ProtectedRoute block ඇතුළේ පැරණි line:
 // //   <Route path="starting-paper/" element={<StartingPaper />} />
 // // Replace with:
 //

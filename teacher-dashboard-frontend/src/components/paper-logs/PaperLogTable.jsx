@@ -1,15 +1,15 @@
 ﻿import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom"; // useNavigate import karanna
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import BASE_URL from "../../config/apiConfig";
 import { getToken } from "@/utils/token";
-import Dropdown from '@/components/shared/Dropdown'; // Dropdown eka import karanna
+import Dropdown from '@/components/shared/Dropdown';
 import { FiEye, FiTrash2 } from 'react-icons/fi';
 
 const PaperLogTable = () => {
     const [logs, setLogs] = useState([]);
     const [loading, setLoading] = useState(true);
-    const navigate = useNavigate(); // navigate eka define karanna
+    const navigate = useNavigate();
 
     const fetchLogs = async () => {
         try {
@@ -47,14 +47,13 @@ const PaperLogTable = () => {
         }
     };
 
-    // Dropdown ekata oni items tika list karana function eka
     const getDropdownItems = (logId) => [
         {
             icon: <FiEye />,
             label: 'View Details',
             onClick: () => navigate(`/admin/paper-logs/view/${logId}`)
         },
-        { type: 'divider' }, // Podi iri kallak (separator)
+        { type: 'divider' },
         {
             icon: <FiTrash2 />,
             label: 'Delete',
@@ -113,7 +112,6 @@ const PaperLogTable = () => {
                                         </td>
                                         <td>{new Date(log.createdAt).toLocaleDateString()}</td>
 
-                                        {/* Actions Column eka wenas wuna widiha */}
                                         <td className="text-end">
                                             <Dropdown
                                                 dropdownItems={getDropdownItems(log._id)}
