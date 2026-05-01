@@ -7,6 +7,8 @@ import BASE_URL from '../../config/apiConfig';
 import { getToken } from '@/utils/token';
 import Swal from 'sweetalert2';
 
+const TEACHER_GUIDE_MAX_WORDS = 300;
+
 const AddTeacherGuideForm = ({ title }) => {
   const countWords = (text) => text.trim().split(/\s+/).filter(Boolean).length;
 
@@ -58,10 +60,7 @@ const AddTeacherGuideForm = ({ title }) => {
       return;
     }
 
-    if (name === 'originalTeacherGuide') {
-      const words = value.trim().split(/\s+/).filter(Boolean);
-      if (words.length > 50) return;
-    }
+    if (name === 'originalTeacherGuide' && countWords(value) > TEACHER_GUIDE_MAX_WORDS) return;
 
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -70,11 +69,11 @@ const AddTeacherGuideForm = ({ title }) => {
     e.preventDefault();
     const guideWordCount = countWords(formData.originalTeacherGuide);
 
-    if (guideWordCount > 50) {
+    if (guideWordCount > TEACHER_GUIDE_MAX_WORDS) {
       Swal.fire({
         icon: 'warning',
-        title: 'Summary is too long',
-        text: 'Teacher guide summary must be 50 words or less.',
+        title: 'Teacher guide is too long',
+        text: `Teacher guide must be ${TEACHER_GUIDE_MAX_WORDS} words or less.`,
       });
       return;
     }
@@ -177,20 +176,20 @@ const AddTeacherGuideForm = ({ title }) => {
                 name="originalTeacherGuide"
                 value={formData.originalTeacherGuide}
                 onChange={handleChange}
-                placeholder="Add a short summary of the teacher guide here. Maximum 50 words."
+                placeholder={`Add the teacher guide here. Maximum ${TEACHER_GUIDE_MAX_WORDS} words.`}
                 rows={5}
                 required
               />
               <div className="d-flex justify-content-end mt-1">
-                <small className={countWords(formData.originalTeacherGuide) >= 45 ? 'text-warning' : 'text-muted'}>
-                  {countWords(formData.originalTeacherGuide)}/50 words
+                <small className={countWords(formData.originalTeacherGuide) >= 270 ? 'text-warning' : 'text-muted'}>
+                  {countWords(formData.originalTeacherGuide)}/{TEACHER_GUIDE_MAX_WORDS} words
                 </small>
               </div>
             </div>
 
             {/* Detailed Time Allocations */}
             <hr className="my-4" />
-            <h5 className="mb-3 text-primary">AI Suggester Metrics (Time Spent)</h5>
+            <h5 className="mb-3 text-primary">Time Allocation</h5>
             <div className="row g-3">
               {[
                 'introduction', 'concept_explanation', 'worked_examples',

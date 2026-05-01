@@ -8,9 +8,12 @@ import BASE_URL from '../../config/apiConfig';
 import { getToken } from '@/utils/token';
 import Swal from 'sweetalert2';
 
+const TEACHER_GUIDE_MAX_WORDS = 300;
+
 const UpdateTeacherGuideForm = ({ title }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const countWords = (text) => text.trim().split(/\s+/).filter(Boolean).length;
 
   const [formData, setFormData] = useState({
     courseInfo: '',
@@ -97,11 +100,24 @@ const UpdateTeacherGuideForm = ({ title }) => {
       return;
     }
 
+    if (name === 'originalTeacherGuide' && countWords(value) > TEACHER_GUIDE_MAX_WORDS) return;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const guideWordCount = countWords(formData.originalTeacherGuide);
+
+    if (guideWordCount > TEACHER_GUIDE_MAX_WORDS) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Teacher guide is too long',
+        text: `Teacher guide must be ${TEACHER_GUIDE_MAX_WORDS} words or less.`,
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -175,10 +191,15 @@ const UpdateTeacherGuideForm = ({ title }) => {
                 name="originalTeacherGuide"
                 value={formData.originalTeacherGuide}
                 onChange={handleChange}
-                placeholder="Objectives, activities, notes..."
+                placeholder={`Objectives, activities, notes... Maximum ${TEACHER_GUIDE_MAX_WORDS} words.`}
                 rows={6}
                 required
               />
+              <div className="d-flex justify-content-end mt-1">
+                <small className={countWords(formData.originalTeacherGuide) >= 270 ? 'text-warning' : 'text-muted'}>
+                  {countWords(formData.originalTeacherGuide)}/{TEACHER_GUIDE_MAX_WORDS} words
+                </small>
+              </div>
             </div>
 
             {/* Detailed Time Allocations */}

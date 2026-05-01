@@ -9,6 +9,9 @@ import { getToken } from '@/utils/token';
 import Swal from 'sweetalert2';
 
 const MAX_PDFS = 5;
+const DESCRIPTION_MAX_WORDS = 100;
+
+const countWords = (text) => text.trim().split(/\s+/).filter(Boolean).length;
 
 const UpdateMathsLectureForm = ({ title }) => {
   const { id } = useParams();
@@ -110,6 +113,7 @@ const UpdateMathsLectureForm = ({ title }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'description' && countWords(value) > DESCRIPTION_MAX_WORDS) return;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -188,6 +192,15 @@ const UpdateMathsLectureForm = ({ title }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (countWords(formData.description) > DESCRIPTION_MAX_WORDS) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Description is too long',
+        text: `Lecture description must be ${DESCRIPTION_MAX_WORDS} words or less.`,
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -343,10 +356,15 @@ const UpdateMathsLectureForm = ({ title }) => {
                   name="description"
                   value={formData.description}
                   onChange={handleChange}
-                  placeholder="This is an introduction to Maths basics..."
+                  placeholder={`This is an introduction to Maths basics... Maximum ${DESCRIPTION_MAX_WORDS} words.`}
                   rows={6}
                   required
                 />
+                <div className="d-flex justify-content-end mt-1">
+                  <small className={countWords(formData.description) >= 90 ? 'text-warning' : 'text-muted'}>
+                    {countWords(formData.description)}/{DESCRIPTION_MAX_WORDS} words
+                  </small>
+                </div>
               </div>
 
 

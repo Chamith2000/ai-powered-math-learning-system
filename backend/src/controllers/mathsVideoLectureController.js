@@ -1,6 +1,11 @@
 const multer = require("multer");
 const { uploadBuffer, uploadMany } = require("../utils/cloudinaryUpload");
 const MathsVideoLecture = require("../models/MathsVideoLecture");
+const DESCRIPTION_MAX_WORDS = 100;
+
+function countWords(text = "") {
+  return String(text).trim().split(/\s+/).filter(Boolean).length;
+}
 
 const upload = multer({ storage: multer.memoryStorage() }).fields([
   { name: "video", maxCount: 1 },
@@ -11,6 +16,12 @@ exports.create = (req, res) => {
   upload(req, res, async (err) => {
     if (err) return res.status(400).json({ message: "Upload error", error: err.message });
     try {
+      if (countWords(req.body.description) > DESCRIPTION_MAX_WORDS) {
+        return res.status(400).json({
+          message: `Lecture description must be ${DESCRIPTION_MAX_WORDS} words or less.`
+        });
+      }
+
       const createdBy = req.user?.userId || req.body.createby;
 
       let videoUrl = null;
@@ -76,6 +87,15 @@ exports.update = (req, res) => {
     if (err) return res.status(400).json({ message: "Upload error", error: err.message });
 
     try {
+      if (
+        req.body.description !== undefined &&
+        countWords(req.body.description) > DESCRIPTION_MAX_WORDS
+      ) {
+        return res.status(400).json({
+          message: `Lecture description must be ${DESCRIPTION_MAX_WORDS} words or less.`
+        });
+      }
+
       const existing = await MathsVideoLecture.findById(req.params.id);
       if (!existing) return res.status(404).json({ message: "Not found" });
 

@@ -1,4 +1,9 @@
 const TeacherGuide = require("../models/TeacherGuide");
+const TEACHER_GUIDE_MAX_WORDS = 300;
+
+function countWords(text = "") {
+  return String(text).trim().split(/\s+/).filter(Boolean).length;
+}
 
 function parseStudytime(val) {
   if (val === undefined || val === null || val === "") return undefined; // omit
@@ -8,6 +13,12 @@ function parseStudytime(val) {
 
 exports.create = async (req, res) => {
   try {
+    if (countWords(req.body.originalTeacherGuide) > TEACHER_GUIDE_MAX_WORDS) {
+      return res.status(400).json({
+        message: `Teacher guide must be ${TEACHER_GUIDE_MAX_WORDS} words or less.`
+      });
+    }
+
     const toCreate = {
       coureInfo: req.body.coureInfo,
       originalTeacherGuide: req.body.originalTeacherGuide,
@@ -55,6 +66,15 @@ exports.update = async (req, res) => {
   try {
     const { coureInfo, originalTeacherGuide, timeAllocations } = req.body;
     const studytime = parseStudytime(req.body.studytime);
+
+    if (
+      originalTeacherGuide !== undefined &&
+      countWords(originalTeacherGuide) > TEACHER_GUIDE_MAX_WORDS
+    ) {
+      return res.status(400).json({
+        message: `Teacher guide must be ${TEACHER_GUIDE_MAX_WORDS} words or less.`
+      });
+    }
 
     const $set = {};
     if (coureInfo !== undefined) $set.coureInfo = coureInfo;
