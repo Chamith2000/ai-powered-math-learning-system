@@ -4,6 +4,9 @@ const axios = require("axios");
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const UserRole = require("../models/UserRole");
+const StudentPerformance = require("../models/StudentPerformance");
+const StudentPerformanceHistory = require("../models/StudentPerformanceHistory");
+const performanceController = require("../controllers/studentPerformanceController");
 const cloudinary = require("../config/cloudinaryConfig");
 
 // ---------- helpers ----------
@@ -36,25 +39,22 @@ const serializeUser = (u) => ({
   age: u.age,
   phoneNumber: u.phoneNumber,
   difficultyLevel: u.difficultyLevel,
-  role: u.role, 
-  suitabilityForCoding: u.suitabilityForCoding,
-  suitableMethod: u.suitableMethod,
+  role: u.role?._id || u.role,
+  roleName: u.role?.name || null,
   entranceTest: u.entranceTest,
   status: u.status,
   faceImgUrl: u.faceImgUrl || null
 });
 
-// ============ REGISTER ============
 exports.registerUser = async (req, res) => {
   try {
-    // DEBUG: see what arrived
     console.log("content-type:", req.headers["content-type"]);
     console.log("has req.file?", !!req.file, "keys in req.files:", req.files ? Object.keys(req.files) : null);
 
     const {
       username, email, password, firstName, lastName, age, phoneNumber,
-      difficultyLevel, suitabilityForCoding, suitableMethod, entranceTest, status,
-      faceBase64 // optional: allow base64 image too
+      difficultyLevel, entranceTest, status, grade,
+      faceBase64 
     } = req.body;
 
     if (!username || !email || !password || !firstName || !lastName || !age || !phoneNumber) {
@@ -68,7 +68,6 @@ exports.registerUser = async (req, res) => {
     const userRole = await UserRole.findOne({ name: "User" });
     if (!userRole) return res.status(500).json({ message: "Role 'User' not found. Please seed roles." });
 
-    // ---- image handling: file OR base64 ----
     let faceImgUrl = null;
     const incomingFile = getIncomingFile(req);
 
@@ -76,7 +75,6 @@ exports.registerUser = async (req, res) => {
       if (incomingFile) {
         faceImgUrl = await uploadToCloudinary(incomingFile, "images", "image");
       } else if (faceBase64) {
-        // Accept `data:image/...;base64,....` or raw base64
         const dataUri = faceBase64.startsWith("data:")
           ? faceBase64
           : `data:image/jpeg;base64,${faceBase64}`;
@@ -85,8 +83,7 @@ exports.registerUser = async (req, res) => {
       }
     } catch (e) {
       console.error("Cloudinary upload error:", e?.message);
-      // Optional: return 400 if face is required
-      // return res.status(400).json({ message: "Face image upload failed" });
+      
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -100,15 +97,14 @@ exports.registerUser = async (req, res) => {
       age: Number(age),
       phoneNumber: phoneNumber.trim(),
       difficultyLevel,
-      suitabilityForCoding: suitabilityForCoding ?? 0,
-      suitableMethod: suitableMethod ?? undefined,
+      grade: Number(grade) || 3,
       entranceTest: entranceTest ?? 0,
       role: userRole._id,
       status: status ?? 1,
       faceImgUrl
     });
 
-    console.log("saved faceImgUrl:", newUser.faceImgUrl); 
+    console.log("saved faceImgUrl:", newUser.faceImgUrl);
 
     return res.status(201).json({
       message: "User registered successfully!",
@@ -120,7 +116,6 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// ============ PASSWORD/EMAIL LOGIN ============
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -135,16 +130,20 @@ exports.loginUser = async (req, res) => {
       return res.status(403).json({ message: "Account is inactive" });
     }
 
+    await performanceController.updateRiskStatus(user._id);
+
+    // Session tracking removed for logins to preserve ML history integrity
+    const updatedUser = await User.findById(user._id).populate("role");
+
     return res.json({
       token: generateToken(user._id),
-      user: serializeUser(user)
+      user: serializeUser(updatedUser)
     });
   } catch (error) {
     return res.status(500).json({ message: "Login error", error: error.message });
   }
 };
 
-// ============ FACE LOGIN ============
 exports.faceLoginUser = async (req, res) => {
   try {
     const { email, capturedImage } = req.body;
@@ -170,9 +169,14 @@ exports.faceLoginUser = async (req, res) => {
     const ok = response?.data?.success ?? response?.data?.match ?? false;
     if (!ok) return res.status(401).json({ message: "Face authentication failed" });
 
+    await performanceController.updateRiskStatus(user._id);
+
+    // Session tracking removed for logins to preserve ML history integrity
+    const updatedUser = await User.findById(user._id).populate("role");
+
     return res.json({
       token: generateToken(user._id),
-      user: serializeUser(user)
+      user: serializeUser(updatedUser)
     });
   } catch (error) {
     return res.status(500).json({ message: "Face login error", error: error.message });

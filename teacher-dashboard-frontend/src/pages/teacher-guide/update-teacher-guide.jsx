@@ -1,6 +1,5 @@
-import React from 'react';
+﻿import React from 'react';
 import PageHeader from '@/components/shared/pageHeader/PageHeader';
-import Footer from '@/components/shared/Footer';
 import UpdateTeacherGuideForm from '@/components/teacher-guide/UpdateTeacherGuideForm';
 
 const UpdateTeacherGuide = () => {
@@ -13,7 +12,6 @@ const UpdateTeacherGuide = () => {
                     <UpdateTeacherGuideForm title={"Update Teacher Guide"} />
                 </div>
             </div>
-            <Footer />
         </>
     );
 }

@@ -48,7 +48,7 @@ export const menuList = [
             {
                 id: 2,
                 name: "Add New Paper",
-                path: "/admin/staring-papers/create",
+                path: "/admin/starting-papers/create",
                 subdropdownMenu: false
             }
         ]
@@ -61,13 +61,13 @@ export const menuList = [
         dropdownMenu: [
             {
                 id: 1,
-                name: "Lecture List",
+                name: "Maths Video Lectures List",
                 path: "/admin/maths-lectures",
                 subdropdownMenu: false
             },
             {
                 id: 2,
-                name: "Add New Teacher Guide",
+                name: "Add New Video Lecture",
                 path: "/admin/maths-lectures/create",
                 subdropdownMenu: false
             }
@@ -92,7 +92,7 @@ export const menuList = [
                 subdropdownMenu: false
             }
         ]
-    }, 
+    },
     {
         id: 2,
         name: "Users",
@@ -108,5 +108,45 @@ export const menuList = [
 
         ]
     },
-    
+    {
+        id: 11,
+        name: "Monitoring",
+        path: "#",
+        icon: 'feather-eye',
+        dropdownMenu: [
+            {
+                id: 1,
+                name: "Activity Logs",
+                path: "/admin/paper-logs",
+                subdropdownMenu: false
+            }
+        ]
+    },
+    {
+        id: 12,
+        name: "Support",
+        path: "#",
+        icon: 'feather-help-circle',
+        dropdownMenu: [
+            {
+                id: 1,
+                name: "Help",
+                path: "/admin/help",
+                subdropdownMenu: false
+            },
+            {
+                id: 2,
+                name: "Terms",
+                path: "/admin/terms",
+                subdropdownMenu: false
+            },
+            {
+                id: 3,
+                name: "Privacy",
+                path: "/admin/privacy",
+                subdropdownMenu: false
+            }
+        ]
+    }
+
 ]

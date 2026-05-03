@@ -1,5 +1,5 @@
 import axios from 'axios';
-import BASE_URL from '../config/apiConfig.js';
+import BASE_URL from '../config/apiConfig';
 
 
 export const loginUser = async (email, password) => {

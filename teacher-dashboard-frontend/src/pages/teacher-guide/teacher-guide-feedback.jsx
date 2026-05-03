@@ -1,7 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import PageHeader from '@/components/shared/pageHeader/PageHeader';
 import PageHeaderWidgets from '@/components/shared/pageHeader/PageHeaderWidgets';
-import Footer from '@/components/shared/Footer';
 import TeacherGuideFeedbackTable from '@/components/teacher-guide/TeacherGuideFeedbackTable';
 
 const TeacherGuideFeedback = () => {
@@ -15,9 +14,9 @@ const TeacherGuideFeedback = () => {
                     <TeacherGuideFeedbackTable title="Teacher Guide Suggest" />
                 </div>
             </div>
-            <Footer />
         </>
     );
 };
 
 export default TeacherGuideFeedback;
+

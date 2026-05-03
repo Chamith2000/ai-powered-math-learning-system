@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import Card from "./card";
 import "../../assets/sass/app.scss";
-import pythonConceptsData from "../data/python_concepts.json";
+import mathsConceptsData from "../data/maths_concepts.json";
 
 import star from "../../assets/images/game-images/star_image.png";
 import corn from "../../assets/images/game-images/9512682.jpg";
@@ -54,7 +54,7 @@ function pickTerms(concepts, count) {
 }
 
 export default function CardFlipGame() {
-  const allConcepts = pythonConceptsData?.concepts ?? [];
+  const allConcepts = mathsConceptsData?.concepts ?? [];
 
   const conceptMap = useMemo(() => {
     const m = {};
@@ -73,7 +73,7 @@ export default function CardFlipGame() {
   const [moves, setMoves] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [bestScore, setBestScore] = useState(
-    JSON.parse(localStorage.getItem("bestScorePythonKids")) || Number.POSITIVE_INFINITY
+    JSON.parse(localStorage.getItem("bestScoreMathsKids")) || Number.POSITIVE_INFINITY
   );
   const timeout = useRef(null);
   const [randomImage, setRandomImage] = useState(generateImage());
@@ -112,7 +112,7 @@ export default function CardFlipGame() {
 
       const highScore = Math.min(moves, bestScore);
       setBestScore(highScore);
-      localStorage.setItem("bestScorePythonKids", highScore);
+      localStorage.setItem("bestScoreMathsKids", highScore);
 
       setLevelResults(prev => {
         const rest = prev.filter(r => r.level !== difficulty);
@@ -235,9 +235,9 @@ export default function CardFlipGame() {
     <div className="pycm-root">
       {/* Header */}
       <header className="pycm-header">
-        <h2>🐍 Python Match (Grade 6)</h2>
+        <h2><i className="icofont-calculator"></i> Maths Match</h2>
         <p>
-          Flip two matching <b>Python</b> words to learn! When you find a pair, a tip appears with a tiny code sample.
+          Flip two matching <b>Maths</b> words to learn! When you find a pair, a tip appears with a tiny code sample.
         </p>
 
         <Box className="pycm-toolbar">
@@ -291,7 +291,7 @@ export default function CardFlipGame() {
       {lastLearn && (
         <Paper elevation={2} sx={{ maxWidth: 720, margin: "0 auto 16px", padding: 2, background: "rgba(255,255,255,0.95)" }}>
           <Typography variant="subtitle1" gutterBottom>
-            ⭐ Learn: <b>{lastLearn.term}</b>
+            <i className="icofont-star"></i> Learn: <b>{lastLearn.term}</b>
           </Typography>
           <Typography variant="body2" gutterBottom>{lastLearn.definition}</Typography>
           <Divider sx={{ my: 1 }} />
@@ -300,7 +300,7 @@ export default function CardFlipGame() {
           </Typography>
           <Box sx={{ textAlign: "right", mt: 1 }}>
             <Button size="small" onClick={() => speak(`${lastLearn.term}. ${lastLearn.definition}`)}>
-              🔊 Read Aloud
+              <i className="icofont-volume-up"></i> Read Aloud
             </Button>
           </Box>
         </Paper>
@@ -339,7 +339,7 @@ export default function CardFlipGame() {
 
       {/* Win Modal */}
       <Dialog open={showModal} disableEscapeKeyDown>
-        <DialogTitle>🎉 Level Complete!</DialogTitle>
+        <DialogTitle><i className="icofont-trophy-alt"></i> Level Complete!</DialogTitle>
         <DialogContent>
           {(() => {
             const rec = levelResults.find(r => r.level === difficulty);
@@ -348,7 +348,7 @@ export default function CardFlipGame() {
             return (
               <>
                 <DialogContentText sx={{ mb: 1 }}>
-                  You matched all <b>{numUnique}</b> Python pairs on <b>{difficulty.toUpperCase()}</b>.
+                  You matched all <b>{numUnique}</b> Maths pairs on <b>{difficulty.toUpperCase()}</b>.
                 </DialogContentText>
                 <Paper variant="outlined" sx={{ p: 2, mb: 2 }}>
                   <div><b>Moves:</b> {moves}</div>

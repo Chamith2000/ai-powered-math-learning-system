@@ -1,7 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import PageHeader from '@/components/shared/pageHeader/PageHeader';
 import PageHeaderWidgets from '@/components/shared/pageHeader/PageHeaderWidgets';
-import Footer from '@/components/shared/Footer';
 import UserDetailTable from '@/components/user/UserDetailTable';
 
 const UserDetails = () => {
@@ -15,9 +14,9 @@ const UserDetails = () => {
                     <UserDetailTable title="User details" />
                 </div>
             </div>
-            <Footer />
         </>
     );
 };
 
 export default UserDetails;
+

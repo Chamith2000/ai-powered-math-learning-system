@@ -1,6 +1,5 @@
-import React from 'react';
+﻿import React from 'react';
 import PageHeader from '@/components/shared/pageHeader/PageHeader';
-import Footer from '@/components/shared/Footer';
 import ViewStartingPaperForm from '@/components/starting-papers/ViewStartingPaperForm';
 
 const ViewStartingPapers = () => {
@@ -13,7 +12,6 @@ const ViewStartingPapers = () => {
                     <ViewStartingPaperForm title={"Starting Paper"} />
                 </div>
             </div>
-            <Footer />
         </>
     );
 }

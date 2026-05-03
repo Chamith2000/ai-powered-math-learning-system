@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import CardHeader from '@/components/shared/CardHeader';
 import CardLoader from '@/components/shared/CardLoader';
 import useCardTitleActions from '@/hooks/useCardTitleActions';
@@ -7,7 +7,7 @@ import axios from 'axios';
 import BASE_URL from '../../config/apiConfig';
 import { getToken } from '@/utils/token';
 import { BsArrowLeft, BsArrowRight, BsDot } from 'react-icons/bs';
-import { FiEdit3, FiTrash2, FiMessageSquare } from 'react-icons/fi';
+import { FiEdit3, FiEye, FiTrash2, FiMessageSquare } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -89,12 +89,15 @@ const TeacherGuideTable = ({ title }) => {
       handleDeleteGuide(guideId);
     } else if (action === 'Edit') {
       navigate(`/admin/teacher-guides/edit/${guideId}`);
+    } else if (action === 'View') {
+      navigate(`/admin/teacher-guides/view/${guideId}`);
     } else if (action === 'Suggestions') {
       navigate(`/admin/teacher-guides-feedback/${guideId}`);
     }
   };
 
   const getDropdownItems = (guideId) => [
+    { icon: <FiEye />, label: 'View Full Guide', onClick: () => handleActionClick('View', guideId) },
     { icon: <FiEdit3 />, label: 'Edit', onClick: () => handleActionClick('Edit', guideId) },
     { icon: <FiMessageSquare />, label: 'See Suggestions', onClick: () => handleActionClick('Suggestions', guideId) },
     { type: 'divider' },
@@ -111,7 +114,7 @@ const TeacherGuideTable = ({ title }) => {
         <CardHeader title={title} refresh={handleRefresh} remove={handleDelete} expanded={handleExpand} />
 
         <div className="card-body custom-card-action p-0">
-          <div className="table-responsive">
+          <div className="table-responsive" style={{ minHeight: "350px" }}>
             <table className="table table-hover mb-0">
               <thead>
                 <tr>
@@ -139,9 +142,29 @@ const TeacherGuideTable = ({ title }) => {
                         {g.coureInfo}
                       </td>
 
-                      {/* FULL originalTeacherGuide; preserve line breaks, allow wrapping */}
-                      <td style={{ minWidth: '260px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                        {g.originalTeacherGuide}
+                      <td style={{ minWidth: '260px', maxWidth: '400px' }}>
+                        <div
+                          onClick={() => navigate(`/admin/teacher-guides/view/${g._id}`)}
+                          style={{
+                            display: '-webkit-box',
+                            WebkitLineClamp: 3,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          {g.originalTeacherGuide}
+                        </div>
+                        <button
+                          type="button"
+                          className="btn btn-link btn-sm p-0 mt-1"
+                          onClick={() => navigate(`/admin/teacher-guides/view/${g._id}`)}
+                        >
+                          View full guide
+                        </button>
                       </td>
 
                       {/* NEW time column */}
@@ -237,3 +260,4 @@ const TeacherGuideTable = ({ title }) => {
 };
 
 export default TeacherGuideTable;
+

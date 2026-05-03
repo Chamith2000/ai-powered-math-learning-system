@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Footer from "../component/layout/footer";
@@ -7,6 +6,7 @@ import PageHeader from "../component/layout/pageheader";
 import apiClient, { setAuthToken } from "../api";
 import Swal from "sweetalert2";
 import FaceCapture from "../component/WebCamCapture";
+import { setStudentSession } from "../auth";
 
 const LoginPage = () => {
   const [formData, setFormData] = useState({ email: "", password: "" });
@@ -28,10 +28,7 @@ const LoginPage = () => {
       const response = await apiClient.post("/api/auth/login", formData);
       const { token, user } = response.data;
 
-      localStorage.setItem("token", token);
-      localStorage.setItem("userId", user.id);
-      localStorage.setItem("difficultyLevel", user.difficultyLevel ?? "Easy");
-      localStorage.setItem("suitabilityForCoding", String(user.suitabilityForCoding ?? 0));
+      setStudentSession(token, String(user.id), user.difficultyLevel);
       setAuthToken(token);
 
       Swal.fire({
@@ -41,8 +38,6 @@ const LoginPage = () => {
         showConfirmButton: false,
         timer: 2000,
       });
-
-      await fetchStudentPerformance(user.id);
 
       const dest = Number(user.entranceTest) === 0 ? "/starting-paper" : "/";
       setTimeout(() => navigate(dest), 2000);
@@ -82,10 +77,7 @@ const LoginPage = () => {
       if (response?.data) {
         const { token, user } = response.data;
 
-        localStorage.setItem("token", token);
-        localStorage.setItem("userId", user.id);
-        localStorage.setItem("difficultyLevel", user.difficultyLevel ?? "Easy");
-        localStorage.setItem("suitabilityForCoding", String(user.suitabilityForCoding ?? 0));
+        setStudentSession(token, String(user.id), user.difficultyLevel);
         setAuthToken(token);
 
         Swal.fire({
@@ -95,8 +87,6 @@ const LoginPage = () => {
           showConfirmButton: false,
           timer: 2000,
         });
-
-        await fetchStudentPerformance(user.id);
 
         const dest = Number(user.entranceTest) === 0 ? "/starting-paper" : "/";
         setTimeout(() => navigate(dest), 2000);
@@ -117,228 +107,69 @@ const LoginPage = () => {
     }
   };
 
-  const fetchStudentPerformance = async (userId) => {
-    try {
-      let spRes = null;
-      try {
-        spRes = await apiClient.get(`/api/student-performance/user/${userId}`);
-      } catch (err) {
-        if (err?.response?.status !== 404) throw err;
-      }
+  // Removed legacy ensurePerformanceRecord
 
-      if (!spRes?.data || !spRes.data.userId) {
-        try {
-          await apiClient.post(`/api/student-performance`, {
-            userId,
-            totalStudyTime: 0,
-            totalScore: 0,
-            resourceScore: 0,
-            paperCount: 0,
-            averageScore: 0,
-            lectureCount: 0,
-          });
-          console.log("Baseline student performance created.");
-        } catch (postErr) {
-          console.error("Error creating baseline performance:", postErr);
-        }
-
-        try {
-          spRes = await apiClient.get(`/api/student-performance/user/${userId}`);
-        } catch (err2) {
-          spRes = {
-            data: {
-              totalStudyTime: 0,
-              resourceScore: 0,
-              totalScore: 0,
-              paperCount: 0,
-              lectureCount: 0,
-              averageScore: 0, 
-            },
-          };
-        }
-      }
-
-      const data = spRes?.data || {};
-      const {
-        totalStudyTime = 0,
-        resourceScore = 0,
-        totalScore = 0,
-        paperCount = 0,
-        lectureCount = 0,
-        averageScore = 0, 
-        updatedAt,
-        createdAt,
-      } = data;
-
-      const todayStr = new Date().toISOString().split("T")[0];
-      const lastUpdateISO = (updatedAt || createdAt || "").toString();
-      const isLastUpdateToday = lastUpdateISO && lastUpdateISO.split("T")[0] === todayStr;
-
-      const historyList = await getHistoryRecords(userId); 
-      const alreadyHasTodayHistory = historyList.some(
-        (r) => (r?.createdAt || "").split("T")[0] === todayStr
-      ); 
-      const attendanceRate = (historyList?.length || 0) + 1; 
-
-      if (!isLastUpdateToday && !alreadyHasTodayHistory) {
-        await predictAndUpdateDifficulty({
-          userId,
-          paperCount,
-          lectureCount,
-          totalStudyTime,
-          resourceScore,
-          attendanceRate,
-          averageScore,
-        });
-
-        await sendStudentPerformanceHistory(
-          userId,
-          totalStudyTime,
-          resourceScore,
-          totalScore,
-          paperCount,
-          lectureCount
-        );
-      } else {
-        console.log("Student performance was updated today or history exists. No snapshot needed.");
-      }
-    } catch (error) {
-      console.error("Error fetching/creating student performance:", error);
-    }
-  };
-
-  // NEW: get all history records once
-  const getHistoryRecords = async (userId) => {
-    try {
-      const response = await apiClient.get(`/api/student-performance-history/user/${userId}`);
-      return Array.isArray(response.data) ? response.data : [];
-    } catch (error) {
-      console.error("Error getting performance history:", error);
-      return [];
-    }
-  };
-
-  // NEW: map ML skill → difficulty level used in your user table
-  const mapSkillToDifficulty = (skill) => {
-    switch (String(skill).toLowerCase()) {
-      case "basic":
-        return "Easy";
-      case "intermediate":
-        return "Medium";
-      case "advanced":
-        return "Hard";
-      default:
-        return "Easy";
-    }
-  };
-
-  const predictAndUpdateDifficulty = async ({
-    userId,
-    paperCount,
-    lectureCount,
-    totalStudyTime,
-    resourceScore,
-    attendanceRate,
-    averageScore,
-  }) => {
-    try {
-      const payload = {
-        papers_completed: Number(paperCount) || 0,
-        video_lectures_watched: Number(lectureCount) || 0,
-        total_time_on_LMS_hours: Number(totalStudyTime) || 0, 
-        resources_downloaded: Number(resourceScore) || 0,
-        attendance_rate: Number(attendanceRate) || 0,
-        past_coding_score: Number(averageScore) || 0,
-      };
-
-      const mlRes = await apiClient.post("http://127.0.0.1:5000/predict-skill", payload); 
-      const predictedSkill = mlRes?.data?.predicted_skill; // "Basic" | "Intermediate" | "Advanced"
-      if (!predictedSkill) {
-        console.warn("ML API did not return predicted_skill. Skipping difficulty update.");
-        return;
-      }
-
-      const difficultyLevel = mapSkillToDifficulty(predictedSkill);
-
-      const token = localStorage.getItem("token") || "";
-      await apiClient.put(
-        `/api/users/${userId}`,
-        { difficultyLevel },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      localStorage.setItem("difficultyLevel", difficultyLevel);
-      console.log(`Updated difficultyLevel → ${difficultyLevel} based on predicted_skill "${predictedSkill}"`);
-    } catch (error) {
-      console.error("Error predicting/updating difficulty level:", error);
-    }
-  };
-
-  const sendStudentPerformanceHistory = async (
-    userId,
-    totalStudyTime,
-    resourceScore,
-    totalScore,
-    paperCount,
-    lectureCount
-  ) => {
-    try {
-      const requestBody = {
-        userId,
-        totalStudyTime,
-        resourceScore,
-        totalScore,
-        paperCount,
-        lectureCount,
-      };
-      await apiClient.post("/api/student-performance-history", requestBody);
-      console.log("Student performance history created for today.");
-    } catch (error) {
-      console.error("Error sending student performance history:", error);
-    }
-  };
 
   return (
     <>
       <Header />
-      <PageHeader title={"Login Page"} curPage={"Login"} />
-      <div className="login-section padding-tb section-bg">
-        <div className="container">
-          <div className="account-wrapper">
-            <h3 className="title">Login</h3>
+      <PageHeader title={"Login "} curPage={"Login"} />
+      <div className="login-section padding-tb section-bg" style={{ backgroundColor: "#F9FAFB", minHeight: "80vh", fontFamily: "'Nunito', sans-serif" }}>
+        <div className="container d-flex justify-content-center align-items-center">
+          <div className="card shadow-lg border-0 p-5 lms-card" style={{ maxWidth: 500, width: "100%", borderRadius: "28px", border: "2px solid #E0E7FF", boxShadow: "0 10px 40px rgba(79, 70, 229, 0.15)" }}>
+            <div className="text-center mb-4">
+              <h2 className="fw-bold" style={{ fontSize: "2.5rem", color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>
+                Welcome Back!
+              </h2>
+              <p className="fs-5" style={{ color: "#6B7280" }}>Ready for another learning adventure? Log in below!</p>
+            </div>
+
             <form className="account-form" onSubmit={handleSubmit}>
-              <div className="form-group">
+              <div className="form-group mb-4">
                 <input
                   type="email"
                   name="email"
-                  placeholder="Email *"
+                  className="form-control form-control-lg rounded-pill px-4 shadow-sm lms-input"
+                  style={{ border: "2px solid #E0E7FF", height: "56px", fontSize: "1.1rem", borderRadius: "50px" }}
+                  placeholder="Your Email"
                   value={formData.email}
                   onChange={handleChange}
                   required
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group mb-4">
                 <input
                   type="password"
                   name="password"
-                  placeholder="Password *"
+                  className="form-control form-control-lg rounded-pill px-4 shadow-sm lms-input"
+                  style={{ border: "2px solid #E0E7FF", height: "56px", fontSize: "1.1rem", borderRadius: "50px" }}
+                  placeholder="Your Password"
                   value={formData.password}
                   onChange={handleChange}
                   required
                 />
               </div>
-              <div className="form-group text-center">
-                <button className="lab-btn" type="submit" disabled={loading}>
-                  <span>{loading ? "Logging in..." : "Login Now"}</span>
+              <div className="form-group text-center mt-5">
+                <button
+                  className="btn btn-primary btn-lg rounded-pill w-100 fw-bold shadow lms-btn lms-btn-primary"
+                  type="submit"
+                  disabled={loading}
+                  style={{ height: "56px", fontSize: "1.25rem", borderRadius: "50px", background: "linear-gradient(135deg, #4F46E5 0%, #4338CA 100%)", border: "none" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 25px rgba(79, 70, 229, 0.4)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 15px rgba(79, 70, 229, 0.3)"; }}
+                >
+                  {loading ? <><i className="icofont-clock-time me-2"></i>Logging in...</> : <>Let's Go! <i className="icofont-rocket ms-2"></i></>}
                 </button>
               </div>
             </form>
 
-            <div className="account-bottom text-center">
-              <span className="d-block cate pt-10">
+            <div className="account-bottom text-center mt-4">
+              <p className="mb-2 fs-6">
                 Forgot Password?{" "}
                 <Link
                   to="#"
+                  className="fw-bold text-decoration-none"
+                  style={{ color: "#4F46E5" }}
                   onClick={(e) => {
                     e.preventDefault();
                     setShowFaceLogin(true);
@@ -346,22 +177,27 @@ const LoginPage = () => {
                 >
                   Login with Face
                 </Link>
-              </span>
-              <span className="d-block cate pt-10">
-                Don’t Have an Account? <Link to="/signup">Sign Up</Link>
-              </span>
+              </p>
+              <p className="fs-6">
+                New here? <Link to="/signup" className="fw-bold text-decoration-none" style={{ color: "#22C55E" }}>Join the Fun! </Link>
+              </p>
             </div>
 
             {showFaceLogin && (
-              <div className="mt-4">
-                <h5>Face Login</h5>
-                <FaceCapture onCapture={setCapturedImage} />
+              <div className="mt-4 p-4 rounded-4 text-center" style={{ backgroundColor: "#EFF6FF", border: "2px solid #818CF8", borderRadius: "24px" }}>
+                <h4 className="fw-bold mb-3" style={{ color: "#4F46E5", fontFamily: "'Baloo 2', sans-serif" }}>Face Login <i className="icofont-camera ms-2"></i></h4>
+                <div className="d-flex justify-content-center mb-3">
+                  <FaceCapture onCapture={setCapturedImage} />
+                </div>
                 {capturedImage && (
-                  <div className="mt-3 text-center">
-                    <button className="lab-btn" type="button" onClick={handleFaceLogin}>
-                      Login Using Face
-                    </button>
-                  </div>
+                  <button
+                    className="btn btn-lg rounded-pill text-white fw-bold shadow-sm px-4"
+                    type="button"
+                    onClick={handleFaceLogin}
+                    style={{ background: "linear-gradient(135deg, #4F46E5 0%, #4338CA 100%)", border: "none", borderRadius: "50px" }}
+                  >
+                    <i className="icofont-magic me-2"></i>Magic Login
+                  </button>
                 )}
               </div>
             )}

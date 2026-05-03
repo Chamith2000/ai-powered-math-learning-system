@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import CardHeader from '@/components/shared/CardHeader';
 import CardLoader from '@/components/shared/CardLoader';
 import useCardTitleActions from '@/hooks/useCardTitleActions';
@@ -107,9 +107,8 @@ const StartingPaperTable = ({ title }) => {
   return (
     <div className="col-xxl-12">
       <div
-        className={`card stretch stretch-full ${isExpanded ? 'card-expand' : ''} ${
-          refreshKey ? 'card-loading' : ''
-        }`}
+        className={`card stretch stretch-full ${isExpanded ? 'card-expand' : ''} ${refreshKey ? 'card-loading' : ''
+          }`}
       >
         <CardHeader
           title={title}
@@ -119,12 +118,13 @@ const StartingPaperTable = ({ title }) => {
         />
 
         <div className="card-body custom-card-action p-0">
-          <div className="table-responsive">
+          <div className="table-responsive" style={{ minHeight: "350px" }}>
             <table className="table table-hover mb-0">
               <thead>
                 <tr>
                   <th>Paper Title</th>
                   <th>Paper #</th>
+                  <th>Grade</th>
                   <th>Created By</th>
                   <th>Created At</th>
                   <th className="text-end">Action</th>
@@ -133,13 +133,13 @@ const StartingPaperTable = ({ title }) => {
               <tbody>
                 {paginatedPapers.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="text-center py-4">
+                    <td colSpan={6} className="text-center py-4">
                       No starting paper titles found.
                     </td>
                   </tr>
                 ) : (
                   paginatedPapers.map((p) => {
-                    // API returns "paperTytle" (typo) — keep both just in case
+                    // API returns "paperTytle" (typo) - keep both just in case
                     const titleTxt = p?.paperTytle || p?.paperTitle || '-';
                     const paperNumber = p?.paperNumber ?? '-';
                     const creator = p?.createBy || p?.createby || p?.createBY || {};
@@ -163,6 +163,12 @@ const StartingPaperTable = ({ title }) => {
                         <td>
                           <span className="badge bg-soft-primary text-primary">
                             {paperNumber}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span className="badge bg-soft-info text-info">
+                            {p?.grade ?? '-'}
                           </span>
                         </td>
 
@@ -250,3 +256,4 @@ const StartingPaperTable = ({ title }) => {
 };
 
 export default StartingPaperTable;
+

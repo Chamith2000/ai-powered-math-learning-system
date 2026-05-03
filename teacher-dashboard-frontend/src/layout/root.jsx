@@ -2,6 +2,7 @@ import React from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import NavigationManu from '@/components/shared/navigationMenu/NavigationMenu'
 import Header from '@/components/shared/header/Header'
+import Footer from '@/components/shared/Footer'
 import useBootstrapUtils from '@/hooks/useBootstrapUtils'
 
 const RootLayout = () => {
@@ -16,6 +17,7 @@ const RootLayout = () => {
                 <div className="nxl-content">
                     <Outlet />
                 </div>
+                <Footer />
             </main>
         </>
     )

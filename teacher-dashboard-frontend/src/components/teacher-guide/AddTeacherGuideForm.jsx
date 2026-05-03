@@ -7,11 +7,25 @@ import BASE_URL from '../../config/apiConfig';
 import { getToken } from '@/utils/token';
 import Swal from 'sweetalert2';
 
+const TEACHER_GUIDE_MAX_WORDS = 300;
+
 const AddTeacherGuideForm = ({ title }) => {
+  const countWords = (text) => text.trim().split(/\s+/).filter(Boolean).length;
+
   const [formData, setFormData] = useState({
     courseInfo: '',
     originalTeacherGuide: '',
-    studytime: '' // NEW: minutes (string to allow empty input)
+    studytime: '', // NEW: minutes (string to allow empty input)
+    time_spent: {
+      introduction: 0,
+      concept_explanation: 0,
+      worked_examples: 0,
+      practice_questions: 0,
+      word_problems: 0,
+      pacing: 0,
+      clarity: 0,
+      engagement: 0
+    }
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -34,14 +48,38 @@ const AddTeacherGuideForm = ({ title }) => {
       return;
     }
 
+    if (name.startsWith('ts_')) {
+      const field = name.replace('ts_', '');
+      setFormData((prev) => ({
+        ...prev,
+        time_spent: {
+          ...prev.time_spent,
+          [field]: Number(value) || 0
+        }
+      }));
+      return;
+    }
+
+    if (name === 'originalTeacherGuide' && countWords(value) > TEACHER_GUIDE_MAX_WORDS) return;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
+    const guideWordCount = countWords(formData.originalTeacherGuide);
+
+    if (guideWordCount > TEACHER_GUIDE_MAX_WORDS) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Teacher guide is too long',
+        text: `Teacher guide must be ${TEACHER_GUIDE_MAX_WORDS} words or less.`,
+      });
+      return;
+    }
 
     try {
+      setIsSubmitting(true);
       const token = getToken();
 
       const minutes =
@@ -50,7 +88,8 @@ const AddTeacherGuideForm = ({ title }) => {
       const payload = {
         coureInfo: formData.courseInfo.trim(),                 // keep backend field name
         originalTeacherGuide: formData.originalTeacherGuide.trim(),
-        ...(minutes !== undefined ? { studytime: minutes } : {}) // send only if provided
+        ...(minutes !== undefined ? { studytime: minutes } : {}), // send only if provided
+        timeAllocations: formData.time_spent
       };
 
       await axios.post(`${BASE_URL}/teacher-guides`, payload, {
@@ -68,7 +107,21 @@ const AddTeacherGuideForm = ({ title }) => {
         showConfirmButton: false,
       });
 
-      setFormData({ courseInfo: '', originalTeacherGuide: '', studytime: '' });
+      setFormData({
+        courseInfo: '',
+        originalTeacherGuide: '',
+        studytime: '',
+        time_spent: {
+          introduction: 0,
+          concept_explanation: 0,
+          worked_examples: 0,
+          practice_questions: 0,
+          word_problems: 0,
+          pacing: 0,
+          clarity: 0,
+          engagement: 0
+        }
+      });
       handleRefresh();
     } catch (err) {
       console.error('Teacher guide submission failed:', err?.response?.data || err);
@@ -111,7 +164,7 @@ const AddTeacherGuideForm = ({ title }) => {
                 name="courseInfo"
                 value={formData.courseInfo}
                 onChange={handleChange}
-                placeholder="e.g., Python 101 - Week 3"
+                placeholder="e.g., Addition"
                 required
               />
             </div>
@@ -123,27 +176,38 @@ const AddTeacherGuideForm = ({ title }) => {
                 name="originalTeacherGuide"
                 value={formData.originalTeacherGuide}
                 onChange={handleChange}
-                placeholder="Objectives, activities, notes..."
+                placeholder={`Add the teacher guide here. Maximum ${TEACHER_GUIDE_MAX_WORDS} words.`}
                 rows={5}
                 required
               />
+              <div className="d-flex justify-content-end mt-1">
+                <small className={countWords(formData.originalTeacherGuide) >= 270 ? 'text-warning' : 'text-muted'}>
+                  {countWords(formData.originalTeacherGuide)}/{TEACHER_GUIDE_MAX_WORDS} words
+                </small>
+              </div>
             </div>
 
-            {/* NEW: Time (minutes) */}
-            <div className="mb-3">
-              <label className="form-label">Time (minutes)</label>
-              <input
-                type="number"
-                className="form-control"
-                name="studytime"
-                value={formData.studytime}
-                onChange={handleChange}
-                placeholder="e.g., 60"
-                min={0}
-                step={1}
-                inputMode="numeric"
-              />
-              <small className="text-muted">Optional. Enter total minutes (non-negative).</small>
+            {/* Detailed Time Allocations */}
+            <hr className="my-4" />
+            <h5 className="mb-3 text-primary">Time Allocation</h5>
+            <div className="row g-3">
+              {[
+                'introduction', 'concept_explanation', 'worked_examples',
+                'practice_questions', 'word_problems', 'pacing',
+                'clarity', 'engagement'
+              ].map((field) => (
+                <div className="col-md-3" key={field}>
+                  <label className="form-label small text-capitalize">{field.replace('_', ' ')}</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    name={`ts_${field}`}
+                    value={formData.time_spent[field]}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+              ))}
             </div>
           </div>
 

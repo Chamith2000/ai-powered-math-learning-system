@@ -10,6 +10,8 @@ router.put("/:id", authMiddleware, studentPerformanceController.updateStudentPer
 router.delete("/:id", authMiddleware, studentPerformanceController.deleteStudentPerformance);
 
 router.get("/user/:userId", authMiddleware, studentPerformanceController.getStudentPerformanceByUserId);
+router.post("/predict/:userId", authMiddleware, studentPerformanceController.predictStudentPerformance);
+router.post("/forecast/:userId", authMiddleware, studentPerformanceController.forecastStudentPerformance);
 router.put("/user/:userId", authMiddleware, studentPerformanceController.updateStudentPerformanceByUserId);
 
 module.exports = router;

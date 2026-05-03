@@ -98,6 +98,7 @@ const ViewStartingPaperForm = ({ title }) => {
             </h3>
             <div className="d-inline-flex align-items-center gap-2 mt-2">
               <span className="badge bg-soft-primary text-primary">Paper #{paper?.paperNumber ?? '—'}</span>
+              <span className="badge bg-soft-info text-info">Grade {paper?.grade ?? '—'}</span>
             </div>
           </div>
 
@@ -163,9 +164,8 @@ const ViewStartingPaperForm = ({ title }) => {
                           return (
                             <li
                               key={i}
-                              className={`list-group-item d-flex justify-content-between align-items-start ${
-                                isCorrect ? 'list-group-item-success' : ''
-                              }`}
+                              className={`list-group-item d-flex justify-content-between align-items-start ${isCorrect ? 'list-group-item-success' : ''
+                                }`}
                               title={isCorrect ? 'Correct answer' : ''}
                               style={{ whiteSpace: 'pre-wrap' }}
                             >

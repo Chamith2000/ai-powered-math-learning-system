@@ -8,8 +8,9 @@ import axios from 'axios';
 import BASE_URL from '../../config/apiConfig';
 import { getToken } from '@/utils/token';
 import { BsArrowLeft, BsArrowRight, BsDot } from 'react-icons/bs';
-import { FiExternalLink, FiRefreshCcw, FiCopy } from 'react-icons/fi';
+import { FiExternalLink, FiRefreshCcw, FiCopy, FiEye } from 'react-icons/fi';
 import Swal from 'sweetalert2';
+
 
 const TeacherGuideFeedbackTable = ({ title }) => {
   const { id } = useParams(); // teacherGuideId from route
@@ -17,9 +18,10 @@ const TeacherGuideFeedbackTable = ({ title }) => {
 
   const [feedbacks, setFeedbacks] = useState([]);
   const [suggestions, setSuggestions] = useState({});                // fbId -> suggestion text
-  const [trustInfo, setTrustInfo] = useState({});                    // fbId -> { status }
   const [loadingSuggestions, setLoadingSuggestions] = useState({});  // fbId -> boolean
-  const [guideDetails, setGuideDetails] = useState({});              // guideId -> { studytime, originalTeacherGuide, coureInfo }
+  const [guideDetails, setGuideDetails] = useState({});              // guideId -> { studytime, originalTeacherGuide, coureInfo, timeAllocations }
+  const [generatingAll, setGeneratingAll] = useState(false);
+  const latestGuidesRef = React.useRef({});
 
   const { refreshKey, isRemoved, isExpanded, handleRefresh, handleExpand, handleDelete } =
     useCardTitleActions();
@@ -29,7 +31,35 @@ const TeacherGuideFeedbackTable = ({ title }) => {
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedFeedbacks = feedbacks.slice(startIndex, endIndex);
+
+  // --- GROUPING LOGIC ---
+  const groupFeedbacks = (list) => {
+    const groups = {};
+    list.forEach((fb) => {
+      const key = `${fb.studentFeedback?.trim() || ''}:::${fb.contentTitle || ''}`;
+      if (!groups[key]) {
+        groups[key] = {
+          ...fb,
+          studentNames: [fb?.studentId?.username || fb?.studentId?.email || 'Unknown'],
+          count: 1,
+          ids: [fb._id]
+        };
+      } else {
+        groups[key].count += 1;
+        groups[key].studentNames.push(fb?.studentId?.username || fb?.studentId?.email || 'Unknown');
+        groups[key].ids.push(fb._id);
+        // Keep the one with an aiSuggestion if available
+        if (!groups[key].aiSuggestion && fb.aiSuggestion) {
+          groups[key].aiSuggestion = fb.aiSuggestion;
+          groups[key]._id = fb._id; // Update main ID for suggestion lookup
+        }
+      }
+    });
+    return Object.values(groups);
+  };
+
+  const groupedList = groupFeedbacks(feedbacks);
+  const paginatedFeedbacks = groupedList.slice(startIndex, endIndex);
 
   useEffect(() => {
     fetchFeedbacks();
@@ -42,14 +72,9 @@ const TeacherGuideFeedbackTable = ({ title }) => {
     return Number.isFinite(n) ? n : 0;
   };
 
-  // --- STUDYTIME UNIT SWITCH ---
-  // If feedback.studytime is in SECONDS from backend, keep this true.
-  // If it's already in MINUTES, set to false.
-  const FEEDBACK_STUDYTIME_IS_SECONDS = true;
   const toMinutes = (value) => {
     const n = safeNum(value);
-    if (!FEEDBACK_STUDYTIME_IS_SECONDS) return Math.max(0, Math.round(n)); // already minutes
-    return Math.max(0, Math.round(n / 60)); // seconds -> minutes
+    return Math.max(0, Math.round(n));
   };
 
   const fetchFeedbacks = async () => {
@@ -60,6 +85,15 @@ const TeacherGuideFeedbackTable = ({ title }) => {
       });
       const list = Array.isArray(res.data) ? res.data : [];
       setFeedbacks(list);
+
+      // Initialize suggestions from DB
+      const initialSuggestions = {};
+      list.forEach(fb => {
+        if (fb.aiSuggestion) {
+          initialSuggestions[fb._id] = fb.aiSuggestion;
+        }
+      });
+      setSuggestions(initialSuggestions);
 
       // Collect guide IDs appearing in this list
       const uniqueGuideIds = [
@@ -72,7 +106,7 @@ const TeacherGuideFeedbackTable = ({ title }) => {
         ),
       ];
 
-      // Fetch missing guide details (studytime + originalTeacherGuide + coureInfo)
+      // Fetch missing guide details
       const missingIds = uniqueGuideIds.filter((gid) => !guideDetails[gid]);
 
       let mergedGuides = { ...guideDetails };
@@ -87,9 +121,10 @@ const TeacherGuideFeedbackTable = ({ title }) => {
               return [
                 gid,
                 {
-                  studytime: safeNum(data?.studytime),                // assigned minutes for the guide
+                  studytime: safeNum(data?.studytime),
                   originalTeacherGuide: data?.originalTeacherGuide || '',
                   coureInfo: data?.coureInfo || '',
+                  timeAllocations: data?.timeAllocations || {}
                 },
               ];
             } catch {
@@ -99,72 +134,111 @@ const TeacherGuideFeedbackTable = ({ title }) => {
         );
         const fetchedMap = Object.fromEntries(results);
         mergedGuides = { ...mergedGuides, ...fetchedMap };
-        setGuideDetails(mergedGuides); // update state (async), but use mergedGuides now
+        setGuideDetails(mergedGuides);
       }
 
-      // Generate suggestions using the merged map to avoid empty payloads
-      await generateSuggestions(list, mergedGuides);
+      latestGuidesRef.current = mergedGuides;
     } catch (err) {
       console.error('Failed to load feedbacks', err);
       Swal.fire('Error', 'Failed to load feedbacks.', 'error');
     }
   };
 
-  // Parse the model's text block to extract recommendation + trust status (we'll override trust)
-  const parseModelText = (raw) => {
-    const text = typeof raw === 'string' ? raw : JSON.stringify(raw);
+  const parseModelText = (data, options = {}) => {
+    const { isVideoFeedback, technicalData } = options;
 
-    // Recommendation line
-    const recMatch = text.match(/RECOMMENDATIONS:\s*(.*)/i);
-    const recommendation = recMatch ? recMatch[1].trim() : text.trim();
+    // --- Part A: Pedagogical Feedback (Standard) ---
+    const reason = data?.output?.reason || '(no suggestion available)';
+    const weakSections = Array.isArray(data?.output?.weak_sections) ? data.output.weak_sections : [];
+    
+    let recommendation = reason;
+    if (weakSections.length > 0) {
+      recommendation += `\n\nWeak sections: ${weakSections.join(', ')}`;
+    }
 
-    // Trust from model is ignored for display; we compute from completion rate
-    return { recommendation, status: null };
+    // --- Part B: Technical Quality (Optional) ---
+    if (isVideoFeedback && technicalData) {
+      const { confidence, issue, recommendation: techRec, severity } = technicalData?.output || {};
+      
+      const techSection = `\n\n----------------------------\n[Video Lecture Quality Review]\nIssue: ${issue || 'General'}\nSeverity: ${severity || 'N/A'}\nConfidence: ${Math.round((confidence || 0) * 100)}%\nRecommendation: ${techRec || 'No technical issues detected.'}`;
+      
+      recommendation += techSection;
+    }
+
+    return { 
+      recommendation, 
+      status: technicalData?.output?.severity || null 
+    };
   };
 
-  // NEW endpoint + body
-  const callSuggester = async ({ feedback, course_info, original_guide, completion_rate }) => {
-    const payload = {
-      feedback: feedback?.trim() || 'No student feedback provided.',
-      course_info: course_info?.trim() || 'General Course',
-      original_guide: original_guide?.trim() || 'No guide text available.',
-      // Send the TABLE’S computed completion rate AS-IS (no extra clamping here)
-      completion_rate: Number(completion_rate),
+  const callSuggester = async ({ feedback, course_info, original_guide, grade, timespent, lecture }) => {
+    const isVideo = !!lecture;
+
+    // 1. Prepare Standard Pedagogical Payload
+    const langConstraint = "*** MANDATORY: RESPOND IN ENGLISH ONLY. NO CHINESE CHARACTERS ALLOWED. ***";
+    const teacherPayload = {
+      teacher_data: {
+        instruction: "RESPOND IN ENGLISH ONLY",
+        task: "task_b",
+        teacher_guide: `${langConstraint}\n\n${course_info}. ${original_guide}\n\n${langConstraint}`.trim(),
+        student_feedback: `${langConstraint}\n\n${feedback?.trim() || 'No student feedback provided.'}\n\n${langConstraint}`,
+        time_spent: {
+          introduction: timespent?.introduction || 0,
+          concept_explanation: timespent?.concept_explanation || 0,
+          worked_examples: timespent?.worked_examples || 0,
+          practice_questions: timespent?.practice_questions || 0,
+          word_problems: timespent?.word_problems || 0,
+          pacing: timespent?.pacing || 0,
+          clarity: timespent?.clarity || 0,
+          engagement: timespent?.engagement || 0
+        },
+        grade: Number(grade) || 4,
+        language_instruction: "English"
+      },
+      model_type: "teacher"
     };
 
-    const { data } = await axios.post(`http://127.0.0.1:5000/predict-clean`, payload, {
-      headers: { 'Content-Type': 'application/json' },
-    });
+    try {
+      // 2. Execute Pedagogical Call
+      const teacherRes = await axios.post(
+        `https://Chamith2000-mcq-generator-new.hf.space/generate`,
+        teacherPayload,
+        { headers: { 'Content-Type': 'application/json' } }
+      );
 
-    return parseModelText(data);
+      let feedbackRes = null;
+      if (isVideo) {
+        // 3. Execute Technical Quality Call Concurrently if it's a video
+        const feedbackPayload = {
+          model_type: "feedback",
+          feedback_data: {
+            instruction: "RESPOND IN ENGLISH ONLY",
+            text: `${langConstraint}\n\n${feedback?.trim() || 'No feedback provided.'}\n\n${langConstraint}`,
+            grade: Number(grade) || 4,
+            lesson: lecture.lectureTytle || 'Untitled Lesson',
+            video_content: lecture.description || 'No description available.',
+            language: "English"
+          }
+        };
+        const fbRes = await axios.post(
+          `https://Chamith2000-mcq-generator-new.hf.space/generate`,
+          feedbackPayload,
+          { headers: { 'Content-Type': 'application/json' } }
+        );
+        feedbackRes = fbRes.data;
+      }
+
+      return parseModelText(teacherRes.data, { isVideoFeedback: isVideo, technicalData: feedbackRes });
+    } catch (e) {
+      console.error("AI Generation failed", e);
+      throw e;
+    }
   };
-
-  /**
-   * Completion formula SHOWN IN TABLE:
-   * marksPercent = clamp(marks, 0..100)
-   * timePercent  = clamp((spentMinutes/assignedMinutes)*100, 0..100)
-   * completion   = round( max(marksPercent, timePercent) )
-   * => Guarantees completion ≥ 50 if marks ≥ 50 OR timePercent ≥ 50
-   */
-  const computeCompletionRate = (fb, guide) => {
-    const assignedMinutes = safeNum(guide?.studytime); // assigned minutes on the guide (already minutes)
-    const spentMinutes = toMinutes(fb?.studytime);     // convert feedback's studytime -> minutes
-    const timePercent = assignedMinutes > 0 ? clamp01(spentMinutes / assignedMinutes) * 100 : 0;
-    const marksPercent = clamp01(safeNum(fb?.marks) / 100) * 100;
-    const completion = Math.round(Math.max(marksPercent, timePercent));
-    return completion; // 0..100
-  };
-
-  // Map a completion rate to display trust AFTER model returns
-  const trustFromCompletion = (completionRate) =>
-    completionRate < 50 ? 'UNTRUSTWORTHY' : 'TRUSTWORTHY';
 
   const generateSuggestions = async (list, guidesMap) => {
-    // Only generate for rows missing a suggestion
     const missing = list.filter((fb) => !suggestions[fb._id]);
     if (missing.length === 0) return;
 
-    // Mark all missing as loading
     const newLoading = {};
     missing.forEach((fb) => (newLoading[fb._id] = true));
     setLoadingSuggestions((prev) => ({ ...prev, ...newLoading }));
@@ -173,55 +247,52 @@ const TeacherGuideFeedbackTable = ({ title }) => {
       const results = await Promise.all(
         missing.map(async (fb) => {
           try {
-            const guideId =
-              typeof fb?.teacherGuideId === 'string'
-                ? fb.teacherGuideId
-                : fb?.teacherGuideId?._id;
-
-            const guide =
-              guidesMap?.[guideId] ||
-              guideDetails?.[guideId] || {
+            const guideId = typeof fb?.teacherGuideId === 'string' ? fb.teacherGuideId : fb?.teacherGuideId?._id;
+            const guide = guidesMap?.[guideId] || guideDetails?.[guideId] || {
                 studytime: 0,
-                originalTeacherGuide:
-                  (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.originalTeacherGuide) || '',
-                coureInfo:
-                  (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.coureInfo) || '',
+                originalTeacherGuide: (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.originalTeacherGuide) || '',
+                coureInfo: (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.coureInfo) || '',
               };
-
-            const completion_rate = computeCompletionRate(fb, guide);
 
             const model = await callSuggester({
               feedback: fb.studentFeedback || '',
               course_info: guide.coureInfo || '',
               original_guide: guide.originalTeacherGuide || '',
-              completion_rate,
+              grade: fb?.studentId?.grade ?? fb?.lectureId?.grade,
+              timespent: guide.timeAllocations || {},
+              lecture: fb.lectureId
             });
 
-            // Decide trust ONLY after model output is available
-            const trustStatus = trustFromCompletion(completion_rate);
-
-            return [fb._id, { model, trustStatus }];
+            return [fb._id, { model }];
           } catch (e) {
             console.error('Suggester failed for feedback', fb._id, e?.response?.data || e);
-            return [fb._id, { model: { recommendation: '(suggestion unavailable)' }, trustStatus: null }];
+            return [fb._id, { model: { recommendation: '(suggestion unavailable)' } }];
           }
         })
       );
 
-      // Split into suggestion + trust maps
       const sugMap = {};
-      const trustMap = {};
-      results.forEach(([fbId, { model, trustStatus }]) => {
+      results.forEach(([fbId, { model }]) => {
         if (!model) return;
         sugMap[fbId] = model.recommendation || '(suggestion unavailable)';
-        // Only set trust once the model has returned
-        if (trustStatus) trustMap[fbId] = { status: trustStatus };
       });
 
       setSuggestions((prev) => ({ ...prev, ...sugMap }));
-      setTrustInfo((prev) => ({ ...prev, ...trustMap }));
+
+      const token = getToken();
+      await Promise.all(
+        Object.entries(sugMap).map(async ([fbId, suggestion]) => {
+          try {
+            await axios.put(`${BASE_URL}/teacher-guide-feedbacks/${fbId}`,
+              { aiSuggestion: suggestion },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+          } catch (err) {
+            console.error(`Failed to save suggestion for ${fbId}`, err);
+          }
+        })
+      );
     } finally {
-      // Clear loading flags
       const cleared = {};
       missing.forEach((fb) => (cleared[fb._id] = false));
       setLoadingSuggestions((prev) => ({ ...prev, ...cleared }));
@@ -231,33 +302,30 @@ const TeacherGuideFeedbackTable = ({ title }) => {
   const regenerateFor = async (fb) => {
     setLoadingSuggestions((prev) => ({ ...prev, [fb._id]: true }));
     try {
-      const guideId =
-        typeof fb?.teacherGuideId === 'string' ? fb.teacherGuideId : fb?.teacherGuideId?._id;
-
-      const guide =
-        guideDetails?.[guideId] || {
+      const guideId = typeof fb?.teacherGuideId === 'string' ? fb.teacherGuideId : fb?.teacherGuideId?._id;
+      const guide = guideDetails?.[guideId] || {
           studytime: 0,
-          originalTeacherGuide:
-            (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.originalTeacherGuide) || '',
-          coureInfo:
-            (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.coureInfo) || '',
+          originalTeacherGuide: (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.originalTeacherGuide) || '',
+          coureInfo: (typeof fb?.teacherGuideId !== 'string' && fb?.teacherGuideId?.coureInfo) || '',
         };
-
-      const completion_rate = computeCompletionRate(fb, guide);
 
       const model = await callSuggester({
         feedback: fb.studentFeedback || '',
         course_info: guide.coureInfo || '',
         original_guide: guide.originalTeacherGuide || '',
-        completion_rate,
+        grade: fb?.studentId?.grade ?? fb?.lectureId?.grade,
+        timespent: guide.timeAllocations || {},
+        lecture: fb.lectureId
       });
 
-      setSuggestions((prev) => ({ ...prev, [fb._id]: model.recommendation || '(suggestion unavailable)' }));
-      // Set trust AFTER model returns
-      setTrustInfo((prev) => ({
-        ...prev,
-        [fb._id]: { status: trustFromCompletion(completion_rate) },
-      }));
+      const suggestion = model.recommendation || '(suggestion unavailable)';
+      setSuggestions((prev) => ({ ...prev, [fb._id]: suggestion }));
+
+      const token = getToken();
+      await axios.put(`${BASE_URL}/teacher-guide-feedbacks/${fb._id}`,
+        { aiSuggestion: suggestion },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
     } catch (e) {
       Swal.fire('Error', 'Failed to regenerate suggestion.', 'error');
     } finally {
@@ -281,13 +349,30 @@ const TeacherGuideFeedbackTable = ({ title }) => {
     }
   };
 
+  // --- Show Full Text Popup ---
+  const handleViewFullText = (title, text) => {
+    if (!text) return;
+    Swal.fire({
+      title: title,
+      html: `<div style="text-align: left; white-space: pre-wrap; word-break: break-word; max-height: 60vh; overflow-y: auto; padding: 10px; font-size: 14px;">${text}</div>`,
+      width: '800px',
+      showCloseButton: true,
+      confirmButtonText: 'Close',
+      confirmButtonColor: '#3085d6',
+    });
+  };
+
   const openGuide = (fb) => {
-    const guideId =
-      typeof fb?.teacherGuideId === 'string' ? fb.teacherGuideId : fb?.teacherGuideId?._id;
+    const guideId = typeof fb?.teacherGuideId === 'string' ? fb.teacherGuideId : fb?.teacherGuideId?._id;
     if (guideId) navigate(`/admin/teacher-guides/edit/${guideId}`);
   };
 
   const getDropdownItems = (fb) => [
+    {
+      icon: <FiEye />,
+      label: 'View Full Details',
+      onClick: () => navigate(`/admin/teacher-guides/feedback/view/${fb._id}`, { state: { fb, suggestion: suggestions[fb._id] } })
+    },
     { icon: <FiExternalLink />, label: 'View Guide', onClick: () => openGuide(fb) },
     { icon: <FiCopy />, label: 'Copy Suggestion', onClick: () => copySuggestion(fb._id) },
     { icon: <FiRefreshCcw />, label: 'Regenerate', onClick: () => regenerateFor(fb) },
@@ -295,25 +380,20 @@ const TeacherGuideFeedbackTable = ({ title }) => {
 
   if (isRemoved) return null;
 
-  const totalPages = Math.max(1, Math.ceil(feedbacks.length / itemsPerPage));
+  const totalPages = Math.max(1, Math.ceil(groupedList.length / itemsPerPage));
 
-  const firstGuideId =
-    typeof feedbacks?.[0]?.teacherGuideId === 'string'
+  const firstGuideId = typeof feedbacks?.[0]?.teacherGuideId === 'string'
       ? feedbacks?.[0]?.teacherGuideId
       : feedbacks?.[0]?.teacherGuideId?._id;
 
-  const courseInfo =
-    guideDetails[firstGuideId]?.coureInfo ||
+  const courseInfo = guideDetails[firstGuideId]?.coureInfo ||
     feedbacks[0]?.teacherGuideId?.coureInfo ||
-    feedbacks.find((f) => f?.teacherGuideId?.coureInfo)?.teacherGuideId?.coureInfo ||
-    '';
+    feedbacks.find((f) => f?.teacherGuideId?.coureInfo)?.teacherGuideId?.coureInfo || '';
 
-  // Wider suggestion column
+  // Widths updated to fit the page
   const suggestionCellStyle = {
-    whiteSpace: 'pre-wrap',
-    wordBreak: 'break-word',
-    minWidth: '520px',
-    width: '50%',
+    minWidth: '250px',
+    maxWidth: '350px',
   };
 
   const spinner = (
@@ -323,92 +403,145 @@ const TeacherGuideFeedbackTable = ({ title }) => {
     </span>
   );
 
-  // badge helper for trust status
-  const TrustBadge = ({ fb }) => {
-    const info = trustInfo[fb._id];
-    // Show "—" while loading or before model finished
-    if (!info || loadingSuggestions[fb._id]) {
-      return <span className="badge bg-secondary">—</span>;
+  const handleGenerateAll = async () => {
+    setGeneratingAll(true);
+    try {
+      await generateSuggestions(feedbacks, latestGuidesRef.current);
+    } finally {
+      setGeneratingAll(false);
     }
-    const raw = (info.status || '').toUpperCase().trim();
-    const isTrust = raw === 'TRUSTWORTHY';
-    const cls = isTrust ? 'bg-success' : 'bg-danger';
-    const label = isTrust ? 'TRUSTWORTHY' : 'UNTRUSTWORTHY';
-    return <span className={`badge ${cls}`}>{label}</span>;
-  };
-
-  // ⬅️ Always show OUR computed completion %, independent of model
-  const CompletionCell = ({ fb }) => {
-    const guideId =
-      typeof fb?.teacherGuideId === 'string' ? fb.teacherGuideId : fb?.teacherGuideId?._id;
-    const guide = guideDetails?.[guideId] || { studytime: 0 };
-    const val = computeCompletionRate(fb, guide);
-    return <span>{Number.isFinite(val) ? `${val}%` : '—'}</span>;
   };
 
   return (
     <div className="col-xxl-12">
       <div className={`card stretch stretch-full ${isExpanded ? 'card-expand' : ''} ${refreshKey ? 'card-loading' : ''}`}>
         <CardHeader
-          title={courseInfo ? `${title} — ${courseInfo}` : title}
+          title={courseInfo ? `${title} - ${courseInfo}` : title}
           refresh={handleRefresh}
           remove={handleDelete}
           expanded={handleExpand}
         />
 
         <div className="card-body custom-card-action p-0">
-          <div className="table-responsive">
+          <div className="d-flex justify-content-end p-3 pb-0">
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={handleGenerateAll}
+              disabled={generatingAll || feedbacks.length === 0}
+            >
+              {generatingAll ? 'Generating...' : 'Generate All Suggestions'}
+            </button>
+          </div>
+          <div className="table-responsive" style={{ minHeight: "350px" }}>
             <table className="table table-hover mb-0">
               <thead>
+                {/* Updated TH Widths */}
                 <tr>
-                  <th style={{ minWidth: 160 }}>Student</th>
-                  <th style={{ minWidth: 260 }}>Feedback</th>
-                  <th style={{ minWidth: 120 }}>Marks</th>
-                  <th style={{ minWidth: 120 }}>Time (min)</th>
-                  <th style={{ minWidth: 140 }}>Completion %</th>
-                  <th style={{ minWidth: 140 }}>Trust</th>
-                  <th style={{ minWidth: 520, width: '50%' }}>Suggestion</th>
+                  <th style={{ minWidth: 120 }}>Student</th>
+                  <th style={{ minWidth: 150 }}>Feedback</th>
+                  <th style={{ minWidth: 150 }}>Content</th>
+                  <th style={{ minWidth: 100 }}>Time (min)</th>
+                  <th style={{ minWidth: 250 }}>Suggestion</th>
                   <th className="text-end">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedFeedbacks.length === 0 ? (
                   <tr>
-                    <td colSpan={8} className="text-center py-4">No feedback found.</td>
+                    <td colSpan={6} className="text-center py-4">No feedback found.</td>
                   </tr>
                 ) : (
                   paginatedFeedbacks.map((fb) => {
-                    const studentName = fb?.studentId?.username || fb?.studentId?.email || '—';
+                    const studentName = fb?.studentId?.username || fb?.studentId?.email || '-';
                     const s = suggestions[fb._id];
 
                     return (
-                      <tr key={fb._id}>
-                        <td title={fb?.studentId?.email || ''}>{studentName}</td>
+                        <tr key={fb._id}>
+                          <td>
+                            {fb.count > 1 ? (
+                                <div className="d-flex flex-column">
+                                <span className="badge bg-soft-primary text-primary border-0"
+                                      style={{maxWidth: 'fit-content'}}>
+                                    Multiple Students ({fb.count})
+                                </span>
+                                  <small className="text-muted mt-1" style={{fontSize: '10px'}}>
+                                    {Array.from(new Set(fb.studentNames)).slice(0, 2).join(', ')}
+                                    {fb.studentNames.length > 2 && '...'}
+                                  </small>
+                                </div>
+                            ) : (
+                                <span title={fb?.studentId?.email || ''}>{studentName}</span>
+                            )}
+                          </td>
 
-                        <td
-                          title={fb?.studentFeedback || ''}
-                          style={{ maxWidth: 420, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-                        >
-                          {fb?.studentFeedback || ''}
-                        </td>
+                          {/* Feedback with line-clamp */}
+                          <td style={{minWidth: '150px', maxWidth: '250px'}}>
+                            <div
+                                style={{
+                                  display: '-webkit-box',
+                                  WebkitLineClamp: 2,
+                                  WebkitBoxOrient: 'vertical',
+                                  overflow: 'hidden',
+                                  cursor: 'pointer'
+                                }}
+                                onClick={() => navigate(`/admin/teacher-guides/feedback/view/${fb._id}`, {
+                                  state: {
+                                    fb,
+                                    suggestion: suggestions[fb._id]
+                                  }
+                                })}
+                            >
+                              {fb?.studentFeedback || '-'}
+                            </div>
+                          </td>
 
-                        <td>{Number.isFinite(Number(fb?.marks)) ? Number(fb.marks) : '—'}</td>
+                          <td>{fb?.contentTitle || <span className="text-muted">-</span>}</td>
+                          <td>{Number.isFinite(Number(fb?.studytime)) ? toMinutes(fb.studytime) : '-'}</td>
 
-                        {/* Display converted minutes */}
-                        <td>{Number.isFinite(Number(fb?.studytime)) ? toMinutes(fb.studytime) : '—'}</td>
+                          <td style={suggestionCellStyle}>
+                            {loadingSuggestions[fb._id] ? spinner : (
+                                <div
+                                    style={{cursor: 'pointer'}}
+                                    onClick={() => navigate(`/admin/teacher-guides/feedback/view/${fb._id}`, {
+                                      state: {
+                                        fb,
+                                        suggestion: suggestions[fb._id]
+                                      }
+                                    })}
+                                >
+                                  {fb.lectureId && s && !s.includes('[Video Quality') && (
+                                      <span className="badge bg-soft-info text-info mb-1 d-block"
+                                            style={{width: 'fit-content'}}>
+          Pedagogical Suggestion
+        </span>
+                                  )}
+                                  {fb.lectureId && s && s.includes('[Video Quality') && (
+                                      <div className="mb-2">
+                                        <span className="badge bg-soft-success text-success me-1">Video + Teaching Review</span>
+                                        {s.includes('Severity: high') && <span
+                                            className="badge bg-soft-danger text-danger">High Severity issue</span>}
+                                        {s.includes('Severity: medium') && <span
+                                            className="badge bg-soft-warning text-warning">Medium Severity issue</span>}
+                                      </div>
+                                  )}
+                                  <div style={{
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 3,
+                                    WebkitBoxOrient: 'vertical',
+                                    overflow: 'hidden'
+                                  }}>
+                                    {s || <span className="text-muted">-</span>}
+                                  </div>
+                                </div>
+                            )}
+                          </td>
 
-                        <td><CompletionCell fb={fb} /></td>
-
-                        <td><TrustBadge fb={fb} /></td>
-
-                        <td style={suggestionCellStyle}>
-                          {loadingSuggestions[fb._id] ? spinner : (s || <span className="text-muted">—</span>)}
-                        </td>
-
-                        <td className="text-end">
-                          <Dropdown dropdownItems={getDropdownItems(fb)} triggerClass="avatar-md ms-auto" triggerPosition="0,28" />
-                        </td>
-                      </tr>
+                          <td className="text-end">
+                            <Dropdown dropdownItems={getDropdownItems(fb)} triggerClass="avatar-md ms-auto"
+                                      triggerPosition="0,28"/>
+                          </td>
+                        </tr>
                     );
                   })
                 )}
@@ -421,24 +554,24 @@ const TeacherGuideFeedbackTable = ({ title }) => {
           <ul className="list-unstyled d-flex align-items-center gap-2 mb-0 pagination-common-style">
             <li>
               <Link
-                to="#"
-                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                className={currentPage === 1 ? 'disabled' : ''}
+                  to="#"
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  className={currentPage === 1 ? 'disabled' : ''}
               >
-                <BsArrowLeft size={16} />
+                <BsArrowLeft size={16}/>
               </Link>
             </li>
-            {Array.from({ length: totalPages }, (_, index) => {
+            {Array.from({length: totalPages}, (_, index) => {
               const page = index + 1;
               const shouldShow = page === 1 || page === totalPages || Math.abs(currentPage - page) <= 1;
 
               if (!shouldShow && (page === 2 || page === totalPages - 1)) {
                 return (
-                  <li key={`dots-${index}`}>
-                    <Link to="#" onClick={(e) => e.preventDefault()}>
-                      <BsDot size={16} />
-                    </Link>
-                  </li>
+                    <li key={`dots-${index}`}>
+                      <Link to="#" onClick={(e) => e.preventDefault()}>
+                        <BsDot size={16}/>
+                      </Link>
+                    </li>
                 );
               }
 

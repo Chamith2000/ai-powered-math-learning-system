@@ -23,6 +23,7 @@ const UpdateStartingPaperForm = ({ title }) => {
   const [formData, setFormData] = useState({
     paperTytle: '',
     paperNumber: 1,
+    grade: 3,
   });
 
   // ---- Existing questions (editable) ----
@@ -65,6 +66,7 @@ const UpdateStartingPaperForm = ({ title }) => {
         setFormData({
           paperTytle: p?.paperTytle || '',
           paperNumber: Number(p?.paperNumber ?? 1),
+          grade: Number(p?.grade ?? 3),
         });
       } catch (err) {
         console.error('Failed to load starting paper title', err);
@@ -116,7 +118,7 @@ const UpdateStartingPaperForm = ({ title }) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'paperNumber' ? Number(value) : value,
+      [name]: (name === 'paperNumber' || name === 'grade') ? Number(value) : value,
     }));
   };
 
@@ -305,6 +307,7 @@ const UpdateStartingPaperForm = ({ title }) => {
         {
           paperTytle: formData.paperTytle.trim(),
           paperNumber: Number(formData.paperNumber),
+          grade: Number(formData.grade),
         },
         { headers: authHeaders() }
       );
@@ -360,7 +363,7 @@ const UpdateStartingPaperForm = ({ title }) => {
       }
 
       // Navigate back to your list page (adjust route if different)
-      navigate('/admin/starting-paper-titles');
+      navigate('/admin/starting-papers/');
     } catch (err) {
       console.error('Update title failed:', err?.response?.data || err);
       Swal.fire({
@@ -381,9 +384,8 @@ const UpdateStartingPaperForm = ({ title }) => {
   return (
     <div className="col-xxl-12">
       <div
-        className={`card stretch stretch-full ${isExpanded ? 'card-expand' : ''} ${
-          refreshKey ? 'card-loading' : ''
-        }`}
+        className={`card stretch stretch-full ${isExpanded ? 'card-expand' : ''} ${refreshKey ? 'card-loading' : ''
+          }`}
       >
         <CardHeader
           title={title}
@@ -404,13 +406,28 @@ const UpdateStartingPaperForm = ({ title }) => {
                   name="paperTytle"
                   value={formData.paperTytle}
                   onChange={onFieldChange}
-                  placeholder="Python starting paper 1"
+                  placeholder="Maths starting paper 1"
                   required
                   disabled={loadingTitle}
                 />
               </div>
 
-              <div className="col-md-4">
+              <div className="col-md-2">
+                <label className="form-label">Grade</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  name="grade"
+                  min={1}
+                  value={formData.grade}
+                  onChange={onFieldChange}
+                  placeholder="e.g., 3"
+                  required
+                  disabled={loadingTitle}
+                />
+              </div>
+
+              <div className="col-md-2">
                 <label className="form-label">Paper #</label>
                 <input
                   type="number"

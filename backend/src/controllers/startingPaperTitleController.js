@@ -6,6 +6,7 @@ exports.create = async (req, res) => {
     const payload = {
       paperTytle: req.body.paperTytle,
       paperNumber: req.body.paperNumber,
+      grade: req.body.grade || 3,
       createBy: req.user?.userId || req.body.createBy
     };
     const doc = await StartingPaperTitle.create(payload);
@@ -28,12 +29,12 @@ exports.getById = async (req, res) => {
   } catch (e) { res.status(500).json({ message: "Fetch failed", error: e.message }); }
 };
 
-// UPDATE
+// Update
 exports.update = async (req, res) => {
   try {
-    const { paperTytle, paperNumber } = req.body;
+    const { paperTytle, paperNumber, grade = 3 } = req.body;
     const doc = await StartingPaperTitle.findByIdAndUpdate(
-      req.params.id, { paperTytle, paperNumber }, { new: true }
+      req.params.id, { paperTytle, paperNumber, grade }, { new: true }
     );
     if (!doc) return res.status(404).json({ message: "Not found" });
     res.json(doc);

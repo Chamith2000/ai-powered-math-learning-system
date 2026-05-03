@@ -1,4 +1,4 @@
-import pythonWords from "./python_words.json";
+import mathsWords from "./maths_words.json";
 
 /** Always a 6x5 (rows × letters) board to match the UI */
 export const getboardDefault = () => {
@@ -6,8 +6,8 @@ export const getboardDefault = () => {
 };
 
 export const generateWordSet = async () => {
-  // Only 5-letter words; list is curated for Grade 6
-  const words = pythonWords.words
+  // Only 5-letter words; list is curated for the word guess game
+  const words = mathsWords.words
     .map(w => (w.word || "").trim().toLowerCase())
     .filter(w => w.length === 5);
 

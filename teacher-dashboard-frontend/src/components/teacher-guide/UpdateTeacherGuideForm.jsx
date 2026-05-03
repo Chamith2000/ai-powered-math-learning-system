@@ -8,14 +8,27 @@ import BASE_URL from '../../config/apiConfig';
 import { getToken } from '@/utils/token';
 import Swal from 'sweetalert2';
 
+const TEACHER_GUIDE_MAX_WORDS = 300;
+
 const UpdateTeacherGuideForm = ({ title }) => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const countWords = (text) => text.trim().split(/\s+/).filter(Boolean).length;
 
   const [formData, setFormData] = useState({
     courseInfo: '',
     originalTeacherGuide: '',
-    studytime: '' // NEW: minutes (string to allow empty)
+    studytime: '', // NEW: minutes (string to allow empty)
+    time_spent: {
+      introduction: 0,
+      concept_explanation: 0,
+      worked_examples: 0,
+      practice_questions: 0,
+      word_problems: 0,
+      pacing: 0,
+      clarity: 0,
+      engagement: 0
+    }
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -41,7 +54,17 @@ const UpdateTeacherGuideForm = ({ title }) => {
         studytime:
           res.data?.studytime === 0 || res.data?.studytime
             ? String(Math.floor(Number(res.data.studytime)))
-            : '' // keep empty if undefined / null
+            : '', // keep empty if undefined / null
+        time_spent: {
+          introduction: res.data?.timeAllocations?.introduction || 0,
+          concept_explanation: res.data?.timeAllocations?.concept_explanation || 0,
+          worked_examples: res.data?.timeAllocations?.worked_examples || 0,
+          practice_questions: res.data?.timeAllocations?.practice_questions || 0,
+          word_problems: res.data?.timeAllocations?.word_problems || 0,
+          pacing: res.data?.timeAllocations?.pacing || 0,
+          clarity: res.data?.timeAllocations?.clarity || 0,
+          engagement: res.data?.timeAllocations?.engagement || 0
+        }
       });
     } catch (err) {
       console.error('Error fetching teacher guide', err);
@@ -65,11 +88,36 @@ const UpdateTeacherGuideForm = ({ title }) => {
       return;
     }
 
+    if (name.startsWith('ts_')) {
+      const field = name.replace('ts_', '');
+      setFormData((prev) => ({
+        ...prev,
+        time_spent: {
+          ...prev.time_spent,
+          [field]: Number(value) || 0
+        }
+      }));
+      return;
+    }
+
+    if (name === 'originalTeacherGuide' && countWords(value) > TEACHER_GUIDE_MAX_WORDS) return;
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const guideWordCount = countWords(formData.originalTeacherGuide);
+
+    if (guideWordCount > TEACHER_GUIDE_MAX_WORDS) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Teacher guide is too long',
+        text: `Teacher guide must be ${TEACHER_GUIDE_MAX_WORDS} words or less.`,
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -82,7 +130,8 @@ const UpdateTeacherGuideForm = ({ title }) => {
         // map UI -> API keys (keep API’s "coureInfo" spelling)
         coureInfo: formData.courseInfo.trim(),
         originalTeacherGuide: formData.originalTeacherGuide.trim(),
-        ...(minutes !== undefined ? { studytime: minutes } : {}) // send only if user set it
+        ...(minutes !== undefined ? { studytime: minutes } : {}), // send only if user set it
+        timeAllocations: formData.time_spent
       };
 
       await axios.put(`${BASE_URL}/teacher-guides/${id}`, payload, {
@@ -130,7 +179,7 @@ const UpdateTeacherGuideForm = ({ title }) => {
                 name="courseInfo"
                 value={formData.courseInfo}
                 onChange={handleChange}
-                placeholder="e.g., Python 101 - Week 3"
+                placeholder="e.g., Maths 101 - Week 3"
                 required
               />
             </div>
@@ -142,27 +191,38 @@ const UpdateTeacherGuideForm = ({ title }) => {
                 name="originalTeacherGuide"
                 value={formData.originalTeacherGuide}
                 onChange={handleChange}
-                placeholder="Objectives, activities, notes..."
+                placeholder={`Objectives, activities, notes... Maximum ${TEACHER_GUIDE_MAX_WORDS} words.`}
                 rows={6}
                 required
               />
+              <div className="d-flex justify-content-end mt-1">
+                <small className={countWords(formData.originalTeacherGuide) >= 270 ? 'text-warning' : 'text-muted'}>
+                  {countWords(formData.originalTeacherGuide)}/{TEACHER_GUIDE_MAX_WORDS} words
+                </small>
+              </div>
             </div>
 
-            {/* NEW: Time (minutes) */}
-            <div className="mb-3">
-              <label className="form-label">Time (minutes)</label>
-              <input
-                type="number"
-                className="form-control"
-                name="studytime"
-                value={formData.studytime}
-                onChange={handleChange}
-                placeholder="e.g., 60"
-                min={0}
-                step={1}
-                inputMode="numeric"
-              />
-              <small className="text-muted">Optional. Enter total minutes (non-negative integer).</small>
+            {/* Detailed Time Allocations */}
+            <hr className="my-4" />
+            <h5 className="mb-3 text-primary">AI Suggester Metrics (Time Spent)</h5>
+            <div className="row g-3">
+              {[
+                'introduction', 'concept_explanation', 'worked_examples',
+                'practice_questions', 'word_problems', 'pacing',
+                'clarity', 'engagement'
+              ].map((field) => (
+                <div className="col-md-3" key={field}>
+                  <label className="form-label small text-capitalize">{field.replace('_', ' ')}</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    name={`ts_${field}`}
+                    value={formData.time_spent[field]}
+                    onChange={handleChange}
+                    min="0"
+                  />
+                </div>
+              ))}
             </div>
           </div>
 

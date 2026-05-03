@@ -1,0 +1,27 @@
+/* LMS Child-Friendly Card Polish */
+.course-item {
+  border-radius: 24px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid #E5E7EB;
+}
+.course-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(79, 70, 229, 0.15);
+  border-color: #818CF8;
+}
+.course-content h4 {
+  font-size: 1.15rem;
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+}
+.lab-btn-text {
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  cursor: pointer;
+  color: #4F46E5;
+  font-family: 'Baloo 2', 'Nunito', sans-serif;
+}
+.lab-btn-text:hover {
+  color: #4338CA;
+}

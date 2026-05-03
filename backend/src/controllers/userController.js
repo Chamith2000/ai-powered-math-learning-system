@@ -10,7 +10,7 @@ exports.getUsers = async (_req, res) => {
   try {
     const users = await User.find()
       .select("-password")
-      .populate("role", "name permissions") 
+      .populate("role", "name permissions")
       .lean();
     res.status(200).json(users);
   } catch (error) {
@@ -48,18 +48,10 @@ exports.updateUser = async (req, res) => {
       "phoneNumber",
       "difficultyLevel",
       "status",
-      "suitabilityForCoding",
-      "suitableMethod",
       "faceImgUrl",
       "entranceTest",
-      "VisualLearningCount",
-      "VisualLearningTotalMarks",
-      "AuditoryLearningCount",
-      "AuditoryLearningTotalMarks",
-      "KinestheticLearningCount",
-      "KinestheticLearningTotal",
-      "ReadWriteLearningCount",
-      "ReadWriteLearningTotal",
+      "suitableMethod",
+      "isRiskStudent",
     ];
     const update = pickAllowed(req.body, allowed);
 

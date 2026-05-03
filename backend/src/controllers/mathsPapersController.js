@@ -5,6 +5,7 @@ exports.create = async (req, res) => {
     const doc = await MathsPapers.create({
       paperTytle: req.body.paperTytle,
       paperDifficulty: req.body.paperDifficulty,
+      grade: req.body.grade || 3,
       teacherGuideId: req.body.teacherGuideId
     });
     res.status(201).json(doc);
@@ -26,9 +27,9 @@ exports.getById = async (req, res) => {
 
 exports.update = async (req, res) => {
   try {
-    const { paperTytle, paperDifficulty, teacherGuideId } = req.body;
+    const { paperTytle, paperDifficulty, grade, teacherGuideId } = req.body;
     const doc = await MathsPapers.findByIdAndUpdate(
-      req.params.id, { paperTytle, paperDifficulty, teacherGuideId }, { new: true }
+      req.params.id, { paperTytle, paperDifficulty, grade, teacherGuideId }, { new: true }
     );
     if (!doc) return res.status(404).json({ message: "Not found" });
     res.json(doc);

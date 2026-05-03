@@ -1,7 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import PageHeader from '@/components/shared/pageHeader/PageHeader';
 import PageHeaderWidgets from '@/components/shared/pageHeader/PageHeaderWidgets';
-import Footer from '@/components/shared/Footer';
 import TeacherGuideTable from '@/components/teacher-guide/TeacherGuideTable';
 
 const TeacherGuide = () => {
@@ -15,9 +14,9 @@ const TeacherGuide = () => {
                     <TeacherGuideTable title="Teacher Guide List" />
                 </div>
             </div>
-            <Footer />
         </>
     );
 };
 
 export default TeacherGuide;
+

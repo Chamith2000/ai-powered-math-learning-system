@@ -1,9 +1,32 @@
+import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import {
+  clearStudentSession,
+  getStudentSessionRemainingMs,
+  hasValidStudentSession,
+} from "./auth";
 
 const ProtectedRoute = () => {
-  const token = localStorage.getItem("token");
+  const [isAuthenticated, setIsAuthenticated] = useState(() =>
+    hasValidStudentSession()
+  );
 
-  return token ? <Outlet /> : <Navigate to="/login" replace />;
+  useEffect(() => {
+    if (!hasValidStudentSession()) {
+      clearStudentSession();
+      setIsAuthenticated(false);
+      return undefined;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      clearStudentSession();
+      setIsAuthenticated(false);
+    }, getStudentSessionRemainingMs());
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isAuthenticated]);
+
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

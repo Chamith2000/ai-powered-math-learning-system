@@ -1,8 +1,9 @@
 import React from 'react'
-import PaymentRecordChart from '@/components/widgetsCharts/PaymentRecordChart'
 import SiteOverviewStatistics from '@/components/widgetsStatistics/SiteOverviewStatistics'
 import PageHeader from '@/components/shared/pageHeader/PageHeader'
-import Footer from '@/components/shared/Footer'
+import TeacherGuideFeedbackDonut from '@/components/widgetsCharts/TeacherGuideFeedbackDonut'
+import LearningActivitySummary from '@/components/widgetsStatistics/LearningActivitySummary'
+import RecentFeedbackWidget from '@/components/widgetsTables/RecentFeedbackWidget'
 
 
 const Home = () => {
@@ -12,11 +13,11 @@ const Home = () => {
             <div className='main-content'>
                 <div className='row'>
                     <SiteOverviewStatistics />
-                    {/* <PaymentRecordChart /> */}
-                    
+                    <TeacherGuideFeedbackDonut />
+                    <LearningActivitySummary />
+                    <RecentFeedbackWidget />
                 </div>
             </div>
-            <Footer />
         </>
     )
 }

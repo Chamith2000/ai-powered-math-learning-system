@@ -1,1 +1,2 @@
-admin panel for MathsBuddy
+# lxir_admin
+admin panel for lxir

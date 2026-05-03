@@ -7,22 +7,14 @@ import {
   FiMessageSquare,
   FiPlayCircle,
   FiFileText,
-  FiEye,
-  FiHeadphones,
-  FiActivity,
-  FiEdit3,
 } from 'react-icons/fi';
 
 const SiteOverviewStatistics = () => {
   const [stats, setStats] = useState({
     totalUsers: 0,
     feedbackCount: 0,
-    pythonLectures: 0,
-    pythonPapers: 0,
-    visualCount: 0,
-    auditoryCount: 0,
-    kinestheticCount: 0,
-    readWriteCount: 0,
+    mathsLectures: 0,
+    mathsPapers: 0,
   });
 
   useEffect(() => {
@@ -31,14 +23,10 @@ const SiteOverviewStatistics = () => {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
       const requests = [
-        axios.get(`${BASE_URL}/users/`, { headers }),                          // users
-        axios.get(`${BASE_URL}/teacher-guide-feedbacks/`, { headers }),        // feedbacks
-        axios.get(`${BASE_URL}/maths/video-lectures/`, { headers }),          // python lectures
-        axios.get(`${BASE_URL}/maths/papers`, { headers }),                   // python papers
-        axios.get(`${BASE_URL}/visual/learning/`, { headers }),                // visual
-        axios.get(`${BASE_URL}/auditory/learning/`, { headers }),              // auditory
-        axios.get(`${BASE_URL}/kinesthetic/learning/`, { headers }),           // kinesthetic
-        axios.get(`${BASE_URL}/readwrite/learning/`, { headers }),             // read & write
+        axios.get(`${BASE_URL}/users/`, { headers }),                          
+        axios.get(`${BASE_URL}/teacher-guide-feedbacks/`, { headers }),        
+        axios.get(`${BASE_URL}/maths/video-lectures/`, { headers }),          
+        axios.get(`${BASE_URL}/maths/papers`, { headers }),                   
       ];
 
       try {
@@ -52,23 +40,15 @@ const SiteOverviewStatistics = () => {
         setStats({
           totalUsers: safeLen(0),
           feedbackCount: safeLen(1),
-          pythonLectures: safeLen(2),
-          pythonPapers: safeLen(3),
-          visualCount: safeLen(4),
-          auditoryCount: safeLen(5),
-          kinestheticCount: safeLen(6),
-          readWriteCount: safeLen(7),
+          mathsLectures: safeLen(2),
+          mathsPapers: safeLen(3),
         });
       } catch {
         setStats({
           totalUsers: 0,
           feedbackCount: 0,
-          pythonLectures: 0,
-          pythonPapers: 0,
-          visualCount: 0,
-          auditoryCount: 0,
-          kinestheticCount: 0,
-          readWriteCount: 0,
+          mathsLectures: 0,
+          mathsPapers: 0,
         });
       }
     };
@@ -78,6 +58,7 @@ const SiteOverviewStatistics = () => {
 
   const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
 
+  // Added a 'colorClass' to make the icons pop with different colors
   const data = [
     {
       id: 1,
@@ -85,6 +66,7 @@ const SiteOverviewStatistics = () => {
       title: 'Users',
       count: stats.totalUsers,
       label: plural(stats.totalUsers, 'User'),
+      colorClass: 'bg-soft-primary text-primary',
     },
     {
       id: 2,
@@ -92,59 +74,35 @@ const SiteOverviewStatistics = () => {
       title: 'Feedbacks',
       count: stats.feedbackCount,
       label: plural(stats.feedbackCount, 'Feedback'),
+      colorClass: 'bg-soft-success text-success',
     },
     {
       id: 3,
       icon: <FiPlayCircle />,
       title: 'Maths Lectures',
-      count: stats.pythonLectures,
-      label: plural(stats.pythonLectures, 'Lecture'),
+      count: stats.mathsLectures,
+      label: plural(stats.mathsLectures, 'Lecture'),
+      colorClass: 'bg-soft-danger text-danger',
     },
     {
       id: 4,
       icon: <FiFileText />,
-      title: 'Python Papers',
-      count: stats.pythonPapers,
-      label: plural(stats.pythonPapers, 'Paper'),
-    },
-    {
-      id: 5,
-      icon: <FiEye />,
-      title: 'Visual Learning',
-      count: stats.visualCount,
-      label: plural(stats.visualCount, 'Record'),
-    },
-    {
-      id: 6,
-      icon: <FiHeadphones />,
-      title: 'Auditory Learning',
-      count: stats.auditoryCount,
-      label: plural(stats.auditoryCount, 'Record'),
-    },
-    {
-      id: 7,
-      icon: <FiActivity />,
-      title: 'Kinesthetic Learning',
-      count: stats.kinestheticCount,
-      label: plural(stats.kinestheticCount, 'Record'),
-    },
-    {
-      id: 8,
-      icon: <FiEdit3 />,
-      title: 'Read & Write Learning',
-      count: stats.readWriteCount,
-      label: plural(stats.readWriteCount, 'Record'),
+      title: 'Maths Papers',
+      count: stats.mathsPapers,
+      label: plural(stats.mathsPapers, 'Paper'),
+      colorClass: 'bg-soft-info text-info',
     },
   ];
 
   return (
     <>
-      {data.map(({ id, icon, title, count, label }) => (
-        <div key={id} className="col-xxl-3 col-md-6">
-          <div className="card stretch stretch-full short-info-card">
+      {data.map(({ id, icon, title, count, label, colorClass }) => (
+        <div key={id} className="col-xxl-3 col-md-6 mb-4">
+          <div className="card stretch stretch-full short-info-card shadow-sm border-0">
             <div className="card-body">
               <div className="d-flex align-items-center gap-3 mb-2">
-                <div className="avatar-text avatar-lg bg-gray-200 icon">
+                {/* Dynamically applying the color block here */}
+                <div className={`avatar-text avatar-lg ${colorClass} icon rounded`}>
                   {React.cloneElement(icon, { size: 24 })}
                 </div>
                 <div>

@@ -4,12 +4,10 @@ import { useLocation } from 'react-router-dom';
 
 const socket = io("http://localhost:5000");
 
-function AutoCapture() {
-  const location = useLocation();
-  const isGamePage = location.pathname === "/game-launch";
-
+function AutoCapture({ enableGamePopup = false, showFloatingEmotion = false }) {
   const emotionWindowRef = useRef([]);
   const [showModal, setShowModal] = useState(false);
+  const [currentEmotion, setCurrentEmotion] = useState("Detecting...");
   const [popupInterval, setPopupInterval] = useState(localStorage.getItem("popupInterval") || "10");
 
   const getSuppressDuration = (value) => {
@@ -33,6 +31,7 @@ function AutoCapture() {
   useEffect(() => {
     socket.on("emotion_result", (data) => {
       emotionWindowRef.current.push(data.emotion);
+      setCurrentEmotion(data.emotion); // update floating stick
     });
 
     return () => socket.off("emotion_result");
@@ -54,8 +53,14 @@ function AutoCapture() {
       const mostFrequent = Object.entries(counts).reduce((a, b) => (b[1] > a[1] ? b : a))[0];
       console.log("Most frequent (last 5s):", mostFrequent);
 
-      // Trigger popup if needed
-      if (!isGamePage && mostFrequent !== "Neutral" && mostFrequent !== "Happy"  && mostFrequent !== "No Face" && shouldShowModal()) {
+      // Trigger popup if needed (only if enabled via props)
+      if (
+        enableGamePopup && 
+        mostFrequent !== "Neutral" && 
+        mostFrequent !== "Happy" && 
+        mostFrequent !== "No Face" && 
+        shouldShowModal()
+      ) {
         setShowModal(true);
       }
 
@@ -64,7 +69,7 @@ function AutoCapture() {
     }, 5000); // every 5 seconds
 
     return () => clearInterval(interval);
-  }, [popupInterval, isGamePage]);
+  }, [popupInterval, enableGamePopup]);
 
 
   const handleDismiss = () => {
@@ -102,7 +107,7 @@ function AutoCapture() {
           }, 10000); // Capture every 10s
         };
       })
-      .catch((err) => console.error("Camera access failed:", err));
+      // .catch((err) => console.error("Camera access failed:", err));
 
     return () => {
       if (captureInterval) clearInterval(captureInterval);
@@ -113,50 +118,98 @@ function AutoCapture() {
 
   return (
     <>
-      {showModal && (
-        <div style={{
-          position: "fixed",
-          bottom: "20px",
-          right: "20px",
-          backgroundColor: "#fff",
-          padding: "16px",
-          borderRadius: "10px",
-          boxShadow: "0 0 10px rgba(0,0,0,0.3)",
-          zIndex: 9999
-        }}>
-          <h4>😟 Mood Detected</h4>
-          <p>We noticed you seem frustrated. Want to play a game to relax?</p>
-
-          <div style={{ marginBottom: '10px' }}>
-            <label htmlFor="remind">Remind me again in: </label>
-            <select
-              id="remind"
-              value={popupInterval}
-              onChange={(e) => {
-                const value = e.target.value;
-                setPopupInterval(value);
-                localStorage.setItem("popupInterval", value);
-              }}
-            >
-              <option value="5">5 minutes</option>
-              <option value="10">10 minutes</option>
-              <option value="30">30 minutes</option>
-              <option value="60">1 hour</option>
-              <option value="never">Never</option>
-            </select>
-          </div>
-          <button style={{ marginRight: '10px' }} onClick={handleDismiss}>Dismiss</button>
-          <button
-            style={{ backgroundColor: 'lightgreen' }}
-            onClick={() => {
-              setShowModal(false);
-              window.location.href = "/game-launch";
-            }}
-          >
-            Play game
-          </button>
+      {showFloatingEmotion && currentEmotion && (
+        <div
+          className="shadow-sm rounded-pill px-3 py-2 fw-bold"
+          style={{
+            position: "fixed",
+            top: "100px",
+            right: "20px",
+            backgroundColor: "#fffdf0",
+            border: "2px solid #ffca28",
+            color: "#f57c00",
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            fontSize: "14px",
+            animation: "slideIn 0.5s ease-out"
+          }}
+        >
+          <i className="icofont-eye"></i>
+          <span>Emotion: {currentEmotion}</span>
         </div>
       )}
+
+      {showModal && (
+        <div
+          className="card border-0 shadow-lg"
+          style={{
+            position: "fixed",
+            bottom: "30px",
+            right: "30px",
+            width: "350px",
+            backgroundColor: "#fffdf0",
+            borderRadius: "24px",
+            border: "4px solid #ffca28",
+            zIndex: 9999,
+            animation: "slideIn 0.5s ease-out"
+          }}
+        >
+          <div className="card-body p-4 text-center">
+            <h3 className="fw-bold mb-3" style={{ color: "#f57c00" }}><i className="icofont-warning-alt me-2"></i>Oh no!</h3>
+            <p className="fs-6 text-muted fw-bold mb-4">
+              You look a little frustrated. Feeling stressed? How about a quick game to relax and recharge your brain?
+            </p>
+
+            <div className="d-flex align-items-center justify-content-center gap-2 mb-4 bg-white p-2 rounded-pill border border-warning border-opacity-50 shadow-sm">
+              <label htmlFor="remind" className="text-secondary fw-bold small mb-0">Ask again in:</label>
+              <select
+                id="remind"
+                className="form-select form-select-sm rounded-pill fw-bold border-0 shadow-none bg-transparent"
+                style={{ width: "auto", color: "#f57c00", cursor: "pointer" }}
+                value={popupInterval}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setPopupInterval(value);
+                  localStorage.setItem("popupInterval", value);
+                }}
+              >
+                <option value="5">5 mins</option>
+                <option value="10">10 mins</option>
+                <option value="30">30 mins</option>
+                <option value="60">1 hour</option>
+                <option value="never">Never</option>
+              </select>
+            </div>
+
+            <div className="d-flex gap-2 justify-content-center">
+              <button
+                className="btn btn-light rounded-pill fw-bold px-4 border border-secondary border-opacity-25 shadow-sm"
+                onClick={handleDismiss}
+              >
+                No Thanks
+              </button>
+              <button
+                className="btn btn-warning rounded-pill fw-bold px-4 shadow-sm"
+                style={{ backgroundColor: "#ffca28", borderColor: "#ffca28", color: "#4e342e" }}
+                onClick={() => {
+                  setShowModal(false);
+                  window.location.href = "/game-launch";
+                }}
+              >
+                Let's Play! <i className="icofont-rocket ms-2"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <style>{`
+        @keyframes slideIn {
+          from { transform: translateY(100px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
     </>
   );
 }

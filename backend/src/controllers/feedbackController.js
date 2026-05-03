@@ -28,7 +28,7 @@ exports.getFeedbacksByLecture = async (req, res) => {
   try {
     const { videoLectureId } = req.params;
     const feedbacks = await Feedback.find({ videoLectureId })
-      .populate('userId', 'username email')
+      .populate('userId', 'username email age grade')
       .sort('-createdAt');
     res.status(200).json(feedbacks);
   } catch (err) {
@@ -51,7 +51,7 @@ exports.getAllFeedbacks = async (req, res) => {
 exports.getFeedbackById = async (req, res) => {
   try {
     const feedback = await Feedback.findById(req.params.id)
-      .populate('userId', 'username email');
+      .populate('userId', 'username email age grade');
     if (!feedback) return res.status(404).json({ message: "Feedback not found" });
     res.status(200).json(feedback);
   } catch (err) {
@@ -92,7 +92,7 @@ exports.getFeedbackByUserAndVideo = async (req, res) => {
     const { userId, videoLectureId } = req.params;
     const feedback = await Feedback.findOne({ userId, videoLectureId })
       .populate('videoLectureId', 'lectureTitle')
-      .populate('userId', 'username email');
+      .populate('userId', 'username email age grade');
     if (!feedback) return res.status(404).json({ message: "Feedback not found for this user and video" });
     res.status(200).json(feedback);
   } catch (err) {
