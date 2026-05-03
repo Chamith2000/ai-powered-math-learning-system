@@ -1,0 +1,26 @@
+# dependencies
+node_modules/
+frontend/node_modules/
+
+# caches
+.cache/
+**/*.pack
+
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv
+
+# env files
+.env
+
+# OS files
+.DS_Store
+
+.idea/
+
+flask/.venv/
+
+reports/
+flask/
