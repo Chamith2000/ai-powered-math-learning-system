@@ -132,9 +132,6 @@ const LectureFeedbackModal = ({ show, onHide, lecture }) => {
                                                     <Badge bg={aiResults[group.text].severity === 'high' ? 'danger' : 'warning'} className="p-2 fs-7">
                                                         Severity: {aiResults[group.text].severity.toUpperCase()}
                                                     </Badge>
-                                                    <Badge bg="info" className="p-2 fs-7 text-white">
-                                                        Confidence: {Math.round(aiResults[group.text].confidence * 100)}%
-                                                    </Badge>
                                                     <Badge bg="dark" className="p-2 fs-7">
                                                         Issue: {aiResults[group.text].issue.toUpperCase()}
                                                     </Badge>

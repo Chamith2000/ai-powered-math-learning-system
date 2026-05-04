@@ -133,13 +133,7 @@ const ViewTeacherGuideFeedback = () => {
             }
 
             if (trimmedLine.startsWith('Confidence:')) {
-                return (
-                    <div key={index} className="mb-2">
-                        <span className="badge bg-light text-dark border px-3 py-2">
-                            Confidence: {trimmedLine.replace('Confidence:', '').trim()}
-                        </span>
-                    </div>
-                );
+                return null;
             }
 
             if (trimmedLine.startsWith('Recommendation:')) {

@@ -159,8 +159,12 @@ const TeacherGuideFeedbackTable = ({ title }) => {
     // --- Part B: Technical Quality (Optional) ---
     if (isVideoFeedback && technicalData) {
       const { confidence, issue, recommendation: techRec, severity } = technicalData?.output || {};
+      const confidenceValue = Number(confidence);
+      const confidencePercent = Number.isFinite(confidenceValue)
+        ? Math.round(confidenceValue <= 1 ? confidenceValue * 100 : confidenceValue)
+        : 0;
       
-      const techSection = `\n\n----------------------------\n[Video Lecture Quality Review]\nIssue: ${issue || 'General'}\nSeverity: ${severity || 'N/A'}\nConfidence: ${Math.round((confidence || 0) * 100)}%\nRecommendation: ${techRec || 'No technical issues detected.'}`;
+      const techSection = `\n\n----------------------------\n[Video Lecture Quality Review]\nIssue: ${issue || 'General'}\nSeverity: ${severity || 'N/A'}\nConfidence: ${confidencePercent}%\nRecommendation: ${techRec || 'No technical issues detected.'}`;
       
       recommendation += techSection;
     }
@@ -531,7 +535,7 @@ const TeacherGuideFeedbackTable = ({ title }) => {
                                     WebkitBoxOrient: 'vertical',
                                     overflow: 'hidden'
                                   }}>
-                                    {s || <span className="text-muted">-</span>}
+                                    {s ? s.replace(/^Confidence:.*$/gmi, '').trim() : <span className="text-muted">-</span>}
                                   </div>
                                 </div>
                             )}

@@ -60,7 +60,6 @@ const parseAiSuggestion = (text) => {
     const technical = {
         issue: extractLabelValue(technicalLines, 'Issue'),
         severity: extractLabelValue(technicalLines, 'Severity'),
-        confidence: extractLabelValue(technicalLines, 'Confidence'),
         recommendation: extractLabelValue(technicalLines, 'Recommendation')
     };
 
@@ -134,11 +133,6 @@ const AiSuggestionPreview = ({ suggestion, onClick, onGenerate, generating }) =>
                     {technical.severity && (
                         <span className={`badge ${severityBadgeClass(technical.severity)}`}>
                             Severity: {technical.severity}
-                        </span>
-                    )}
-                    {technical.confidence && (
-                        <span className="badge bg-soft-info text-info border border-info border-opacity-25">
-                            Confidence: {technical.confidence}
                         </span>
                     )}
                 </div>
