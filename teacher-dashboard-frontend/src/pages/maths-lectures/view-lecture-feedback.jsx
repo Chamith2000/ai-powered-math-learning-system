@@ -32,8 +32,16 @@ const parseAiSuggestion = (text) => {
         .filter(Boolean);
 
     const dividerIndex = lines.findIndex((line) => line.includes('----------------------------'));
-    const beforeVideo = dividerIndex >= 0 ? lines.slice(0, dividerIndex) : lines;
-    const afterVideo = dividerIndex >= 0 ? lines.slice(dividerIndex + 1) : [];
+    const videoHeaderIndex = lines.findIndex((line) => line.includes('[Video Lecture Quality Review]'));
+    const splitIndex = videoHeaderIndex >= 0 ? videoHeaderIndex : dividerIndex;
+    const beforeVideo = splitIndex >= 0
+        ? lines.slice(0, splitIndex).filter((line) => !line.includes('----------------------------'))
+        : lines;
+    const afterVideo = videoHeaderIndex >= 0
+        ? lines.slice(videoHeaderIndex + 1)
+        : dividerIndex >= 0
+            ? lines.slice(dividerIndex + 1)
+            : [];
 
     const weakLine = beforeVideo.find((line) => line.toLowerCase().startsWith('weak sections:'));
     const weakSections = weakLine
@@ -45,7 +53,10 @@ const parseAiSuggestion = (text) => {
         .map((line) => line.replace(/^[-*]\s*/, '').trim())
         .filter(Boolean);
 
-    const technicalLines = afterVideo.filter((line) => !line.includes('[Video Lecture Quality Review]'));
+    const technicalLines = afterVideo.filter((line) => (
+        !line.includes('[Video Lecture Quality Review]') &&
+        !line.includes('----------------------------')
+    ));
     const technical = {
         issue: extractLabelValue(technicalLines, 'Issue'),
         severity: extractLabelValue(technicalLines, 'Severity'),
@@ -61,19 +72,14 @@ const isSuggestionUnavailable = (suggestion) => {
     return !value || value.includes('suggestion unavailable') || value.includes('no suggestion available');
 };
 
-const buildAiSuggestionText = (teacherData, technicalData) => {
-    const reason = teacherData?.output?.reason || '(no suggestion available)';
-    const weakSections = Array.isArray(teacherData?.output?.weak_sections) ? teacherData.output.weak_sections : [];
-
-    let recommendation = reason;
-    if (weakSections.length > 0) {
-        recommendation += `\n\nWeak sections: ${weakSections.join(', ')}`;
-    }
-
+const buildVideoFeedbackSuggestionText = (technicalData) => {
     const { confidence, issue, recommendation: techRec, severity } = technicalData?.output || {};
-    recommendation += `\n\n----------------------------\n[Video Lecture Quality Review]\nIssue: ${issue || 'General'}\nSeverity: ${severity || 'N/A'}\nConfidence: ${Math.round((confidence || 0) * 100)}%\nRecommendation: ${techRec || 'No technical issues detected.'}`;
+    const confidenceValue = Number(confidence);
+    const confidencePercent = Number.isFinite(confidenceValue)
+        ? Math.round(confidenceValue <= 1 ? confidenceValue * 100 : confidenceValue)
+        : 0;
 
-    return recommendation;
+    return `[Video Lecture Quality Review]\nIssue: ${issue || 'General'}\nSeverity: ${severity || 'N/A'}\nConfidence: ${confidencePercent}%\nRecommendation: ${techRec || 'No video feedback recommendation available.'}`;
 };
 
 const severityBadgeClass = (severity = '') => {
@@ -90,7 +96,7 @@ const AiSuggestionPreview = ({ suggestion, onClick, onGenerate, generating }) =>
             <div className="rounded-3 border border-warning border-opacity-25 bg-soft-warning p-3">
                 <div className="fw-bold text-warning mb-1">AI suggestion unavailable</div>
                 <div className="small text-muted mb-3">
-                    Generate a fresh review for this feedback.
+                    Generate a video feedback review for this feedback.
                 </div>
                 <button
                     type="button"
@@ -103,7 +109,7 @@ const AiSuggestionPreview = ({ suggestion, onClick, onGenerate, generating }) =>
                             <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
                             Generating...
                         </>
-                    ) : 'Generate AI Suggestion'}
+                    ) : 'Generate Video AI Suggestion'}
                 </button>
             </div>
         );
@@ -267,37 +273,14 @@ const ViewLectureFeedback = () => {
     const generateSuggestionFor = async (fb) => {
         setGeneratingSuggestions((prev) => ({ ...prev, [fb._id]: true }));
 
-        const guide = typeof fb?.teacherGuideId === 'object' ? fb.teacherGuideId : {};
         const lecture = typeof fb?.lectureId === 'object' ? fb.lectureId : {};
         const studentGrade = fb?.studentId?.grade ?? lecture?.grade ?? 4;
         const langConstraint = "*** MANDATORY: RESPOND IN ENGLISH ONLY. NO CHINESE CHARACTERS ALLOWED. ***";
 
-        const teacherPayload = {
-            teacher_data: {
-                instruction: "RESPOND IN ENGLISH ONLY",
-                task: "task_b",
-                teacher_guide: `${langConstraint}\n\n${guide?.coureInfo || ''}. ${guide?.originalTeacherGuide || ''}\n\n${langConstraint}`.trim(),
-                student_feedback: `${langConstraint}\n\n${fb?.studentFeedback?.trim() || 'No student feedback provided.'}\n\n${langConstraint}`,
-                time_spent: {
-                    introduction: guide?.timeAllocations?.introduction || 0,
-                    concept_explanation: guide?.timeAllocations?.concept_explanation || 0,
-                    worked_examples: guide?.timeAllocations?.worked_examples || 0,
-                    practice_questions: guide?.timeAllocations?.practice_questions || 0,
-                    word_problems: guide?.timeAllocations?.word_problems || 0,
-                    pacing: guide?.timeAllocations?.pacing || 0,
-                    clarity: guide?.timeAllocations?.clarity || 0,
-                    engagement: guide?.timeAllocations?.engagement || 0
-                },
-                grade: Number(studentGrade) || 4,
-                language_instruction: "English"
-            },
-            model_type: "teacher"
-        };
-
         const feedbackPayload = {
             model_type: "feedback",
             feedback_data: {
-                instruction: "RESPOND IN ENGLISH ONLY",
+                instruction: "RESPOND IN ENGLISH ONLY. Give one specific recommendation using the lesson topic, grade, and student feedback. Avoid generic advice.",
                 text: `${langConstraint}\n\n${fb?.studentFeedback?.trim() || 'No feedback provided.'}\n\n${langConstraint}`,
                 grade: Number(studentGrade) || 4,
                 lesson: lecture?.lectureTytle || fb?.contentTitle || 'Untitled Lesson',
@@ -307,16 +290,15 @@ const ViewLectureFeedback = () => {
         };
 
         try {
-            const [teacherRes, feedbackRes] = await Promise.all([
-                axios.post(`https://Chamith2000-mcq-generator-new.hf.space/generate`, teacherPayload, {
-                    headers: { 'Content-Type': 'application/json' }
-                }),
-                axios.post(`https://Chamith2000-mcq-generator-new.hf.space/generate`, feedbackPayload, {
-                    headers: { 'Content-Type': 'application/json' }
-                })
-            ]);
+            const feedbackRes = await axios.post(`https://Chamith2000-mcq-generator-new.hf.space/generate`, feedbackPayload, {
+                headers: { 'Content-Type': 'application/json' }
+            });
 
-            const suggestion = buildAiSuggestionText(teacherRes.data, feedbackRes.data);
+            if (!feedbackRes.data?.output) {
+                throw new Error('Invalid video feedback model response');
+            }
+
+            const suggestion = buildVideoFeedbackSuggestionText(feedbackRes.data);
             const token = getToken();
 
             await axios.put(
