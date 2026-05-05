@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
-import CardHeader from '@/components/shared/CardHeader';
-import CardLoader from '@/components/shared/CardLoader';
-import useCardTitleActions from '@/hooks/useCardTitleActions';
-import axios from 'axios';
-import BASE_URL from '../../config/apiConfig';
-import { getToken } from '@/utils/token';
-import Swal from 'sweetalert2';
-import { FiEdit3, FiSave, FiX } from 'react-icons/fi';
+import React, { useEffect, useMemo, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { jsPDF } from "jspdf";
+import html2canvas from "html2canvas";
+import CardHeader from "@/components/shared/CardHeader";
+import CardLoader from "@/components/shared/CardLoader";
+import useCardTitleActions from "@/hooks/useCardTitleActions";
+import axios from "axios";
+import BASE_URL from "../../config/apiConfig";
+import { getToken } from "@/utils/token";
+import Swal from "sweetalert2";
+import { FiEdit3, FiSave, FiX } from "react-icons/fi";
 
 const ViewMathsPaperForm = ({ title }) => {
   const { id } = useParams(); // paper id
@@ -40,15 +40,28 @@ const ViewMathsPaperForm = ({ title }) => {
 
   // ---- helpers
   const pct = (v) => `${Math.round((v ?? 0) * 100)}%`;
-  const round = (v, d = 1) => (v || v === 0 ? Number(v).toFixed(d) : '—');
-  const fmt = (iso) => (iso ? new Date(iso).toLocaleString() : '—');
+  const round = (v, d = 1) => (v || v === 0 ? Number(v).toFixed(d) : "—");
+  const fmt = (iso) => (iso ? new Date(iso).toLocaleString() : "—");
+  const formatImprovementText = (value) => {
+    const text =
+      typeof value === "string"
+        ? value
+        : Array.isArray(value)
+          ? value.join("\n")
+          : JSON.stringify(value, null, 2);
+
+    return String(text || "").replace(/\bstudent\b/gi, "You");
+  };
 
   const badgeForDifficulty = (diff) => {
-    const d = (diff || '').toLowerCase();
-    if (d === 'easy') return <span className="badge bg-soft-success text-success">Easy</span>;
-    if (d === 'medium') return <span className="badge bg-soft-warning text-warning">Medium</span>;
-    if (d === 'hard') return <span className="badge bg-soft-danger text-danger">Hard</span>;
-    return <span className="badge bg-secondary">{diff || '—'}</span>;
+    const d = (diff || "").toLowerCase();
+    if (d === "easy")
+      return <span className="badge bg-soft-success text-success">Easy</span>;
+    if (d === "medium")
+      return <span className="badge bg-soft-warning text-warning">Medium</span>;
+    if (d === "hard")
+      return <span className="badge bg-soft-danger text-danger">Hard</span>;
+    return <span className="badge bg-secondary">{diff || "—"}</span>;
   };
 
   // ---- load paper + questions
@@ -62,8 +75,8 @@ const ViewMathsPaperForm = ({ title }) => {
         });
         setPaper(res?.data || null);
       } catch (err) {
-        console.error('Failed to load paper', err);
-        Swal.fire('Error', 'Failed to load paper details.', 'error');
+        console.error("Failed to load paper", err);
+        Swal.fire("Error", "Failed to load paper details.", "error");
       } finally {
         setLoadingPaper(false);
       }
@@ -77,10 +90,10 @@ const ViewMathsPaperForm = ({ title }) => {
           headers: { Authorization: `Bearer ${token}` },
         });
         setQuestions(Array.isArray(res.data) ? res.data : []);
-        setEvaluations({}); 
+        setEvaluations({});
       } catch (err) {
-        console.error('Failed to load questions', err);
-        Swal.fire('Error', 'Failed to load questions for this paper.', 'error');
+        console.error("Failed to load questions", err);
+        Swal.fire("Error", "Failed to load questions for this paper.", "error");
       } finally {
         setLoadingQuestions(false);
       }
@@ -93,21 +106,25 @@ const ViewMathsPaperForm = ({ title }) => {
 
   // ---- derived
   const totalScore = useMemo(
-    () => questions.reduce((sum, q) => sum + (typeof q.score === 'number' ? q.score : 0), 0),
-    [questions]
+    () =>
+      questions.reduce(
+        (sum, q) => sum + (typeof q.score === "number" ? q.score : 0),
+        0,
+      ),
+    [questions],
   );
 
   const tgTitle = useMemo(() => {
-    if (!paper) return '—';
-    const tg = typeof paper?.teacherGuideId === 'string' ? null : paper?.teacherGuideId;
-    return tg?.coureInfo || '—';
+    if (!paper) return "—";
+    const tg =
+      typeof paper?.teacherGuideId === "string" ? null : paper?.teacherGuideId;
+    return tg?.coureInfo || "—";
   }, [paper]);
 
   const creator = useMemo(() => {
     if (!paper) return {};
     return paper?.createby || paper?.createBy || {};
   }, [paper]);
-
 
   // --- Inline Edit Handlers ---
   const handleEditClick = (q) => {
@@ -123,15 +140,22 @@ const ViewMathsPaperForm = ({ title }) => {
   };
 
   const handleSaveQuestion = async () => {
-    if (!editingQuestion.questionTytle.trim() || !editingQuestion.questionAnswer.trim()) {
-      Swal.fire('Required', 'Question title and answer cannot be empty.', 'warning');
+    if (
+      !editingQuestion.questionTytle.trim() ||
+      !editingQuestion.questionAnswer.trim()
+    ) {
+      Swal.fire(
+        "Required",
+        "Question title and answer cannot be empty.",
+        "warning",
+      );
       return;
     }
 
     try {
       setSavingQuestion(true);
       const token = getToken();
-      
+
       const payload = {
         questionTytle: editingQuestion.questionTytle,
         questionAnswer: editingQuestion.questionAnswer,
@@ -139,30 +163,41 @@ const ViewMathsPaperForm = ({ title }) => {
         score: Number(editingQuestion.score) || 0,
       };
 
-      await axios.put(`${BASE_URL}/maths/qanda/${editingQuestion._id}`, payload, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.put(
+        `${BASE_URL}/maths/qanda/${editingQuestion._id}`,
+        payload,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
 
       // Update UI List
       setQuestions((prev) =>
-        prev.map((q) => (q._id === editingQuestion._id ? { ...q, ...payload } : q))
+        prev.map((q) =>
+          q._id === editingQuestion._id ? { ...q, ...payload } : q,
+        ),
       );
-      
+
       setEditingQuestion(null);
-      Swal.fire({ icon: 'success', title: 'Updated!', text: 'Question updated successfully.', timer: 1500, showConfirmButton: false });
+      Swal.fire({
+        icon: "success",
+        title: "Updated!",
+        text: "Question updated successfully.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
     } catch (err) {
-      console.error('Failed to update question', err);
-      Swal.fire('Error', 'Failed to update the question.', 'error');
+      console.error("Failed to update question", err);
+      Swal.fire("Error", "Failed to update the question.", "error");
     } finally {
       setSavingQuestion(false);
     }
   };
 
-
   // ---- evaluation call
   const runEvaluation = async () => {
     if (!questions.length) {
-      Swal.fire('No questions', 'There are no questions to evaluate.', 'info');
+      Swal.fire("No questions", "There are no questions to evaluate.", "info");
       return;
     }
     try {
@@ -177,15 +212,19 @@ const ViewMathsPaperForm = ({ title }) => {
             question: q.questionTytle,
             student_answer: q.questionAnswer,
             answer: q.questionAnswer,
-            grade: paper?.grade || 3
+            grade: paper?.grade || 3,
           },
-          model_type: "analyze"
+          model_type: "analyze",
         };
 
         try {
-          const res = await axios.post('https://Chamith2000-mcq-generator-new.hf.space/generate', payload, {
-            headers: { 'Content-Type': 'application/json' },
-          });
+          const res = await axios.post(
+            "https://Chamith2000-mcq-generator-new.hf.space/generate",
+            payload,
+            {
+              headers: { "Content-Type": "application/json" },
+            },
+          );
           newEvals[q._id] = res.data?.output || {};
         } catch (innerErr) {
           console.error(`Evaluation failed for question ${q._id}`, innerErr);
@@ -194,8 +233,8 @@ const ViewMathsPaperForm = ({ title }) => {
       }
       setEvaluations(newEvals);
     } catch (err) {
-      console.error('Evaluate failed', err);
-      Swal.fire('Error', 'Failed to evaluate paper topics.', 'error');
+      console.error("Evaluate failed", err);
+      Swal.fire("Error", "Failed to evaluate paper topics.", "error");
     } finally {
       setEvaluating(false);
     }
@@ -206,7 +245,7 @@ const ViewMathsPaperForm = ({ title }) => {
 
     try {
       Swal.fire({
-        title: 'Generating PDF...',
+        title: "Generating PDF...",
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading(),
       });
@@ -216,25 +255,25 @@ const ViewMathsPaperForm = ({ title }) => {
         scale: 2,
         useCORS: true,
         logging: false,
-        backgroundColor: '#ffffff'
+        backgroundColor: "#ffffff",
       });
 
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
       const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
 
-      const fileName = `${paper?.paperTytle || 'Maths_Paper'}_Grade_${paper?.grade || '3'}.pdf`;
+      const fileName = `${paper?.paperTytle || "Maths_Paper"}_Grade_${paper?.grade || "3"}.pdf`;
       pdf.save(fileName);
 
       Swal.close();
     } catch (error) {
-      console.error('PDF Generation failed', error);
+      console.error("PDF Generation failed", error);
       Swal.close();
-      Swal.fire('Error', 'Failed to generate PDF.', 'error');
+      Swal.fire("Error", "Failed to generate PDF.", "error");
     }
   };
 
@@ -242,8 +281,15 @@ const ViewMathsPaperForm = ({ title }) => {
 
   return (
     <div className="col-xxl-12">
-      <div className={`card stretch stretch-full ${isExpanded ? 'card-expand' : ''} ${refreshKey ? 'card-loading' : ''}`}>
-        <CardHeader title={title} refresh={handleRefresh} remove={handleDelete} expanded={handleExpand} />
+      <div
+        className={`card stretch stretch-full ${isExpanded ? "card-expand" : ""} ${refreshKey ? "card-loading" : ""}`}
+      >
+        <CardHeader
+          title={title}
+          refresh={handleRefresh}
+          remove={handleDelete}
+          expanded={handleExpand}
+        />
 
         <div className="card-body">
           {/* Top bar */}
@@ -255,14 +301,32 @@ const ViewMathsPaperForm = ({ title }) => {
                 onClick={runEvaluation}
                 disabled={evaluating || loadingPaper || loadingQuestions}
               >
-                {evaluating ? 'Evaluating…' : 'Evaluate Matching'}
+                {evaluating ? "Evaluating…" : "Evaluate Matching"}
               </button>
             </div>
 
             <div className="d-flex justify-content-end gap-2">
-              <button type="button" className="btn btn-light" onClick={() => navigate(-1)}>← Back</button>
-              <button type="button" className="btn btn-outline-info" onClick={handleDownloadPDF}>Download PDF</button>
-              <button type="button" className="btn btn-outline-primary" onClick={() => window.print()}>Print</button>
+              <button
+                type="button"
+                className="btn btn-light"
+                onClick={() => navigate(-1)}
+              >
+                ← Back
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-info"
+                onClick={handleDownloadPDF}
+              >
+                Download PDF
+              </button>
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                onClick={() => window.print()}
+              >
+                Print
+              </button>
             </div>
           </div>
 
@@ -270,12 +334,14 @@ const ViewMathsPaperForm = ({ title }) => {
           <div ref={paperRef} className="p-3 bg-white">
             {/* Paper header */}
             <div className="text-center mb-4">
-              <h3 className="mb-1" style={{ wordBreak: 'break-word' }}>
-                {paper?.paperTytle || paper?.paperTitle || '—'}
+              <h3 className="mb-1" style={{ wordBreak: "break-word" }}>
+                {paper?.paperTytle || paper?.paperTitle || "—"}
               </h3>
               <div className="d-inline-flex align-items-center gap-2 mt-2">
                 {badgeForDifficulty(paper?.paperDifficulty)}
-                <span className="badge bg-soft-info text-info">Grade {paper?.grade || '—'}</span>
+                <span className="badge bg-soft-info text-info">
+                  Grade {paper?.grade || "—"}
+                </span>
                 <span className="text-muted">Total Marks: {totalScore}</span>
               </div>
             </div>
@@ -285,7 +351,9 @@ const ViewMathsPaperForm = ({ title }) => {
               <div className="col-md-4">
                 <div className="p-3 border rounded h-100">
                   <div className="text-muted small">Teacher Guide</div>
-                  <div className="fw-semibold" title={tgTitle}>{tgTitle}</div>
+                  <div className="fw-semibold" title={tgTitle}>
+                    {tgTitle}
+                  </div>
                 </div>
               </div>
               {/* <div className="col-md-4">
@@ -311,14 +379,16 @@ const ViewMathsPaperForm = ({ title }) => {
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5 className="mb-0">Questions</h5>
                 <span className="text-muted small">
-                  {questions.length} question{questions.length !== 1 ? 's' : ''}
+                  {questions.length} question{questions.length !== 1 ? "s" : ""}
                 </span>
               </div>
 
               {loadingPaper || loadingQuestions ? (
                 <div className="text-muted">Loading paper…</div>
               ) : questions.length === 0 ? (
-                <div className="text-muted">No questions available for this paper.</div>
+                <div className="text-muted">
+                  No questions available for this paper.
+                </div>
               ) : (
                 <ol className="ps-3">
                   {questions.map((q) => {
@@ -328,53 +398,79 @@ const ViewMathsPaperForm = ({ title }) => {
                     // EDIT MODE
                     if (isEditing) {
                       return (
-                        <li key={q._id} className="mb-4 p-4 border border-primary rounded bg-soft-primary">
+                        <li
+                          key={q._id}
+                          className="mb-4 p-4 border border-primary rounded bg-soft-primary"
+                        >
                           <h6 className="mb-3 text-primary">Edit Question</h6>
                           <div className="mb-3">
                             <label className="form-label">Question Title</label>
-                            <input 
-                              type="text" 
-                              className="form-control" 
-                              value={editingQuestion.questionTytle} 
-                              onChange={(e) => handleEditChange('questionTytle', e.target.value)} 
+                            <input
+                              type="text"
+                              className="form-control"
+                              value={editingQuestion.questionTytle}
+                              onChange={(e) =>
+                                handleEditChange(
+                                  "questionTytle",
+                                  e.target.value,
+                                )
+                              }
                             />
                           </div>
                           <div className="row mb-3">
                             <div className="col-md-8">
                               <label className="form-label">Topic Tag</label>
-                              <input 
-                                type="text" 
-                                className="form-control" 
-                                value={editingQuestion.topicTag} 
-                                onChange={(e) => handleEditChange('topicTag', e.target.value)} 
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={editingQuestion.topicTag}
+                                onChange={(e) =>
+                                  handleEditChange("topicTag", e.target.value)
+                                }
                               />
                             </div>
                             <div className="col-md-4">
                               <label className="form-label">Score</label>
-                              <input 
-                                type="number" 
-                                className="form-control" 
+                              <input
+                                type="number"
+                                className="form-control"
                                 min={0}
-                                value={editingQuestion.score} 
-                                onChange={(e) => handleEditChange('score', e.target.value)} 
+                                value={editingQuestion.score}
+                                onChange={(e) =>
+                                  handleEditChange("score", e.target.value)
+                                }
                               />
                             </div>
                           </div>
                           <div className="mb-4">
                             <label className="form-label">Answer</label>
-                            <textarea 
-                              className="form-control" 
-                              rows="3" 
-                              value={editingQuestion.questionAnswer} 
-                              onChange={(e) => handleEditChange('questionAnswer', e.target.value)}
+                            <textarea
+                              className="form-control"
+                              rows="3"
+                              value={editingQuestion.questionAnswer}
+                              onChange={(e) =>
+                                handleEditChange(
+                                  "questionAnswer",
+                                  e.target.value,
+                                )
+                              }
                             ></textarea>
                           </div>
                           <div className="d-flex justify-content-end gap-2">
-                            <button className="btn btn-light" onClick={handleCancelEdit} disabled={savingQuestion}>
+                            <button
+                              className="btn btn-light"
+                              onClick={handleCancelEdit}
+                              disabled={savingQuestion}
+                            >
                               <FiX className="me-1" /> Cancel
                             </button>
-                            <button className="btn btn-primary" onClick={handleSaveQuestion} disabled={savingQuestion}>
-                              <FiSave className="me-1" /> {savingQuestion ? 'Saving...' : 'Save Changes'}
+                            <button
+                              className="btn btn-primary"
+                              onClick={handleSaveQuestion}
+                              disabled={savingQuestion}
+                            >
+                              <FiSave className="me-1" />{" "}
+                              {savingQuestion ? "Saving..." : "Save Changes"}
                             </button>
                           </div>
                         </li>
@@ -385,10 +481,16 @@ const ViewMathsPaperForm = ({ title }) => {
                     return (
                       <li key={q._id} className="mb-4">
                         <div className="d-flex justify-content-between align-items-start gap-3">
-                          <h6 className="mb-2 d-flex align-items-center gap-2" style={{ wordBreak: 'break-word' }}>
-                            <span>{q.questionTytle || '—'}</span>
-                            <span className="badge bg-secondary" style={{ fontSize: '0.75rem' }}>
-                              {q.topicTag || q.topic || 'General'}
+                          <h6
+                            className="mb-2 d-flex align-items-center gap-2"
+                            style={{ wordBreak: "break-word" }}
+                          >
+                            <span>{q.questionTytle || "—"}</span>
+                            <span
+                              className="badge bg-secondary"
+                              style={{ fontSize: "0.75rem" }}
+                            >
+                              {q.topicTag || q.topic || "General"}
                             </span>
                           </h6>
                           <div className="d-flex flex-wrap align-items-center gap-2">
@@ -396,16 +498,22 @@ const ViewMathsPaperForm = ({ title }) => {
                               Score: {q.score ?? 0}
                             </span>
                             {ev && !ev.error && (
-                              <span className={`badge ${ev.matching_score >= 0.8 ? 'bg-soft-success text-success' : ev.matching_score >= 0.5 ? 'bg-soft-warning text-warning' : 'bg-soft-danger text-danger'}`}>
+                              <span
+                                className={`badge ${ev.matching_score >= 0.8 ? "bg-soft-success text-success" : ev.matching_score >= 0.5 ? "bg-soft-warning text-warning" : "bg-soft-danger text-danger"}`}
+                              >
                                 Match: {round(ev.matching_score * 100)}%
                               </span>
                             )}
-                            {ev?.error && <span className="badge bg-soft-danger text-danger">Eval Failed</span>}
-                            
+                            {ev?.error && (
+                              <span className="badge bg-soft-danger text-danger">
+                                Eval Failed
+                              </span>
+                            )}
+
                             {/* Edit Button */}
-                            <button 
-                              className="btn btn-sm btn-icon btn-outline-primary ms-2" 
-                              onClick={() => handleEditClick(q)} 
+                            <button
+                              className="btn btn-sm btn-icon btn-outline-primary ms-2"
+                              onClick={() => handleEditClick(q)}
                               title="Edit Question"
                             >
                               <FiEdit3 /> Edit
@@ -413,13 +521,43 @@ const ViewMathsPaperForm = ({ title }) => {
                           </div>
                         </div>
 
-                        <div className="p-3 border rounded mt-2 bg-light" style={{ whiteSpace: 'pre-wrap' }}>
-                          <strong>Answer:</strong><br/>
-                          {q.questionAnswer || '—'}
+                        <div
+                          className="p-3 border rounded mt-2 bg-light"
+                          style={{ whiteSpace: "pre-wrap" }}
+                        >
+                          <strong>Answer:</strong>
+                          <br />
+                          {q.questionAnswer || "—"}
                         </div>
                         {ev && !ev.error && ev.improvements && (
-                          <div className="mt-2 p-2 border rounded bg-soft-info text-info small" style={{ whiteSpace: 'pre-wrap' }}>
-                            <strong>Improvements:</strong> {typeof ev.improvements === 'string' ? ev.improvements.replace(/\bstudent\b/gi, 'You') : JSON.stringify(ev.improvements)}
+                          <div
+                            className="mt-3 p-3"
+                            style={{
+                              whiteSpace: "pre-wrap",
+                              wordBreak: "break-word",
+                              overflowWrap: "anywhere",
+                              background: "#FAEEDA",
+                              borderLeft: "3px solid #BA7517",
+                              borderRadius: "0 6px 6px 0",
+                              color: "#633806",
+                              fontSize: "0.875rem",
+                              lineHeight: 1.65,
+                              fontWeight: 400,
+                            }}
+                          >
+                            <div
+                              className="mb-2"
+                              style={{
+                                color: "#854F0B",
+                                fontSize: "0.75rem",
+                                letterSpacing: "0.04em",
+                                textTransform: "uppercase",
+                                fontWeight: 500,
+                              }}
+                            >
+                              Reason
+                            </div>
+                            <div>{formatImprovementText(ev.improvements)}</div>
                           </div>
                         )}
                       </li>
